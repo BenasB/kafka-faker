@@ -1,11 +1,10 @@
-import './App.scss';
-import { Button } from 'react-bootstrap';
+import ToastManager from './components/toasts/ToastManager';
 
 function App() {
   return (
-    <div className="App">
-      <Button>Hello world</Button>
-    </div>
+    <>
+      <ToastManager/>
+    </>
   );
 }
 
