@@ -1,29 +1,31 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 
 export interface HeaderTab {
   title: string;
-  selected: boolean;
   component: React.ReactNode;
 }
 
 interface Props {
-  tabTitles: string[];
-  defaultTitle?: string;
-  onTabChange: (selectedTabTitle: string) => void;
+  tabs: HeaderTab[];
+  defaultTab: HeaderTab;
+  onTabChange: (selectedTab: HeaderTab) => void;
 }
 
-const Header: React.FC<Props> = ({ tabTitles, onTabChange }) => {
+const Header: React.FC<Props> = ({ tabs, defaultTab, onTabChange }) => {
   return (
-    <Nav variant="tabs" className="mb-3" defaultActiveKey={"Send"}>
-      {tabTitles.map((title) => (
-        <Nav.Item key={title}>
-          <Nav.Link eventKey={title} onClick={() => onTabChange(title)}>
-            {title}
-          </Nav.Link>
-        </Nav.Item>
-      ))}
-    </Nav>
+    <Navbar className="mb-3 d-block">
+      <Nav variant="tabs" defaultActiveKey={defaultTab.title}>
+        <Navbar.Brand>Kafka faker</Navbar.Brand>
+        {tabs.map((tab) => (
+          <Nav.Item key={tab.title}>
+            <Nav.Link eventKey={tab.title} onClick={() => onTabChange(tab)}>
+              {tab.title}
+            </Nav.Link>
+          </Nav.Item>
+        ))}
+      </Nav>
+    </Navbar>
   );
 };
 

@@ -1,7 +1,11 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import style from "./layout.module.scss";
 
-const Layout: React.FC<PropsWithChildren> = ({ children }) => {
+interface Props {
+  children: React.ReactNode | React.ReactNode[];
+}
+
+const Layout: React.FC<Props> = ({ children }) => {
   return <div className={style.layoutContainer}>{children}</div>;
 };
 
