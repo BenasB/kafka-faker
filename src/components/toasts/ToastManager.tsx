@@ -12,22 +12,19 @@ const Toasts: React.FC = () => {
     );
   };
 
+  const addNewToast = () =>
+    setToastList((prevState) => [
+      ...prevState,
+      {
+        text: "Hello world",
+        timeStamp: new Date(),
+        onClose: removeToastFromList,
+      },
+    ]);
+
   return (
     <>
-      <Button
-        onClick={() => {
-          setToastList([
-            ...toastList,
-            {
-              text: "Hello world",
-              timeStamp: new Date(),
-              onClose: removeToastFromList,
-            },
-          ]);
-        }}
-      >
-        Add toast
-      </Button>
+      <Button onClick={() => addNewToast()}>Add toast</Button>
       <ToastContainer position="bottom-end" className="p-3">
         {toastList.map((toastData) => (
           <ToastPrefab {...toastData} key={toastData.timeStamp.getTime()} />
