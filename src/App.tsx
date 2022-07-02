@@ -1,10 +1,10 @@
-import Layout from './components/layout/Layout';
-import ToastManager from './components/toasts/ToastManager';
+import Layout from "./components/layout/Layout";
+import ToastManager from "./components/toasts/ToastManager";
 
 function App() {
   return (
     <Layout>
-      <ToastManager/>
+      <ToastManager />
     </Layout>
   );
 }
