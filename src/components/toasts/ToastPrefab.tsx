@@ -20,7 +20,10 @@ const ToastPrefab: React.FC<ToastData> = (data) => {
       autohide
       onTransitionEnd={() => onClose(data)}
       show={show}
-      onClose={() => setShow(false)}
+      onClose={() => {
+        console.log("turning off: ", timeStamp);
+        setShow(false);
+      }}
     >
       <Toast.Header>
         <strong className="me-auto">Kafka</strong>
