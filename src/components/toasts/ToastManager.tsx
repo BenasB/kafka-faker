@@ -25,7 +25,11 @@ const Toasts: React.FC = () => {
   return (
     <>
       <Button onClick={() => addNewToast()}>Add toast</Button>
-      <ToastContainer position="bottom-end" className="p-3">
+      <ToastContainer
+        position="bottom-end"
+        className="p-3 position-fixed"
+        style={{ zIndex: "1090" }}
+      >
         {toastList.map((toastData) => (
           <ToastPrefab {...toastData} key={toastData.timeStamp.getTime()} />
         ))}
