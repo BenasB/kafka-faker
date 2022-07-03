@@ -7,12 +7,9 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
-import { ToastActions } from "../../../hooks/useToasts";
+import { KafkaMessage } from "../../tabs/SendTab";
 
-const RepeatBar: React.FC<ToastActions> = ({
-  addNewToast,
-  removeToastFromList,
-}) => {
+const RepeatBar: React.FC<KafkaMessage> = ({ send }) => {
   const defaultIntervalSeconds = 5;
   const [intervalSeconds, setIntervalSeconds] = useState<number>(
     defaultIntervalSeconds
@@ -22,17 +19,9 @@ const RepeatBar: React.FC<ToastActions> = ({
   let interval: NodeJS.Timer;
   useEffect(() => {
     if (running) {
-      addNewToast({
-        text: "Hello world from repeat",
-        timeStamp: new Date(),
-        onClose: removeToastFromList,
-      });
+      send();
       interval = setInterval(() => {
-        addNewToast({
-          text: "Hello world from repeat",
-          timeStamp: new Date(),
-          onClose: removeToastFromList,
-        });
+        send();
       }, intervalSeconds * 1000);
     }
     return () => clearInterval(interval);

@@ -1,24 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { ToastActions } from "../../../hooks/useToasts";
+import { KafkaMessage } from "../../tabs/SendTab";
 
-const OnceBar: React.FC<ToastActions> = ({
-  addNewToast,
-  removeToastFromList,
-}) => {
+const OnceBar: React.FC<KafkaMessage> = ({ send }) => {
   return (
     <div className="d-flex flex-row justify-content-end flex-fill">
-      <Button
-        className={"px-4"}
-        variant="success"
-        onClick={() => {
-          addNewToast({
-            text: "Hello world",
-            timeStamp: new Date(),
-            onClose: removeToastFromList,
-          });
-        }}
-      >
+      <Button className={"px-4"} variant="success" onClick={() => send()}>
         Send
       </Button>
     </div>

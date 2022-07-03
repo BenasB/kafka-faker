@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { ToastContainer } from "react-bootstrap";
 import ToastPrefab, { ToastData } from "../components/toasts/ToastPrefab";
 
-export interface ToastActions {
-  addNewToast: (newToast: ToastData) => void;
-  removeToastFromList: (toastToRemove: ToastData) => void;
-}
-
-interface ToastManagement extends ToastActions {
+interface ToastManagement {
+  addNewToast: (text: string) => void;
   toastDisplay: React.ReactNode;
 }
 
@@ -21,8 +17,15 @@ const useToasts: () => ToastManagement = () => {
     );
   };
 
-  const addNewToast = (newToast: ToastData) =>
-    setToastList((prevState) => [...prevState, newToast]);
+  const addNewToast = (text: string) =>
+    setToastList((prevState) => [
+      ...prevState,
+      {
+        text,
+        timeStamp: new Date(),
+        onClose: removeToastFromList,
+      },
+    ]);
 
   const toastDisplay = (
     <ToastContainer
@@ -36,7 +39,7 @@ const useToasts: () => ToastManagement = () => {
     </ToastContainer>
   );
 
-  return { addNewToast, removeToastFromList, toastDisplay };
+  return { addNewToast, toastDisplay };
 };
 
 export default useToasts;
