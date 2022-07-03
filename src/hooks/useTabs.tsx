@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { HeaderTab } from "../components/header/Header";
+import { HeaderTabData } from "../components/header/Header";
 
-const useTabs = (defaultTab: HeaderTab) => {
-  const [currentTab, setCurrentTab] = useState<HeaderTab>(defaultTab);
+interface HeaderTab extends HeaderTabData {
+  selected: boolean;
+}
 
-  const onTabChange: (selectedTabTitle: HeaderTab) => void = (
-    selectedTabTitle
-  ) => {
-    setCurrentTab(selectedTabTitle);
+const useTabs = (initialTabs: HeaderTabData[], defaulTab: HeaderTabData) => {
+  const [tabs, setCurrentTabs] = useState<HeaderTab[]>(
+    initialTabs.map((t) => ({ ...t, selected: t.title === defaulTab.title }))
+  );
+
+  const onTabChange: (selectedTab: HeaderTabData) => void = (selectedTab) => {
+    setCurrentTabs((prevState) =>
+      prevState.map((t) => ({ ...t, selected: t.title === selectedTab.title }))
+    );
   };
 
   return {
-    currentTab,
+    tabs,
     onTabChange,
   };
 };

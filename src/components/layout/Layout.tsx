@@ -8,7 +8,7 @@ interface Props {
 const Layout: React.FC<Props> = ({ children }) => {
   return (
     <div
-      className={`${style.layoutContainer} min-vh-100 mx-auto px-2 d-flex flex-column`}
+      className={`${style.layoutContainer} mx-auto px-2 min-vh-100 d-flex flex-column`}
     >
       {children}
     </div>

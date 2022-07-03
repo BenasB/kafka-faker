@@ -1,15 +1,15 @@
 import React from "react";
 import { Nav, Navbar } from "react-bootstrap";
 
-export interface HeaderTab {
+export interface HeaderTabData {
   title: string;
   component: React.ReactNode;
 }
 
 interface Props {
-  tabs: HeaderTab[];
-  defaultTab: HeaderTab;
-  onTabChange: (selectedTab: HeaderTab) => void;
+  tabs: HeaderTabData[];
+  defaultTab: HeaderTabData;
+  onTabChange: (selectedTab: HeaderTabData) => void;
 }
 
 const Header: React.FC<Props> = ({ tabs, defaultTab, onTabChange }) => {
@@ -19,7 +19,13 @@ const Header: React.FC<Props> = ({ tabs, defaultTab, onTabChange }) => {
         <Navbar.Brand>Kafka faker</Navbar.Brand>
         {tabs.map((tab) => (
           <Nav.Item key={tab.title}>
-            <Nav.Link eventKey={tab.title} onClick={() => onTabChange(tab)}>
+            <Nav.Link
+              eventKey={tab.title}
+              onClick={(e) => {
+                e.preventDefault();
+                onTabChange(tab);
+              }}
+            >
               {tab.title}
             </Nav.Link>
           </Nav.Item>
