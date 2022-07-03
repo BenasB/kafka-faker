@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import { ToastContainer } from "react-bootstrap";
 import ToastPrefab, { ToastData } from "../components/toasts/ToastPrefab";
 
-const useToasts = () => {
+export interface ToastActions {
+  addNewToast: (newToast: ToastData) => void;
+  removeToastFromList: (toastToRemove: ToastData) => void;
+}
+
+interface ToastManagement extends ToastActions {
+  toastDisplay: React.ReactNode;
+}
+
+const useToasts: () => ToastManagement = () => {
   const [toastList, setToastList] = useState<ToastData[]>([]);
 
   const removeToastFromList = (toastToRemove: ToastData) => {

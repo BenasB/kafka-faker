@@ -5,9 +5,7 @@ const SendTab: React.FC = () => {
   return (
     <>
       <div className="col">
-        <div
-          style={{ background: "green", width: "30px", height: "2000px" }}
-        ></div>
+        <p>Good morning sunshine, the world says hello!</p>
       </div>
       <ActionBar />
     </>

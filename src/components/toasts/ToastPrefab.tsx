@@ -21,7 +21,6 @@ const ToastPrefab: React.FC<ToastData> = (data) => {
       onTransitionEnd={() => onClose(data)}
       show={show}
       onClose={() => {
-        console.log("turning off: ", timeStamp);
         setShow(false);
       }}
     >
