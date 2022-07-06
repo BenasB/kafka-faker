@@ -50,7 +50,7 @@ const MessageForm: React.FC<MessageFormManagement> = ({
       <Form.Group>
         <Form.Label>Data</Form.Label>
         {message.data.map((dataField, index) => (
-          <Row key={index}>
+          <Row key={index} className={"mb-3"}>
             <Col>
               <Form.Control
                 type="text"
@@ -88,7 +88,7 @@ const MessageForm: React.FC<MessageFormManagement> = ({
             )}
           </Row>
         ))}
-        <Row sm={5} className={"justify-content-center mt-3"}>
+        <Row sm={5} className={"justify-content-center"}>
           <Button variant="primary" onClick={() => addMessageDataField()}>
             Add field
           </Button>
