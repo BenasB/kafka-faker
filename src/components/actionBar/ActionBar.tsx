@@ -20,7 +20,7 @@ const ActionBar: React.FC<KafkaMessage> = (kafkaMessage) => {
             >
               {modes.map((m) => (
                 <option key={m} value={m}>
-                  {m.charAt(0).toUpperCase() + m.slice(1)}
+                  {m.toFirstUpperCase()}
                 </option>
               ))}
             </Form.Select>

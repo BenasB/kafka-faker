@@ -1,28 +1,33 @@
 import React from "react";
+import useMessageForm from "../../hooks/useMessageForm";
 import useToasts from "../../hooks/useToasts";
 import ActionBar from "../actionBar/ActionBar";
+import MessageForm, { Message } from "../messageForm/MessageForm";
+import ToastDisplay from "../toasts/ToastDisplay";
 
 export interface KafkaMessage {
   send: () => void;
+  data: Message;
 }
 
 const SendTab: React.FC = () => {
-  const toastManagement = useToasts();
-  const { toastDisplay, addNewToast } = toastManagement;
+  const { toastList, addNewToast } = useToasts();
+  const formManagement = useMessageForm();
 
   const kafkaMessage: KafkaMessage = {
     send: () => {
-      addNewToast("Hello world!");
+      addNewToast(formManagement.message.topic);
     },
+    data: formManagement.message,
   };
 
   return (
     <>
       <div className="col">
-        <p>Good morning sunshine, the world says hello!</p>
+        <MessageForm {...formManagement} />
       </div>
       <ActionBar {...kafkaMessage} />
-      {toastDisplay}
+      <ToastDisplay toastList={toastList} />
     </>
   );
 };

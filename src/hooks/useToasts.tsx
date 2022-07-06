@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { ToastContainer } from "react-bootstrap";
-import ToastPrefab, { ToastData } from "../components/toasts/ToastPrefab";
+import { useState } from "react";
+import { ToastData } from "../components/toasts/ToastPrefab";
 
 interface ToastManagement {
   addNewToast: (text: string) => void;
-  toastDisplay: React.ReactNode;
+  toastList: ToastData[];
 }
 
 const useToasts: () => ToastManagement = () => {
@@ -27,19 +26,7 @@ const useToasts: () => ToastManagement = () => {
       },
     ]);
 
-  const toastDisplay = (
-    <ToastContainer
-      position="bottom-start"
-      className="p-3 position-fixed"
-      style={{ zIndex: "1090" }}
-    >
-      {toastList.map((toastData) => (
-        <ToastPrefab {...toastData} key={toastData.timeStamp.getTime()} />
-      ))}
-    </ToastContainer>
-  );
-
-  return { addNewToast, toastDisplay };
+  return { addNewToast, toastList };
 };
 
 export default useToasts;
