@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Message,
+  MessageDataField,
   messageDataFieldTypes,
 } from "../components/messageForm/MessageForm";
 
@@ -8,15 +9,19 @@ export interface MessageFormManagement {
   message: Message;
   addMessageDataField: () => void;
   updateTopic: (newTopic: string) => void;
-  updateMessageDataKey: (newKey: string, messageDataFieldIndex: number) => void;
+  updateMessageDataKey: (
+    newKey: string,
+    messageDataFieldIndices: number[]
+  ) => void;
   updateMessageDataCustomValue: (
     newValue: string,
-    messageDataFieldIndex: number
+    messageDataFieldIndices: number[]
   ) => void;
   updateMessageDataType: (
     newType: typeof messageDataFieldTypes[number],
-    messageDataFieldIndex: number
+    messageDataFieldIndices: number[]
   ) => void;
+  addMessageDataObjectField: (messageDataFieldIndices: number[]) => void;
 }
 
 const useMessageForm: () => MessageFormManagement = () => {
@@ -25,6 +30,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     data: [],
   });
 
+  // Adds a new message data field to the first/main parent element
   const addMessageDataField = () => {
     setMessage((prevState) => ({
       ...prevState,
@@ -34,6 +40,7 @@ const useMessageForm: () => MessageFormManagement = () => {
           key: "",
           valueType: "custom",
           value: "",
+          depth: 0,
         },
       ],
     }));
@@ -46,67 +53,128 @@ const useMessageForm: () => MessageFormManagement = () => {
     }));
   };
 
+  // Helper used to iterate recursively through the object, find and update a field
+  const findAndUpdateField = (
+    dataFields: MessageDataField[],
+    indices: number[],
+    fieldUpdate: (fieldData: MessageDataField) => MessageDataField,
+    indexCount = 1
+  ): MessageDataField[] => {
+    return dataFields.map<MessageDataField>((dataField, i) => {
+      if (
+        indexCount !== indices.length &&
+        i === indices[indexCount - 1] &&
+        dataField.valueType === "object"
+      )
+        return {
+          ...dataField,
+          value: findAndUpdateField(
+            dataField.value,
+            indices,
+            fieldUpdate,
+            indexCount + 1
+          ),
+        };
+
+      if (indexCount === indices.length && i === indices[indexCount - 1])
+        return fieldUpdate(dataField);
+
+      return dataField;
+    });
+  };
+
   const updateMessageDataKey = (
     newKey: string,
-    messageDataFieldIndex: number
+    messageDataFieldIndices: number[]
   ) => {
     setMessage((prevState) => ({
       ...prevState,
-      data: prevState.data.map((o, i) => {
-        if (i !== messageDataFieldIndex) return o;
-
-        return {
-          ...o,
+      data: findAndUpdateField(
+        prevState.data,
+        messageDataFieldIndices,
+        (fieldData) => ({
+          ...fieldData,
           key: newKey,
-        };
-      }),
+        })
+      ),
     }));
   };
 
   const updateMessageDataCustomValue = (
     newValue: string,
-    messageDataFieldIndex: number
+    messageDataFieldIndices: number[]
   ) => {
     setMessage((prevState) => ({
       ...prevState,
-      data: prevState.data.map((o, i) => {
-        if (i !== messageDataFieldIndex) return o;
-        if (o.valueType !== "custom") return o;
+      data: findAndUpdateField(
+        prevState.data,
+        messageDataFieldIndices,
+        (fieldData) => {
+          if (fieldData.valueType !== "custom") return fieldData;
 
-        return {
-          ...o,
-          value: newValue,
-        };
-      }),
+          return {
+            ...fieldData,
+            value: newValue,
+          };
+        }
+      ),
     }));
   };
 
   const updateMessageDataType = (
     newType: typeof messageDataFieldTypes[number],
-    messageDataFieldIndex: number
+    messageDataFieldIndices: number[]
   ) => {
     setMessage((prevState) => ({
       ...prevState,
-      data: prevState.data.map((o, i) => {
-        if (i !== messageDataFieldIndex) return o;
+      data: findAndUpdateField(
+        prevState.data,
+        messageDataFieldIndices,
+        (fieldData) => {
+          switch (newType) {
+            case "object":
+              return {
+                ...fieldData,
+                valueType: newType,
+                value: [],
+              };
 
-        switch (newType) {
-          case "object":
-            return {
-              ...o,
-              valueType: newType,
-              value: [],
-            };
-
-          case "custom":
-          default:
-            return {
-              ...o,
-              valueType: newType,
-              value: "",
-            };
+            case "custom":
+            default:
+              return {
+                ...fieldData,
+                valueType: newType,
+                value: "",
+              };
+          }
         }
-      }),
+      ),
+    }));
+  };
+
+  const addMessageDataObjectField = (messageDataFieldIndices: number[]) => {
+    setMessage((prevState) => ({
+      ...prevState,
+      data: findAndUpdateField(
+        prevState.data,
+        messageDataFieldIndices,
+        (fieldData) => {
+          if (fieldData.valueType !== "object") return fieldData;
+
+          return {
+            ...fieldData,
+            value: [
+              ...fieldData.value,
+              {
+                key: "",
+                valueType: "custom",
+                value: "",
+                depth: fieldData.depth + 1,
+              },
+            ],
+          };
+        }
+      ),
     }));
   };
 
@@ -117,6 +185,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     updateMessageDataKey,
     updateMessageDataCustomValue,
     updateMessageDataType,
+    addMessageDataObjectField,
   };
 };
 
