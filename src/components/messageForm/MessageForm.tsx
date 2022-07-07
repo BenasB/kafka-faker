@@ -3,30 +3,6 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import MessageDataRow from "./MessageDataRow";
 
-export const messageDataFieldTypes = ["custom", "object"] as const;
-
-type MessageDataFieldCommon = {
-  key: string;
-  depth: number;
-};
-
-type MessageDataFieldCustom = MessageDataFieldCommon & {
-  valueType: typeof messageDataFieldTypes[0];
-  value: string;
-};
-
-type MessageDataFieldObject = MessageDataFieldCommon & {
-  valueType: typeof messageDataFieldTypes[1];
-  value: MessageDataField[];
-};
-
-export type MessageDataField = MessageDataFieldCustom | MessageDataFieldObject;
-
-export interface Message {
-  topic: string;
-  data: MessageDataField[];
-}
-
 const MessageForm: React.FC<MessageFormManagement> = (props) => {
   const { message, addMessageDataField, updateTopic } = props;
 

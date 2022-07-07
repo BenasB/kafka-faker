@@ -1,7 +1,10 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
-import { MessageDataField, messageDataFieldTypes } from "./MessageForm";
+import {
+  MessageDataField,
+  messageDataFieldTypes,
+} from "../../hooks/useMessageForm";
 
 interface Props {
   dataField: MessageDataField;
@@ -15,6 +18,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
     updateMessageDataType,
     updateMessageDataCustomValue,
     addMessageDataObjectField,
+    removeMessageDataField,
   } = props;
 
   return (
@@ -70,6 +74,14 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
             </Button>
           </Col>
         )}
+        <Col xs="auto">
+          <Button
+            variant="outline-danger"
+            onClick={() => removeMessageDataField(indices)}
+          >
+            <i className="bi bi-trash"></i>
+          </Button>
+        </Col>
       </Row>
       {dataField.valueType === "object" &&
         dataField.value.map((nestedDataField, nestedIndex) => (

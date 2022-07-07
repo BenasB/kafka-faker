@@ -1,8 +1,8 @@
 import React from "react";
-import useMessageForm from "../../hooks/useMessageForm";
+import useMessageForm, { Message } from "../../hooks/useMessageForm";
 import useToasts from "../../hooks/useToasts";
 import ActionBar from "../actionBar/ActionBar";
-import MessageForm, { Message } from "../messageForm/MessageForm";
+import MessageForm from "../messageForm/MessageForm";
 import ToastDisplay from "../toasts/ToastDisplay";
 
 export interface KafkaMessage {

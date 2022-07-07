@@ -1,10 +1,34 @@
 import { useState } from "react";
-import {
-  Message,
-  MessageDataField,
-  messageDataFieldTypes,
-} from "../components/messageForm/MessageForm";
 
+export const messageDataFieldTypes = ["custom", "object"] as const;
+
+// Common shared properties between all message data field types
+type MessageDataFieldCommon = {
+  key: string;
+  depth: number;
+  toDelete?: boolean;
+};
+
+type MessageDataFieldCustom = MessageDataFieldCommon & {
+  valueType: typeof messageDataFieldTypes[0];
+  value: string;
+};
+
+type MessageDataFieldObject = MessageDataFieldCommon & {
+  valueType: typeof messageDataFieldTypes[1];
+  value: MessageDataField[];
+};
+
+export type MessageDataField = MessageDataFieldCustom | MessageDataFieldObject;
+
+// State interface
+export interface Message {
+  topic: string;
+  data: MessageDataField[];
+}
+
+// The hook returns this interface
+// Necessary functions and data to manage the message form
 export interface MessageFormManagement {
   message: Message;
   addMessageDataField: () => void;
@@ -22,6 +46,7 @@ export interface MessageFormManagement {
     messageDataFieldIndices: number[]
   ) => void;
   addMessageDataObjectField: (messageDataFieldIndices: number[]) => void;
+  removeMessageDataField: (messageDataFieldIndices: number[]) => void;
 }
 
 const useMessageForm: () => MessageFormManagement = () => {
@@ -60,123 +85,110 @@ const useMessageForm: () => MessageFormManagement = () => {
     fieldUpdate: (fieldData: MessageDataField) => MessageDataField,
     indexCount = 1
   ): MessageDataField[] => {
-    return dataFields.map<MessageDataField>((dataField, i) => {
-      if (
-        indexCount !== indices.length &&
-        i === indices[indexCount - 1] &&
-        dataField.valueType === "object"
-      )
-        return {
-          ...dataField,
-          value: findAndUpdateField(
-            dataField.value,
-            indices,
-            fieldUpdate,
-            indexCount + 1
-          ),
-        };
+    return dataFields
+      .map<MessageDataField>((dataField, i) => {
+        if (
+          indexCount !== indices.length &&
+          i === indices[indexCount - 1] &&
+          dataField.valueType === "object"
+        )
+          return {
+            ...dataField,
+            value: findAndUpdateField(
+              dataField.value,
+              indices,
+              fieldUpdate,
+              indexCount + 1
+            ),
+          };
 
-      if (indexCount === indices.length && i === indices[indexCount - 1])
-        return fieldUpdate(dataField);
+        if (indexCount === indices.length && i === indices[indexCount - 1])
+          return fieldUpdate(dataField);
 
-      return dataField;
-    });
+        return dataField;
+      })
+      .filter((d) => !d.toDelete);
+  };
+
+  const updateMessageDataField = (
+    indices: number[],
+    fieldUpdate: (fieldData: MessageDataField) => MessageDataField
+  ): void => {
+    setMessage((prevState) => ({
+      ...prevState,
+      data: findAndUpdateField(prevState.data, indices, fieldUpdate),
+    }));
   };
 
   const updateMessageDataKey = (
     newKey: string,
     messageDataFieldIndices: number[]
-  ) => {
-    setMessage((prevState) => ({
-      ...prevState,
-      data: findAndUpdateField(
-        prevState.data,
-        messageDataFieldIndices,
-        (fieldData) => ({
-          ...fieldData,
-          key: newKey,
-        })
-      ),
+  ) =>
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
+      ...fieldData,
+      key: newKey,
     }));
-  };
 
   const updateMessageDataCustomValue = (
     newValue: string,
     messageDataFieldIndices: number[]
-  ) => {
-    setMessage((prevState) => ({
-      ...prevState,
-      data: findAndUpdateField(
-        prevState.data,
-        messageDataFieldIndices,
-        (fieldData) => {
-          if (fieldData.valueType !== "custom") return fieldData;
+  ) =>
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "custom") return fieldData;
 
-          return {
-            ...fieldData,
-            value: newValue,
-          };
-        }
-      ),
-    }));
-  };
+      return {
+        ...fieldData,
+        value: newValue,
+      };
+    });
 
   const updateMessageDataType = (
     newType: typeof messageDataFieldTypes[number],
     messageDataFieldIndices: number[]
-  ) => {
-    setMessage((prevState) => ({
-      ...prevState,
-      data: findAndUpdateField(
-        prevState.data,
-        messageDataFieldIndices,
-        (fieldData) => {
-          switch (newType) {
-            case "object":
-              return {
-                ...fieldData,
-                valueType: newType,
-                value: [],
-              };
-
-            case "custom":
-            default:
-              return {
-                ...fieldData,
-                valueType: newType,
-                value: "",
-              };
-          }
-        }
-      ),
-    }));
-  };
-
-  const addMessageDataObjectField = (messageDataFieldIndices: number[]) => {
-    setMessage((prevState) => ({
-      ...prevState,
-      data: findAndUpdateField(
-        prevState.data,
-        messageDataFieldIndices,
-        (fieldData) => {
-          if (fieldData.valueType !== "object") return fieldData;
-
+  ) =>
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      switch (newType) {
+        case "object":
           return {
             ...fieldData,
-            value: [
-              ...fieldData.value,
-              {
-                key: "",
-                valueType: "custom",
-                value: "",
-                depth: fieldData.depth + 1,
-              },
-            ],
+            valueType: newType,
+            value: [],
           };
-        }
-      ),
+
+        case "custom":
+        default:
+          return {
+            ...fieldData,
+            valueType: newType,
+            value: "",
+          };
+      }
+    });
+
+  // Adds a new message data field to an already existing message data field of type object
+  const addMessageDataObjectField = (messageDataFieldIndices: number[]) =>
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "object") return fieldData;
+
+      return {
+        ...fieldData,
+        value: [
+          ...fieldData.value,
+          {
+            key: "",
+            valueType: "custom",
+            value: "",
+            depth: fieldData.depth + 1,
+          },
+        ],
+      };
+    });
+
+  const removeMessageDataField = (messageDataFieldIndices: number[]) =>
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
+      ...fieldData,
+      toDelete: true,
     }));
-  };
 
   return {
     message,
@@ -186,6 +198,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     updateMessageDataCustomValue,
     updateMessageDataType,
     addMessageDataObjectField,
+    removeMessageDataField,
   };
 };
 
