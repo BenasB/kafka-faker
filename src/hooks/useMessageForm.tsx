@@ -2,6 +2,12 @@ import { useState } from "react";
 
 export const messageDataFieldTypes = ["custom", "object"] as const;
 
+export const messageDataFieldGenerationTypes = [
+  "name",
+  "date",
+  "location",
+] as const;
+
 // Common shared properties between all message data field types
 type MessageDataFieldCommon = {
   key: string;
@@ -19,7 +25,16 @@ type MessageDataFieldObject = MessageDataFieldCommon & {
   value: MessageDataField[];
 };
 
-export type MessageDataField = MessageDataFieldCustom | MessageDataFieldObject;
+type MessageDataFieldGeneration = MessageDataFieldCommon & {
+  valueType: "generation";
+  generate: () => string;
+  value: string;
+};
+
+export type MessageDataField =
+  | MessageDataFieldCustom
+  | MessageDataFieldObject
+  | MessageDataFieldGeneration;
 
 // State interface
 export interface Message {
@@ -42,11 +57,16 @@ export interface MessageFormManagement {
     messageDataFieldIndices: number[]
   ) => void;
   updateMessageDataType: (
-    newType: typeof messageDataFieldTypes[number],
+    newType:
+      | typeof messageDataFieldTypes[number]
+      | typeof messageDataFieldGenerationTypes[number],
     messageDataFieldIndices: number[]
   ) => void;
   addMessageDataObjectField: (messageDataFieldIndices: number[]) => void;
   removeMessageDataField: (messageDataFieldIndices: number[]) => void;
+  regenerateMessageDataFieldGeneration: (
+    messageDataFieldIndices: number[]
+  ) => void;
 }
 
 const useMessageForm: () => MessageFormManagement = () => {
@@ -143,9 +163,21 @@ const useMessageForm: () => MessageFormManagement = () => {
     });
 
   const updateMessageDataType = (
-    newType: typeof messageDataFieldTypes[number],
+    newType:
+      | typeof messageDataFieldTypes[number]
+      | typeof messageDataFieldGenerationTypes[number],
     messageDataFieldIndices: number[]
-  ) =>
+  ) => {
+    const generationField = (
+      fieldData: MessageDataField,
+      generate: () => string
+    ): MessageDataFieldGeneration => ({
+      ...fieldData,
+      valueType: "generation",
+      generate,
+      value: generate(),
+    });
+
     updateMessageDataField(messageDataFieldIndices, (fieldData) => {
       switch (newType) {
         case "object":
@@ -154,6 +186,24 @@ const useMessageForm: () => MessageFormManagement = () => {
             valueType: newType,
             value: [],
           };
+
+        case "name":
+          return generationField(
+            fieldData,
+            () => "Benas" + Math.floor(Math.random() * 100)
+          );
+
+        case "date":
+          return generationField(
+            fieldData,
+            () => "Date" + Math.floor(Math.random() * 100)
+          );
+
+        case "location":
+          return generationField(
+            fieldData,
+            () => "Location" + Math.floor(Math.random() * 100)
+          );
 
         case "custom":
         default:
@@ -164,6 +214,7 @@ const useMessageForm: () => MessageFormManagement = () => {
           };
       }
     });
+  };
 
   // Adds a new message data field to an already existing message data field of type object
   const addMessageDataObjectField = (messageDataFieldIndices: number[]) =>
@@ -190,6 +241,18 @@ const useMessageForm: () => MessageFormManagement = () => {
       toDelete: true,
     }));
 
+  const regenerateMessageDataFieldGeneration = (
+    messageDataFieldIndices: number[]
+  ) =>
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "generation") return fieldData;
+
+      return {
+        ...fieldData,
+        value: fieldData.generate(),
+      };
+    });
+
   return {
     message,
     addMessageDataField,
@@ -199,6 +262,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     updateMessageDataType,
     addMessageDataObjectField,
     removeMessageDataField,
+    regenerateMessageDataFieldGeneration,
   };
 };
 

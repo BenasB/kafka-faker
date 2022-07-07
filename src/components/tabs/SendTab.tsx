@@ -16,7 +16,7 @@ const SendTab: React.FC = () => {
 
   const kafkaMessage: KafkaMessage = {
     send: () => {
-      addNewToast(formManagement.message.topic);
+      addNewToast(JSON.stringify(formManagement.message));
     },
     data: formManagement.message,
   };

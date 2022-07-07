@@ -1,6 +1,9 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
-import { MessageFormManagement } from "../../hooks/useMessageForm";
+import {
+  messageDataFieldGenerationTypes,
+  MessageFormManagement,
+} from "../../hooks/useMessageForm";
 import {
   MessageDataField,
   messageDataFieldTypes,
@@ -19,6 +22,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
     updateMessageDataCustomValue,
     addMessageDataObjectField,
     removeMessageDataField,
+    regenerateMessageDataFieldGeneration,
   } = props;
 
   return (
@@ -35,21 +39,27 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
             onChange={(e) => updateMessageDataKey(e.target.value, indices)}
           />
         </Col>
-        <Col xs={3}>
+        <Col xs={2}>
           <Form.Select
             onChange={(e) =>
               updateMessageDataType(
-                messageDataFieldTypes.find((t) => t === e.target.value) ||
+                messageDataFieldGenerationTypes.find(
+                  (t) => t === e.target.value
+                ) ||
+                  messageDataFieldTypes.find((t) => t === e.target.value) ||
                   messageDataFieldTypes[0],
                 indices
               )
             }
+            value={dataField.valueType}
           >
-            {messageDataFieldTypes.map((m) => (
-              <option key={m} value={m}>
-                {m.toFirstUpperCase()}
-              </option>
-            ))}
+            {[...messageDataFieldGenerationTypes, ...messageDataFieldTypes].map(
+              (m) => (
+                <option key={m} value={m}>
+                  {m.toFirstUpperCase()}
+                </option>
+              )
+            )}
           </Form.Select>
         </Col>
         {dataField.valueType === "custom" && (
@@ -73,6 +83,25 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
               Add field to object
             </Button>
           </Col>
+        )}
+        {dataField.valueType === "generation" && (
+          <>
+            <Col>
+              <Form.Control
+                type="text"
+                value={dataField.value}
+                disabled={true}
+              />
+            </Col>
+            <Col xs="auto">
+              <Button
+                variant="outline-secondary"
+                onClick={() => regenerateMessageDataFieldGeneration(indices)}
+              >
+                <i className="bi bi-arrow-clockwise"></i>
+              </Button>
+            </Col>
+          </>
         )}
         <Col xs="auto">
           <Button
