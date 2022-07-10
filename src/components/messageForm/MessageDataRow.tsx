@@ -15,7 +15,7 @@ interface Props {
 }
 
 const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
-  const { dataField, indices } = props;
+  const { dataField, indices, message } = props;
   const {
     updateMessageDataKey,
     updateMessageDataType,
@@ -51,7 +51,11 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
                 indices
               )
             }
-            value={dataField.valueType}
+            value={
+              dataField.valueType === "generation"
+                ? dataField.generationType
+                : dataField.valueType
+            }
           >
             {[...messageDataFieldGenerationTypes, ...messageDataFieldTypes].map(
               (m) => (
@@ -84,7 +88,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
             </Button>
           </Col>
         )}
-        {dataField.valueType === "generation" && (
+        {dataField.valueType === "generation" && !message.autoGeneration && (
           <>
             <Col>
               <Form.Control

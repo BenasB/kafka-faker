@@ -27,6 +27,7 @@ type MessageDataFieldObject = MessageDataFieldCommon & {
 
 type MessageDataFieldGeneration = MessageDataFieldCommon & {
   valueType: "generation";
+  generationType: typeof messageDataFieldGenerationTypes[number];
   generate: () => string;
   value: string;
 };
@@ -39,6 +40,7 @@ export type MessageDataField =
 // State interface
 export interface Message {
   topic: string;
+  autoGeneration: boolean;
   data: MessageDataField[];
 }
 
@@ -48,6 +50,7 @@ export interface MessageFormManagement {
   message: Message;
   addMessageDataField: () => void;
   updateTopic: (newTopic: string) => void;
+  toggleAutoGeneration: () => void;
   updateMessageDataKey: (
     newKey: string,
     messageDataFieldIndices: number[]
@@ -72,6 +75,7 @@ export interface MessageFormManagement {
 const useMessageForm: () => MessageFormManagement = () => {
   const [message, setMessage] = useState<Message>({
     topic: "",
+    autoGeneration: false,
     data: [],
   });
 
@@ -95,6 +99,13 @@ const useMessageForm: () => MessageFormManagement = () => {
     setMessage((prevState) => ({
       ...prevState,
       topic: newTopic,
+    }));
+  };
+
+  const toggleAutoGeneration = () => {
+    setMessage((prevState) => ({
+      ...prevState,
+      autoGeneration: !prevState.autoGeneration,
     }));
   };
 
@@ -174,6 +185,9 @@ const useMessageForm: () => MessageFormManagement = () => {
     ): MessageDataFieldGeneration => ({
       ...fieldData,
       valueType: "generation",
+      generationType:
+        messageDataFieldGenerationTypes.find((t) => t === newType) ||
+        messageDataFieldGenerationTypes[0],
       generate,
       value: generate(),
     });
@@ -257,6 +271,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     message,
     addMessageDataField,
     updateTopic,
+    toggleAutoGeneration,
     updateMessageDataKey,
     updateMessageDataCustomValue,
     updateMessageDataType,

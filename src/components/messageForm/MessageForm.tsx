@@ -1,10 +1,18 @@
 import React from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
+import {
+  Form,
+  Row,
+  Col,
+  Button,
+  Tooltip,
+  OverlayTrigger,
+} from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import MessageDataRow from "./MessageDataRow";
 
 const MessageForm: React.FC<MessageFormManagement> = (props) => {
-  const { message, addMessageDataField, updateTopic } = props;
+  const { message, addMessageDataField, updateTopic, toggleAutoGeneration } =
+    props;
 
   return (
     <Form onSubmit={(e) => e.preventDefault()}>
@@ -21,7 +29,23 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
         </Col>
       </Form.Group>
       <Form.Group>
-        <Form.Label>Data</Form.Label>
+        <div className="d-flex justify-content-between my-2">
+          <Form.Label>Data</Form.Label>
+          <OverlayTrigger
+            overlay={
+              <Tooltip>
+                Automatically generate data when sending a message
+              </Tooltip>
+            }
+          >
+            <Form.Check
+              type="switch"
+              label="Auto generation"
+              value={message.autoGeneration.toString()}
+              onClick={() => toggleAutoGeneration()}
+            />
+          </OverlayTrigger>
+        </div>
         {message.data.map((dataField, index) => (
           <MessageDataRow
             {...props}
