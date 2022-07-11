@@ -1,10 +1,6 @@
-export const messageDataFieldTypes = ["custom", "object"] as const;
+import { messageDataFieldGenerationTypes } from "../../data/generationFunctions";
 
-export const messageDataFieldGenerationTypes = [
-  "name",
-  "date",
-  "location",
-] as const;
+export const messageDataFieldTypes = ["custom", "object"] as const;
 
 // Common shared properties between all message data field types
 type MessageDataFieldCommon = {

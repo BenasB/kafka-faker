@@ -1,11 +1,8 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
+import { messageDataFieldGenerationTypes } from "../../data/generationFunctions";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
-import {
-  MessageDataField,
-  messageDataFieldGenerationTypes,
-  messageDataFieldTypes,
-} from "./messageTypes";
+import { MessageDataField, messageDataFieldTypes } from "./messageTypes";
 
 interface Props {
   dataField: MessageDataField;

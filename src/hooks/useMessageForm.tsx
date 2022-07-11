@@ -3,10 +3,13 @@ import hookHelpers from "../components/messageForm/hookHelpers";
 import {
   Message,
   messageDataFieldTypes,
-  messageDataFieldGenerationTypes,
   MessageDataField,
   MessageDataFieldGeneration,
 } from "../components/messageForm/messageTypes";
+import generationFunctions, {
+  GenerationFunction,
+  messageDataFieldGenerationTypes,
+} from "../data/generationFunctions";
 
 // The hook returns this interface
 // Necessary functions and data to manage the message form
@@ -108,52 +111,43 @@ const useMessageForm: () => MessageFormManagement = () => {
   ) => {
     const generationField = (
       fieldData: MessageDataField,
-      generate: () => string
+      generationFunction: GenerationFunction
     ): MessageDataFieldGeneration => ({
       ...fieldData,
       valueType: "generation",
       generationType:
         messageDataFieldGenerationTypes.find((t) => t === newType) ||
         messageDataFieldGenerationTypes[0],
-      generate,
-      value: generate(),
+      generate: generationFunction.function,
+      value: generationFunction.function(),
     });
 
     updateMessageDataField(messageDataFieldIndices, (fieldData) => {
-      switch (newType) {
-        case "object":
-          return {
-            ...fieldData,
-            valueType: newType,
-            value: [],
-          };
+      if (messageDataFieldGenerationTypes.find((t) => t === newType)) {
+        return generationField(
+          fieldData,
+          generationFunctions.find((t) => t.type === newType) ||
+            generationFunctions[0]
+        );
+      } else if (messageDataFieldTypes.find((t) => t === newType)) {
+        switch (newType) {
+          case "object":
+            return {
+              ...fieldData,
+              valueType: newType,
+              value: [],
+            };
 
-        case "name":
-          return generationField(
-            fieldData,
-            () => "Benas" + Math.floor(Math.random() * 100)
-          );
-
-        case "date":
-          return generationField(
-            fieldData,
-            () => "Date" + Math.floor(Math.random() * 100)
-          );
-
-        case "location":
-          return generationField(
-            fieldData,
-            () => "Location" + Math.floor(Math.random() * 100)
-          );
-
-        case "custom":
-        default:
-          return {
-            ...fieldData,
-            valueType: newType,
-            value: "",
-          };
+          case "custom":
+            return {
+              ...fieldData,
+              valueType: newType,
+              value: "",
+            };
+        }
       }
+
+      return fieldData;
     });
   };
 
