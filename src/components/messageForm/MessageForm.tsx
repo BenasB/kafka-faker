@@ -44,7 +44,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
             <Col>
               <h4>Data</h4>
             </Col>
-            {!message.autoGeneration && (
+            {!message.autoGeneration && message.data.length > 0 && (
               <Col>
                 <OverlayTrigger
                   overlay={<Tooltip>Regenerate all generation fields</Tooltip>}
