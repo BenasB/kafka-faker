@@ -67,6 +67,7 @@ export interface MessageFormManagement {
   ) => void;
   addMessageDataObjectField: (messageDataFieldIndices: number[]) => void;
   removeMessageDataField: (messageDataFieldIndices: number[]) => void;
+  removeAllMessageDataFields: () => void;
   regenerateMessageDataFieldGeneration: (
     messageDataFieldIndices: number[]
   ) => void;
@@ -285,6 +286,13 @@ const useMessageForm: () => MessageFormManagement = () => {
       toDelete: true,
     }));
 
+  const removeAllMessageDataFields = () => {
+    setMessage((prevState) => ({
+      ...prevState,
+      data: [],
+    }));
+  };
+
   const regenerateMessageDataFieldGeneration = (
     messageDataFieldIndices: number[]
   ) =>
@@ -319,6 +327,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     removeMessageDataField,
     regenerateMessageDataFieldGeneration,
     regenerateAllMessageDataFields,
+    removeAllMessageDataFields,
   };
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   Row,
@@ -8,6 +8,7 @@ import {
   OverlayTrigger,
 } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
+import DeleteConfimationModal from "./DeleteConfimationModal";
 import MessageDataRow from "./MessageDataRow";
 
 const MessageForm: React.FC<MessageFormManagement> = (props) => {
@@ -17,7 +18,11 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
     updateTopic,
     toggleAutoGeneration,
     regenerateAllMessageDataFields,
+    removeAllMessageDataFields,
   } = props;
+
+  const [showDeleteConfirmationModal, setShowDeleteConfimationModal] =
+    useState<boolean>(false);
 
   return (
     <Form onSubmit={(e) => e.preventDefault()}>
@@ -53,6 +58,28 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
                   </Button>
                 </OverlayTrigger>
               </Col>
+            )}
+            {message.data.length > 0 && (
+              <>
+                <Col>
+                  <OverlayTrigger
+                    overlay={<Tooltip>Delete all fields</Tooltip>}
+                  >
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => setShowDeleteConfimationModal(true)}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </Button>
+                  </OverlayTrigger>
+                </Col>
+                <DeleteConfimationModal
+                  show={showDeleteConfirmationModal}
+                  setShow={setShowDeleteConfimationModal}
+                  onConfirm={removeAllMessageDataFields}
+                />
+              </>
             )}
           </Row>
           <OverlayTrigger
