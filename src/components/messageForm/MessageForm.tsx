@@ -11,8 +11,13 @@ import { MessageFormManagement } from "../../hooks/useMessageForm";
 import MessageDataRow from "./MessageDataRow";
 
 const MessageForm: React.FC<MessageFormManagement> = (props) => {
-  const { message, addMessageDataField, updateTopic, toggleAutoGeneration } =
-    props;
+  const {
+    message,
+    addMessageDataField,
+    updateTopic,
+    toggleAutoGeneration,
+    regenerateAllMessageDataFields,
+  } = props;
 
   return (
     <Form onSubmit={(e) => e.preventDefault()}>
@@ -30,11 +35,30 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
       </Form.Group>
       <Form.Group>
         <div className="d-flex justify-content-between my-2">
-          <Form.Label>Data</Form.Label>
+          <Row>
+            <Col>
+              <h4>Data</h4>
+            </Col>
+            {!message.autoGeneration && (
+              <Col>
+                <OverlayTrigger
+                  overlay={<Tooltip>Regenerate all generation fields</Tooltip>}
+                >
+                  <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => regenerateAllMessageDataFields()}
+                  >
+                    <i className="bi bi-arrow-clockwise"></i>
+                  </Button>
+                </OverlayTrigger>
+              </Col>
+            )}
+          </Row>
           <OverlayTrigger
             overlay={
               <Tooltip>
-                Automatically generate data when sending a message
+                Automatically regenerate data when sending a message
               </Tooltip>
             }
           >

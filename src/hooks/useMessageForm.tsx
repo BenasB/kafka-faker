@@ -70,6 +70,7 @@ export interface MessageFormManagement {
   regenerateMessageDataFieldGeneration: (
     messageDataFieldIndices: number[]
   ) => void;
+  regenerateAllMessageDataFields: () => void;
 }
 
 const useMessageForm: () => MessageFormManagement = () => {
@@ -109,7 +110,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     }));
   };
 
-  // Helper used to iterate recursively through the object, find and update a field
+  // Helper used to iterate recursively through the message data object, find and update a field
   const findAndUpdateField = (
     dataFields: MessageDataField[],
     indices: number[],
@@ -141,6 +142,7 @@ const useMessageForm: () => MessageFormManagement = () => {
       .filter((d) => !d.toDelete);
   };
 
+  // Reusable function to update a single field
   const updateMessageDataField = (
     indices: number[],
     fieldUpdate: (fieldData: MessageDataField) => MessageDataField
@@ -148,6 +150,34 @@ const useMessageForm: () => MessageFormManagement = () => {
     setMessage((prevState) => ({
       ...prevState,
       data: findAndUpdateField(prevState.data, indices, fieldUpdate),
+    }));
+  };
+
+  // Helper to iterate recursively through all of message data fields
+  const iterateAllMessageFields = (
+    dataFields: MessageDataField[],
+    fieldUpdate: (fieldData: MessageDataField) => MessageDataField
+  ): MessageDataField[] => {
+    return dataFields
+      .map<MessageDataField>((dataField) => {
+        if (dataField.valueType === "object")
+          return {
+            ...dataField,
+            value: iterateAllMessageFields(dataField.value, fieldUpdate),
+          };
+
+        return fieldUpdate(dataField);
+      })
+      .filter((d) => !d.toDelete);
+  };
+
+  // Reusable function to update multiple fields at once
+  const updateAllMessageFields = (
+    fieldUpdate: (fieldData: MessageDataField) => MessageDataField
+  ): void => {
+    setMessage((prevState) => ({
+      ...prevState,
+      data: iterateAllMessageFields(prevState.data, fieldUpdate),
     }));
   };
 
@@ -267,6 +297,16 @@ const useMessageForm: () => MessageFormManagement = () => {
       };
     });
 
+  const regenerateAllMessageDataFields = () =>
+    updateAllMessageFields((fieldData) => {
+      if (fieldData.valueType !== "generation") return fieldData;
+
+      return {
+        ...fieldData,
+        value: fieldData.generate(),
+      };
+    });
+
   return {
     message,
     addMessageDataField,
@@ -278,6 +318,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     addMessageDataObjectField,
     removeMessageDataField,
     regenerateMessageDataFieldGeneration,
+    regenerateAllMessageDataFields,
   };
 };
 
