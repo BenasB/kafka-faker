@@ -8,7 +8,7 @@ import {
   OverlayTrigger,
 } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
-import DeleteConfimationModal from "./DeleteConfimationModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import MessageDataRow from "./MessageDataRow";
 
 const MessageForm: React.FC<MessageFormManagement> = (props) => {
@@ -74,7 +74,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
                     </Button>
                   </OverlayTrigger>
                 </Col>
-                <DeleteConfimationModal
+                <DeleteConfirmationModal
                   show={showDeleteConfirmationModal}
                   setShow={setShowDeleteConfimationModal}
                   onConfirm={removeAllMessageDataFields}

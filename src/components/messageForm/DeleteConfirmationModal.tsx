@@ -7,7 +7,7 @@ interface Props {
   onConfirm: () => void;
 }
 
-const DeleteConfimationModal: React.FC<Props> = ({
+const DeleteConfirmationModal: React.FC<Props> = ({
   show,
   setShow,
   onConfirm,
@@ -38,4 +38,4 @@ const DeleteConfimationModal: React.FC<Props> = ({
   );
 };
 
-export default DeleteConfimationModal;
+export default DeleteConfirmationModal;
