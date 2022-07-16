@@ -34,19 +34,24 @@ const findAndUpdateField = (
 };
 
 // Helper to iterate recursively through all of message data fields
-const iterateAllMessageFields = (
+export const iterateAllMessageFields = (
   dataFields: MessageDataField[],
   fieldUpdate: (fieldData: MessageDataField) => MessageDataField
 ): MessageDataField[] => {
   return dataFields
     .map<MessageDataField>((dataField) => {
-      if (dataField.valueType === "object")
+      const updatedField = fieldUpdate(dataField);
+
+      if (
+        dataField.valueType === "object" &&
+        updatedField.valueType === "object"
+      )
         return {
-          ...dataField,
+          ...updatedField,
           value: iterateAllMessageFields(dataField.value, fieldUpdate),
         };
 
-      return fieldUpdate(dataField);
+      return updatedField;
     })
     .filter((d) => !d.toDelete);
 };

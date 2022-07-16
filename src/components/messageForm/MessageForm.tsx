@@ -25,7 +25,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
     useState<boolean>(false);
 
   return (
-    <Form onSubmit={(e) => e.preventDefault()}>
+    <Form onSubmit={(e) => e.preventDefault()} noValidate>
       <Form.Group as={Row}>
         <Form.Label column sm={2}>
           Topic
@@ -34,8 +34,13 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
           <Form.Control
             type="text"
             placeholder="Topic"
+            value={message.topic.value}
             onChange={(e) => updateTopic(e.target.value)}
+            isInvalid={!!message.topic.errorMessages}
           />
+          <Form.Control.Feedback type="invalid">
+            {message.topic.errorMessages?.join(",")}
+          </Form.Control.Feedback>
         </Col>
       </Form.Group>
       <Form.Group>

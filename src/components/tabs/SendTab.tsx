@@ -17,6 +17,9 @@ const SendTab: React.FC = () => {
 
   const kafkaMessage: KafkaMessage = {
     send: () => {
+      const isFormValid = formManagement.checkValidation();
+      if (!isFormValid) return;
+
       addNewToast(JSON.stringify(formManagement.message));
     },
     data: formManagement.message,

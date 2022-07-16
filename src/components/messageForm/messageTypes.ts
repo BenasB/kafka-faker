@@ -4,9 +4,15 @@ export const messageDataFieldTypes = ["custom", "object"] as const;
 
 // Common shared properties between all message data field types
 type MessageDataFieldCommon = {
-  key: string;
+  key: ValidatedInput<string>;
   depth: number;
   toDelete?: boolean;
+};
+
+export type ValidatedInput<T> = {
+  value: T;
+  errorMessages?: string[];
+  validate: (value: T) => string[] | undefined;
 };
 
 type MessageDataFieldCustom = MessageDataFieldCommon & {
@@ -33,7 +39,7 @@ export type MessageDataField =
 
 // State interface
 export interface Message {
-  topic: string;
+  topic: ValidatedInput<string>;
   autoGeneration: boolean;
   data: MessageDataField[];
 }

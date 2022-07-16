@@ -29,10 +29,14 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
         <Col xs={3}>
           <Form.Control
             type="text"
-            value={dataField.key}
+            value={dataField.key.value}
             placeholder="Name"
             onChange={(e) => updateMessageDataKey(e.target.value, indices)}
+            isInvalid={!!dataField.key.errorMessages}
           />
+          <Form.Control.Feedback type="invalid">
+            {dataField.key.errorMessages?.join(",")}
+          </Form.Control.Feedback>
         </Col>
         <Col xs={2}>
           <Form.Select

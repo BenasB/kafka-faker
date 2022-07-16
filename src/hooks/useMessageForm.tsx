@@ -1,10 +1,13 @@
 import { useState } from "react";
-import hookHelpers from "../components/messageForm/hookHelpers";
+import hookHelpers, {
+  iterateAllMessageFields,
+} from "../components/messageForm/hookHelpers";
 import {
   Message,
   messageDataFieldTypes,
   MessageDataField,
   MessageDataFieldGeneration,
+  ValidatedInput,
 } from "../components/messageForm/messageTypes";
 import generationFunctions, {
   GenerationFunction,
@@ -39,11 +42,16 @@ export interface MessageFormManagement {
     messageDataFieldIndices: number[]
   ) => void;
   regenerateAllMessageDataFields: () => void;
+  checkValidation: () => boolean;
 }
 
 const useMessageForm: () => MessageFormManagement = () => {
   const [message, setMessage] = useState<Message>({
-    topic: "",
+    topic: {
+      value: "",
+      validate: (value) =>
+        value.length > 0 ? undefined : ["Topic must not be empty"],
+    },
     autoGeneration: false,
     data: [],
   });
@@ -52,7 +60,11 @@ const useMessageForm: () => MessageFormManagement = () => {
     hookHelpers(setMessage);
 
   const getNewDataField = (parentDepth: number): MessageDataField => ({
-    key: "",
+    key: {
+      value: "",
+      validate: (value) =>
+        value.length > 0 ? undefined : ["Key must not be empty"],
+    },
     valueType: "custom",
     value: "",
     depth: parentDepth + 1,
@@ -69,7 +81,11 @@ const useMessageForm: () => MessageFormManagement = () => {
   const updateTopic = (newTopic: string) => {
     setMessage((prevState) => ({
       ...prevState,
-      topic: newTopic,
+      topic: {
+        ...prevState.topic,
+        value: newTopic,
+        errorMessages: prevState.topic.validate(newTopic),
+      },
     }));
   };
 
@@ -86,7 +102,11 @@ const useMessageForm: () => MessageFormManagement = () => {
   ) =>
     updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
       ...fieldData,
-      key: newKey,
+      key: {
+        ...fieldData.key,
+        value: newKey,
+        errorMessages: fieldData.key.validate(newKey),
+      },
     }));
 
   const updateMessageDataCustomValue = (
@@ -196,6 +216,53 @@ const useMessageForm: () => MessageFormManagement = () => {
       };
     });
 
+  // Revalidates all form components and returns true if no errors found
+  const checkValidation = () => {
+    let isValid = true;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateValidation = (property: ValidatedInput<any>) => ({
+      ...property,
+      errorMessages: property.validate(property.value),
+    });
+
+    const findAnyErrors = (fieldData: MessageDataField): boolean => {
+      if (fieldData.valueType === "object") {
+        return (
+          !!updateValidation(fieldData.key).errorMessages ||
+          fieldData.value.some(findAnyErrors)
+        );
+      }
+
+      return !!updateValidation(fieldData.key).errorMessages;
+    };
+
+    // Check if valid in current state
+    if (updateValidation(message.topic).errorMessages) isValid = false;
+    if (message.data.some(findAnyErrors)) isValid = false;
+
+    // Update validation for all
+    setMessage((prevState) => ({
+      ...prevState,
+      topic: updateValidation(prevState.topic),
+      data: iterateAllMessageFields(message.data, (fieldData) => {
+        switch (fieldData.valueType) {
+          // If there are ValidatedInput<T> on other MessageDataField types
+          // besides the basic MessageDataFieldCommon, write cases here and
+          // update their validation.
+
+          default:
+            return {
+              ...fieldData,
+              key: updateValidation(fieldData.key),
+            };
+        }
+      }),
+    }));
+
+    return isValid;
+  };
+
   return {
     message,
     addMessageDataField,
@@ -209,6 +276,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     regenerateMessageDataFieldGeneration,
     regenerateAllMessageDataFields,
     removeAllMessageDataFields,
+    checkValidation,
   };
 };
 
