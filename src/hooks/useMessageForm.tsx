@@ -51,19 +51,18 @@ const useMessageForm: () => MessageFormManagement = () => {
   const { updateMessageDataField, updateAllMessageFields } =
     hookHelpers(setMessage);
 
+  const getNewDataField = (parentDepth: number): MessageDataField => ({
+    key: "",
+    valueType: "custom",
+    value: "",
+    depth: parentDepth + 1,
+  });
+
   // Adds a new message data field to the first/main parent element
   const addMessageDataField = () => {
     setMessage((prevState) => ({
       ...prevState,
-      data: [
-        ...prevState.data,
-        {
-          key: "",
-          valueType: "custom",
-          value: "",
-          depth: 0,
-        },
-      ],
+      data: [...prevState.data, getNewDataField(-1)],
     }));
   };
 
@@ -158,15 +157,7 @@ const useMessageForm: () => MessageFormManagement = () => {
 
       return {
         ...fieldData,
-        value: [
-          ...fieldData.value,
-          {
-            key: "",
-            valueType: "custom",
-            value: "",
-            depth: fieldData.depth + 1,
-          },
-        ],
+        value: [...fieldData.value, getNewDataField(fieldData.depth)],
       };
     });
 
