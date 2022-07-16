@@ -227,14 +227,16 @@ const useMessageForm: () => MessageFormManagement = () => {
     });
 
     const findAnyErrors = (fieldData: MessageDataField): boolean => {
-      if (fieldData.valueType === "object") {
-        return (
-          !!updateValidation(fieldData.key).errorMessages ||
-          fieldData.value.some(findAnyErrors)
-        );
-      }
+      switch (fieldData.valueType) {
+        case "object":
+          return (
+            !!updateValidation(fieldData.key).errorMessages ||
+            fieldData.value.some(findAnyErrors)
+          );
 
-      return !!updateValidation(fieldData.key).errorMessages;
+        default:
+          return !!updateValidation(fieldData.key).errorMessages;
+      }
     };
 
     // Check if valid in current state
@@ -250,7 +252,6 @@ const useMessageForm: () => MessageFormManagement = () => {
           // If there are ValidatedInput<T> on other MessageDataField types
           // besides the basic MessageDataFieldCommon, write cases here and
           // update their validation.
-
           default:
             return {
               ...fieldData,
