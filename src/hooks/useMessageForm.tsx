@@ -13,6 +13,7 @@ import generationFunctions, {
   GenerationFunction,
   messageDataFieldGenerationTypes,
 } from "../data/generationFunctions";
+import validationFunctions from "../data/validationFunctions";
 
 // The hook returns this interface
 // Necessary functions and data to manage the message form
@@ -49,8 +50,7 @@ const useMessageForm: () => MessageFormManagement = () => {
   const [message, setMessage] = useState<Message>({
     topic: {
       value: "",
-      validate: (value) =>
-        value.length > 0 ? undefined : ["Topic must not be empty"],
+      validate: validationFunctions.topicValidation,
     },
     autoGeneration: false,
     data: [],
@@ -62,8 +62,7 @@ const useMessageForm: () => MessageFormManagement = () => {
   const getNewDataField = (parentDepth: number): MessageDataField => ({
     key: {
       value: "",
-      validate: (value) =>
-        value.length > 0 ? undefined : ["Key must not be empty"],
+      validate: validationFunctions.keyValidation,
     },
     valueType: "custom",
     value: "",
@@ -157,10 +156,10 @@ const useMessageForm: () => MessageFormManagement = () => {
               value: [],
             };
 
-          case "custom":
+          default:
             return {
               ...fieldData,
-              valueType: newType,
+              valueType: "custom",
               value: "",
             };
         }

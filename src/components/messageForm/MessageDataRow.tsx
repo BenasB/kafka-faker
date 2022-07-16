@@ -3,6 +3,7 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import { messageDataFieldGenerationTypes } from "../../data/generationFunctions";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import { MessageDataField, messageDataFieldTypes } from "./messageTypes";
+import ValidationErrorMessage from "./ValidationErrorMessage";
 
 interface Props {
   dataField: MessageDataField;
@@ -34,9 +35,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
             onChange={(e) => updateMessageDataKey(e.target.value, indices)}
             isInvalid={!!dataField.key.errorMessages}
           />
-          <Form.Control.Feedback type="invalid">
-            {dataField.key.errorMessages?.join(",")}
-          </Form.Control.Feedback>
+          <ValidationErrorMessage {...dataField.key} />
         </Col>
         <Col xs={2}>
           <Form.Select

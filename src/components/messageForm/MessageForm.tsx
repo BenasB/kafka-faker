@@ -10,6 +10,7 @@ import {
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import MessageDataRow from "./MessageDataRow";
+import ValidationErrorMessage from "./ValidationErrorMessage";
 
 const MessageForm: React.FC<MessageFormManagement> = (props) => {
   const {
@@ -38,9 +39,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
             onChange={(e) => updateTopic(e.target.value)}
             isInvalid={!!message.topic.errorMessages}
           />
-          <Form.Control.Feedback type="invalid">
-            {message.topic.errorMessages?.join(",")}
-          </Form.Control.Feedback>
+          <ValidationErrorMessage {...message.topic} />
         </Col>
       </Form.Group>
       <Form.Group>
