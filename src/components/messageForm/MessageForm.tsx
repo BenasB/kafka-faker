@@ -28,7 +28,13 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
     useState<boolean>(false);
 
   return (
-    <Form as={Stack} onSubmit={(e) => e.preventDefault()} noValidate gap={3}>
+    <Form
+      as={Stack}
+      onSubmit={(e) => e.preventDefault()}
+      noValidate
+      gap={3}
+      autoComplete={"off"}
+    >
       <Form.Group as={Row}>
         <Form.Label column sm={2}>
           Topic
@@ -57,7 +63,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
           />
         </Col>
       </Form.Group>
-      <Form.Group>
+      <Form.Group as={Stack} gap={3}>
         <div className="d-flex justify-content-between">
           <Row>
             <Col>
@@ -124,7 +130,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
             key={index}
           />
         ))}
-        <Row sm={5} className={"justify-content-center mb-3"}>
+        <Row sm={5} className={"justify-content-center my-3"}>
           <Button variant="primary" onClick={() => addMessageDataField()}>
             Add field
           </Button>

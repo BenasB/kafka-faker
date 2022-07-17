@@ -10,20 +10,31 @@ const findAndUpdateField = (
 ): MessageDataField[] => {
   return dataFields
     .map<MessageDataField>((dataField, i) => {
-      if (
-        indexCount !== indices.length &&
-        i === indices[indexCount - 1] &&
-        dataField.valueType === "object"
-      )
-        return {
-          ...dataField,
-          value: findAndUpdateField(
-            dataField.value,
-            indices,
-            fieldUpdate,
-            indexCount + 1
-          ),
-        };
+      if (indexCount !== indices.length && i === indices[indexCount - 1]) {
+        if (dataField.valueType === "object")
+          return {
+            ...dataField,
+            value: findAndUpdateField(
+              dataField.value,
+              indices,
+              fieldUpdate,
+              indexCount + 1
+            ),
+          };
+
+        if (dataField.valueType === "array")
+          return {
+            ...dataField,
+            value: [
+              findAndUpdateField(
+                [dataField.value[0]],
+                indices,
+                fieldUpdate,
+                indexCount + 1
+              )[0],
+            ],
+          };
+      }
 
       if (indexCount === indices.length && i === indices[indexCount - 1])
         return fieldUpdate(dataField);
@@ -49,6 +60,14 @@ export const iterateAllMessageFields = (
         return {
           ...updatedField,
           value: iterateAllMessageFields(dataField.value, fieldUpdate),
+        };
+
+      if (dataField.valueType === "array" && updatedField.valueType === "array")
+        return {
+          ...updatedField,
+          value: [
+            iterateAllMessageFields([dataField.value[0]], fieldUpdate)[0],
+          ],
         };
 
       return updatedField;

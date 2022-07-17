@@ -31,13 +31,17 @@ export interface MessageFormManagement {
     newValue: string,
     messageDataFieldIndices: number[]
   ) => void;
+  updateMessageDataArrayCount: (
+    newCount: number,
+    messageDataFieldIndices: number[]
+  ) => void;
   updateMessageDataType: (
     newType:
       | typeof messageDataFieldTypes[number]
       | typeof messageDataFieldGenerationTypes[number],
     messageDataFieldIndices: number[]
   ) => void;
-  addMessageDataObjectField: (messageDataFieldIndices: number[]) => void;
+  addMessageDataNestedField: (messageDataFieldIndices: number[]) => void;
   removeMessageDataField: (messageDataFieldIndices: number[]) => void;
   removeAllMessageDataFields: () => void;
   regenerateMessageDataFieldGeneration: (
@@ -130,6 +134,19 @@ const useMessageForm: () => MessageFormManagement = () => {
       };
     });
 
+  const updateMessageDataArrayCount = (
+    newCount: number,
+    messageDataFieldIndices: number[]
+  ) =>
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "array") return fieldData;
+
+      return {
+        ...fieldData,
+        count: newCount,
+      };
+    });
+
   const updateMessageDataType = (
     newType:
       | typeof messageDataFieldTypes[number]
@@ -165,6 +182,22 @@ const useMessageForm: () => MessageFormManagement = () => {
               value: [],
             };
 
+          case "array":
+            return {
+              ...fieldData,
+              valueType: newType,
+              count: 1,
+              value: [
+                {
+                  ...getNewDataField(fieldData.depth - 1),
+                  name: {
+                    value: fieldData.name.value,
+                    validate: () => undefined,
+                  },
+                },
+              ],
+            };
+
           default:
             return {
               ...fieldData,
@@ -178,8 +211,8 @@ const useMessageForm: () => MessageFormManagement = () => {
     });
   };
 
-  // Adds a new message data field to an already existing message data field of type object
-  const addMessageDataObjectField = (messageDataFieldIndices: number[]) =>
+  // Adds a new message data field to an already existing message data field (object or array)
+  const addMessageDataNestedField = (messageDataFieldIndices: number[]) =>
     updateMessageDataField(messageDataFieldIndices, (fieldData) => {
       if (fieldData.valueType !== "object") return fieldData;
 
@@ -236,6 +269,7 @@ const useMessageForm: () => MessageFormManagement = () => {
 
     const findAnyErrors = (fieldData: MessageDataField): boolean => {
       switch (fieldData.valueType) {
+        case "array":
         case "object":
           return (
             !!updateValidation(fieldData.name).errorMessages ||
@@ -280,8 +314,9 @@ const useMessageForm: () => MessageFormManagement = () => {
     toggleAutoGeneration,
     updateMessageDataName,
     updateMessageDataCustomValue,
+    updateMessageDataArrayCount,
     updateMessageDataType,
-    addMessageDataObjectField,
+    addMessageDataNestedField,
     removeMessageDataField,
     regenerateMessageDataFieldGeneration,
     regenerateAllMessageDataFields,
