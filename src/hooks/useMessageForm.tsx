@@ -23,8 +23,8 @@ export interface MessageFormManagement {
   updateTopic: (newTopic: string) => void;
   updateKey: (newKey: string) => void;
   toggleAutoGeneration: () => void;
-  updateMessageDataKey: (
-    newKey: string,
+  updateMessageDataName: (
+    newName: string,
     messageDataFieldIndices: number[]
   ) => void;
   updateMessageDataCustomValue: (
@@ -62,9 +62,9 @@ const useMessageForm: () => MessageFormManagement = () => {
     hookHelpers(setMessage);
 
   const getNewDataField = (parentDepth: number): MessageDataField => ({
-    key: {
+    name: {
       value: "",
-      validate: validationFunctions.keyValidation,
+      validate: validationFunctions.nameValidation,
     },
     valueType: "custom",
     value: "",
@@ -104,16 +104,16 @@ const useMessageForm: () => MessageFormManagement = () => {
     }));
   };
 
-  const updateMessageDataKey = (
-    newKey: string,
+  const updateMessageDataName = (
+    newName: string,
     messageDataFieldIndices: number[]
   ) =>
     updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
       ...fieldData,
-      key: {
-        ...fieldData.key,
-        value: newKey,
-        errorMessages: fieldData.key.validate(newKey),
+      name: {
+        ...fieldData.name,
+        value: newName,
+        errorMessages: fieldData.name.validate(newName),
       },
     }));
 
@@ -238,12 +238,12 @@ const useMessageForm: () => MessageFormManagement = () => {
       switch (fieldData.valueType) {
         case "object":
           return (
-            !!updateValidation(fieldData.key).errorMessages ||
+            !!updateValidation(fieldData.name).errorMessages ||
             fieldData.value.some(findAnyErrors)
           );
 
         default:
-          return !!updateValidation(fieldData.key).errorMessages;
+          return !!updateValidation(fieldData.name).errorMessages;
       }
     };
 
@@ -263,7 +263,7 @@ const useMessageForm: () => MessageFormManagement = () => {
           default:
             return {
               ...fieldData,
-              key: updateValidation(fieldData.key),
+              name: updateValidation(fieldData.name),
             };
         }
       }),
@@ -278,7 +278,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     updateTopic,
     updateKey,
     toggleAutoGeneration,
-    updateMessageDataKey,
+    updateMessageDataName,
     updateMessageDataCustomValue,
     updateMessageDataType,
     addMessageDataObjectField,

@@ -4,7 +4,7 @@ export const messageDataFieldTypes = ["custom", "object"] as const;
 
 // Common shared properties between all message data field types
 type MessageDataFieldCommon = {
-  key: ValidatedInput<string>;
+  name: ValidatedInput<string>;
   depth: number;
   toDelete?: boolean;
 };

@@ -13,7 +13,7 @@ interface Props {
 const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
   const { dataField, indices, message } = props;
   const {
-    updateMessageDataKey,
+    updateMessageDataName,
     updateMessageDataType,
     updateMessageDataCustomValue,
     addMessageDataObjectField,
@@ -30,12 +30,12 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
         <Col xs={3}>
           <Form.Control
             type="text"
-            value={dataField.key.value}
+            value={dataField.name.value}
             placeholder="Name"
-            onChange={(e) => updateMessageDataKey(e.target.value, indices)}
-            isInvalid={!!dataField.key.errorMessages}
+            onChange={(e) => updateMessageDataName(e.target.value, indices)}
+            isInvalid={!!dataField.name.errorMessages}
           />
-          <ValidationErrorMessage {...dataField.key} />
+          <ValidationErrorMessage {...dataField.name} />
         </Col>
         <Col xs={2}>
           <Form.Select
