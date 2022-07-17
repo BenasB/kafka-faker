@@ -40,6 +40,7 @@ export type MessageDataField =
 // State interface
 export interface Message {
   topic: ValidatedInput<string>;
+  key: string;
   autoGeneration: boolean;
   data: MessageDataField[];
 }

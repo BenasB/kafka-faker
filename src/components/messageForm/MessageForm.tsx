@@ -6,6 +6,7 @@ import {
   Button,
   Tooltip,
   OverlayTrigger,
+  Stack,
 } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
@@ -17,6 +18,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
     message,
     addMessageDataField,
     updateTopic,
+    updateKey,
     toggleAutoGeneration,
     regenerateAllMessageDataFields,
     removeAllMessageDataFields,
@@ -26,7 +28,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
     useState<boolean>(false);
 
   return (
-    <Form onSubmit={(e) => e.preventDefault()} noValidate>
+    <Form as={Stack} onSubmit={(e) => e.preventDefault()} noValidate gap={3}>
       <Form.Group as={Row}>
         <Form.Label column sm={2}>
           Topic
@@ -42,8 +44,21 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
           <ValidationErrorMessage {...message.topic} />
         </Col>
       </Form.Group>
+      <Form.Group as={Row}>
+        <Form.Label column sm={2}>
+          Key
+        </Form.Label>
+        <Col sm={10}>
+          <Form.Control
+            type="text"
+            placeholder="Key (optional)"
+            value={message.key}
+            onChange={(e) => updateKey(e.target.value)}
+          />
+        </Col>
+      </Form.Group>
       <Form.Group>
-        <div className="d-flex justify-content-between my-2">
+        <div className="d-flex justify-content-between">
           <Row>
             <Col>
               <h4>Data</h4>

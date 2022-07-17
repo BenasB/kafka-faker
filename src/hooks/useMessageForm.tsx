@@ -21,6 +21,7 @@ export interface MessageFormManagement {
   message: Message;
   addMessageDataField: () => void;
   updateTopic: (newTopic: string) => void;
+  updateKey: (newKey: string) => void;
   toggleAutoGeneration: () => void;
   updateMessageDataKey: (
     newKey: string,
@@ -53,6 +54,7 @@ const useMessageForm: () => MessageFormManagement = () => {
       validate: validationFunctions.topicValidation,
     },
     autoGeneration: false,
+    key: "",
     data: [],
   });
 
@@ -85,6 +87,13 @@ const useMessageForm: () => MessageFormManagement = () => {
         value: newTopic,
         errorMessages: prevState.topic.validate(newTopic),
       },
+    }));
+  };
+
+  const updateKey = (newKey: string) => {
+    setMessage((prevState) => ({
+      ...prevState,
+      key: newKey,
     }));
   };
 
@@ -267,6 +276,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     message,
     addMessageDataField,
     updateTopic,
+    updateKey,
     toggleAutoGeneration,
     updateMessageDataKey,
     updateMessageDataCustomValue,
