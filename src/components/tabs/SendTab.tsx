@@ -4,6 +4,7 @@ import useToasts from "../../hooks/useToasts";
 import ActionBar from "../actionBar/ActionBar";
 import MessageForm from "../messageForm/MessageForm";
 import { Message } from "../messageForm/messageTypes";
+import serializeMessage from "../messageForm/serializeMessage";
 import ToastDisplay from "../toasts/ToastDisplay";
 
 export interface KafkaMessage {
@@ -20,7 +21,8 @@ const SendTab: React.FC = () => {
       const isFormValid = formManagement.checkValidation();
       if (!isFormValid) return;
 
-      addNewToast(JSON.stringify(formManagement.message));
+      console.log(serializeMessage(formManagement.message).jsonString);
+      addNewToast("Sent");
     },
     data: formManagement.message,
   };
