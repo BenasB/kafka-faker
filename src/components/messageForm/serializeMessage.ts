@@ -1,8 +1,9 @@
 import { Message, MessageDataField } from "./messageTypes";
 
-interface SerializedMessage {
+export interface SerializedMessage {
   topic: string;
   key?: string;
+  timeStamp: Date;
   jsonString: string;
   jsonStringPretty: string;
 }
@@ -49,6 +50,7 @@ const serializeMessage = (message: Message): SerializedMessage => {
   return {
     topic: message.topic.value,
     key: message.key,
+    timeStamp: new Date(),
     jsonString: JSON.stringify(dataObject),
     jsonStringPretty: JSON.stringify(dataObject, null, 2),
   };
