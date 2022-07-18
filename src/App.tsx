@@ -1,28 +1,38 @@
+import { useState } from "react";
 import { Col } from "react-bootstrap";
 import Header from "./components/header/Header";
 import Layout from "./components/layout/Layout";
-import tabsData from "./data/tabs";
-import useTabs from "./hooks/useTabs";
+import HistoryTab from "./components/tabs/HistoryTab";
+import SendTab from "./components/tabs/SendTab";
+
+export const tabTypes = ["send", "history"] as const;
 
 function App() {
-  const defaultTab = tabsData[0];
-  const { tabs, onTabChange } = useTabs(tabsData, defaultTab);
+  const defaultTab: typeof tabTypes[number] = "send";
+  const [selectedTab, setSelectedTab] =
+    useState<typeof tabTypes[number]>(defaultTab);
 
   return (
     <Layout>
       <Header
-        tabs={tabsData}
+        tabs={tabTypes}
         defaultTab={defaultTab}
-        onTabChange={onTabChange}
+        onTabChange={(newTab) => setSelectedTab(newTab)}
       />
-      {tabs.map((t) => (
-        <Col
-          key={t.title}
-          className={`${!t.selected ? "d-none" : ""} d-flex flex-column`}
-        >
-          {t.component}
-        </Col>
-      ))}
+      <Col
+        className={`${
+          selectedTab === "send" ? "" : "d-none"
+        } d-flex flex-column`}
+      >
+        <SendTab />
+      </Col>
+      <Col
+        className={`${
+          selectedTab === "history" ? "" : "d-none"
+        } d-flex flex-column`}
+      >
+        <HistoryTab />
+      </Col>
     </Layout>
   );
 }

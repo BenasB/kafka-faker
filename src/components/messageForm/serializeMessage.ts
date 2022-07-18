@@ -4,6 +4,7 @@ interface SerializedMessage {
   topic: string;
   key?: string;
   jsonString: string;
+  jsonStringPretty: string;
 }
 
 type SerializedMessageValue = string | object | SerializedMessageValue[];
@@ -48,7 +49,8 @@ const serializeMessage = (message: Message): SerializedMessage => {
   return {
     topic: message.topic.value,
     key: message.key,
-    jsonString: JSON.stringify(dataObject, null, 2),
+    jsonString: JSON.stringify(dataObject),
+    jsonStringPretty: JSON.stringify(dataObject, null, 2),
   };
 };
 
