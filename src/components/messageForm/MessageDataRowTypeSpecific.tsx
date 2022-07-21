@@ -9,11 +9,15 @@ import {
 } from "react-bootstrap";
 import { messageDataFieldGenerationTypes } from "../../data/generationFunctions";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
-import { MessageDataField, messageDataFieldTypes } from "./messageTypes";
+import {
+  MessageDataFieldSpecific,
+  messageDataFieldTypes,
+} from "./messageTypes";
 
 interface Props {
-  dataField: MessageDataField;
+  dataField: MessageDataFieldSpecific;
   indices: number[];
+  depth: number;
 }
 
 const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
@@ -22,6 +26,7 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
   const {
     dataField,
     indices,
+    depth,
     message,
     updateMessageDataType,
     updateMessageDataCustomValue,
@@ -76,7 +81,7 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
       {dataField.valueType === "array" && (
         <MessageDataRowTypeSpecific
           {...props}
-          dataField={dataField.value[0]}
+          dataField={dataField.value}
           indices={[...indices, 0]}
         />
       )}
@@ -96,7 +101,7 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
         <Col>
           <Button
             variant="primary"
-            onClick={() => addMessageDataNestedField(indices)}
+            onClick={() => addMessageDataNestedField(indices, depth)}
           >
             Add field to {dataField.valueType}
           </Button>

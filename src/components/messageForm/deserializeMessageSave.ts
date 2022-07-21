@@ -8,6 +8,7 @@ import {
   MessageDataFieldCustom,
   MessageDataFieldGeneration,
   MessageDataFieldObject,
+  MessageDataFieldSpecific,
 } from "./messageTypes";
 import {
   SaveMessageDataField,
@@ -15,6 +16,7 @@ import {
   SaveMessageDataFieldCustom,
   SaveMessageDataFieldGeneration,
   SaveMessageDataFieldObject,
+  SaveMessageDataFieldSpecific,
   SerializedSaveMessage,
 } from "./serializeMessageSave";
 
@@ -23,10 +25,10 @@ import {
 const deserializeMessageSave = (
   messageSave: SerializedSaveMessage
 ): Message => {
-  const mapField = (
-    field: SaveMessageDataField,
+  const mapSpecificField = (
+    field: SaveMessageDataFieldSpecific,
     depth: number
-  ): MessageDataField => {
+  ): MessageDataFieldSpecific => {
     const mapGeneration = (
       field: SaveMessageDataFieldGeneration
     ): MessageDataFieldGeneration => {
@@ -38,7 +40,7 @@ const deserializeMessageSave = (
         generationFunction = functionReplacement.function;
         console.error(
           `Could not locate a generation function of type ${field.generationType}.
-           Replacing that function by the default generation type ${functionReplacement.type}`
+               Replacing that function by the default generation type ${functionReplacement.type}`
         );
       }
 
@@ -69,15 +71,28 @@ const deserializeMessageSave = (
     ): MessageDataFieldArray => ({
       valueType: "array",
       count: field.count,
-      value: [
-        {
-          ...mapField(field.value, depth),
-          // Turn off validation for array value field
-          name: { value: field.value.name, validate: () => undefined },
-        },
-      ],
+      value: mapSpecificField(field.value, depth),
     });
 
+    switch (field.valueType) {
+      case "generation":
+        return mapGeneration(field);
+
+      case "object":
+        return mapObject(field);
+
+      case "custom":
+        return mapCustom(field);
+
+      case "array":
+        return mapArray(field);
+    }
+  };
+
+  const mapField = (
+    field: SaveMessageDataField,
+    depth: number
+  ): MessageDataField => {
     const common: MessageDataFieldCommon = {
       depth,
       name: {
@@ -86,19 +101,7 @@ const deserializeMessageSave = (
       },
     };
 
-    switch (field.valueType) {
-      case "generation":
-        return { ...common, ...mapGeneration(field) };
-
-      case "object":
-        return { ...common, ...mapObject(field) };
-
-      case "custom":
-        return { ...common, ...mapCustom(field) };
-
-      case "array":
-        return { ...common, ...mapArray(field) };
-    }
+    return { ...common, ...mapSpecificField(field, depth) };
   };
 
   const data = messageSave.data.map<MessageDataField>((field) =>

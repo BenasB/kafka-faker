@@ -1,4 +1,8 @@
-import { Message, MessageDataField } from "./messageTypes";
+import {
+  Message,
+  MessageDataField,
+  MessageDataFieldSpecific,
+} from "./messageTypes";
 
 export interface SerializedSendMessage {
   topic: string;
@@ -15,35 +19,42 @@ type SerializedSendMessageValue =
 
 // Converts data from message form to a json string for sending to kafka
 const serializeMessageSend = (message: Message): SerializedSendMessage => {
-  const reduceField = (
+  const reduceSpecificField = (
     result: Record<string, SerializedSendMessageValue>,
-    field: MessageDataField
+    specificField: MessageDataFieldSpecific,
+    name: string
   ): Record<string, SerializedSendMessageValue> => {
-    switch (field.valueType) {
+    switch (specificField.valueType) {
       case "generation":
-        result[field.name.value] = message.autoGeneration
-          ? field.generate()
-          : field.value;
+        result[name] = message.autoGeneration
+          ? specificField.generate()
+          : specificField.value;
         return result;
 
       case "object":
-        result[field.name.value] = field.value.reduce<
+        result[name] = specificField.value.reduce<
           Record<string, SerializedSendMessageValue>
         >(reduceField, {});
         return result;
 
       case "array":
-        result[field.name.value] = Array.from(
-          { length: field.count },
-          () => reduceField({}, field.value[0])[field.value[0].name.value]
+        result[name] = Array.from(
+          { length: specificField.count },
+          () => reduceSpecificField({}, specificField.value, name)[name]
         );
         return result;
 
       case "custom":
       default:
-        result[field.name.value] = field.value;
+        result[name] = specificField.value;
         return result;
     }
+  };
+  const reduceField = (
+    result: Record<string, SerializedSendMessageValue>,
+    field: MessageDataField
+  ): Record<string, SerializedSendMessageValue> => {
+    return reduceSpecificField(result, field, field.name.value);
   };
 
   const dataObject = message.data.reduce<

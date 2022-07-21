@@ -48,8 +48,8 @@ const NestedDataFields: React.FC<Props & MessageFormManagement> = (props) => {
 const findObjectInArray = (
   arrayDataField: MessageDataFieldArray
 ): { dataFields: MessageDataField[]; depth: number } | null => {
-  if (arrayDataField.value[0].valueType === "array") {
-    const results = findObjectInArray(arrayDataField.value[0]);
+  if (arrayDataField.value.valueType === "array") {
+    const results = findObjectInArray(arrayDataField.value);
     if (!results) return null;
 
     return {
@@ -57,9 +57,9 @@ const findObjectInArray = (
       depth: results.depth + 1,
     };
   }
-  if (arrayDataField.value[0].valueType === "object")
+  if (arrayDataField.value.valueType === "object")
     return {
-      dataFields: arrayDataField.value[0].value,
+      dataFields: arrayDataField.value.value,
       depth: 1,
     };
 

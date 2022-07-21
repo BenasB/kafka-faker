@@ -28,7 +28,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
           />
           <ValidationErrorMessage {...dataField.name} />
         </Col>
-        <MessageDataRowTypeSpecific {...props} />
+        <MessageDataRowTypeSpecific {...props} depth={dataField.depth} />
         <Col xs="auto">
           <Button
             variant="outline-danger"

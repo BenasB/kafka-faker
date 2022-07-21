@@ -8,6 +8,7 @@ import {
   messageDataFieldTypes,
   MessageDataField,
   ValidatedInput,
+  MessageDataFieldSpecific,
 } from "../components/messageForm/messageTypes";
 import { SerializedSaveMessage } from "../components/messageForm/serializeMessageSave";
 import generationFunctions, {
@@ -42,7 +43,10 @@ export interface MessageFormManagement {
       | typeof messageDataFieldGenerationTypes[number],
     messageDataFieldIndices: number[]
   ) => void;
-  addMessageDataNestedField: (messageDataFieldIndices: number[]) => void;
+  addMessageDataNestedField: (
+    messageDataFieldIndices: number[],
+    parentDepth: number
+  ) => void;
   removeMessageDataField: (messageDataFieldIndices: number[]) => void;
   removeAllMessageDataFields: () => void;
   regenerateMessageDataFieldGeneration: (
@@ -65,7 +69,7 @@ const useMessageForm: () => MessageFormManagement = () => {
 
   useEffect(() => {
     const parsed: SerializedSaveMessage = JSON.parse(
-      `{"topic":"mano topicas","key":"","autoGeneration":false,"data":[{"name":"pirmas","valueType":"custom","value":"konstanta"},{"name":"antras","valueType":"array","count":4,"value":{"name":"","valueType":"custom","value":"arejusvienas"}},{"name":"trecias","valueType":"object","value":[{"name":"jektasviens","valueType":"generation","generationType":"location","value":"Location62"},{"name":"jektasdu","valueType":"array","count":9,"value":{"name":"jektasdu","valueType":"generation","generationType":"date","value":"Date75"}}]},{"name":"ketvirtas","valueType":"generation","generationType":"name","value":"Benas4"}]}`
+      `{"topic":"mano topicas","key":"","autoGeneration":true,"data":[{"name":"pirmas","valueType":"custom","value":"konstanta"},{"name":"antras","valueType":"array","count":4,"value":{"valueType":"custom","value":"arejusvienas"}},{"name":"trecias","valueType":"object","value":[{"name":"jektasviens","valueType":"generation","generationType":"location","value":"Location28"},{"name":"jektasdu","valueType":"array","count":9,"value":{"valueType":"generation","generationType":"date","value":"Date95"}}]},{"name":"ketvirtas","valueType":"generation","generationType":"name","value":"Benas28"}]}`
     );
     const newState = deserializeMessageSave(parsed);
     setMessage(newState);
@@ -121,40 +125,52 @@ const useMessageForm: () => MessageFormManagement = () => {
     newName: string,
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
-      ...fieldData,
-      name: {
-        ...fieldData.name,
-        value: newName,
-        errorMessages: fieldData.name.validate(newName),
-      },
-    }));
+    updateMessageDataField(
+      messageDataFieldIndices,
+      (fieldData) => ({
+        ...fieldData,
+        name: {
+          ...fieldData.name,
+          value: newName,
+          errorMessages: fieldData.name.validate(newName),
+        },
+      }),
+      (fieldData) => fieldData
+    );
 
   const updateMessageDataCustomValue = (
     newValue: string,
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
-      if (fieldData.valueType !== "custom") return fieldData;
+    updateMessageDataField(
+      messageDataFieldIndices,
+      (fieldData) => fieldData,
+      (fieldData) => {
+        if (fieldData.valueType !== "custom") return fieldData;
 
-      return {
-        ...fieldData,
-        value: newValue,
-      };
-    });
+        return {
+          ...fieldData,
+          value: newValue,
+        };
+      }
+    );
 
   const updateMessageDataArrayCount = (
     newCount: number,
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
-      if (fieldData.valueType !== "array") return fieldData;
+    updateMessageDataField(
+      messageDataFieldIndices,
+      (fieldData) => fieldData,
+      (fieldData) => {
+        if (fieldData.valueType !== "array") return fieldData;
 
-      return {
-        ...fieldData,
-        count: newCount,
-      };
-    });
+        return {
+          ...fieldData,
+          count: newCount,
+        };
+      }
+    );
 
   const updateMessageDataType = (
     newType:
@@ -163,9 +179,9 @@ const useMessageForm: () => MessageFormManagement = () => {
     messageDataFieldIndices: number[]
   ) => {
     const generationField = (
-      fieldData: MessageDataField,
+      fieldData: MessageDataFieldSpecific,
       generationFunction: GenerationFunction
-    ): MessageDataField => ({
+    ): MessageDataFieldSpecific => ({
       ...fieldData,
       valueType: "generation",
       generationType:
@@ -175,67 +191,77 @@ const useMessageForm: () => MessageFormManagement = () => {
       value: generationFunction.function(),
     });
 
-    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
-      if (messageDataFieldGenerationTypes.find((t) => t === newType)) {
-        return generationField(
-          fieldData,
-          generationFunctions.find((t) => t.type === newType) ||
-            generationFunctions[0]
-        );
-      } else if (messageDataFieldTypes.find((t) => t === newType)) {
-        switch (newType) {
-          case "object":
-            return {
-              ...fieldData,
-              valueType: newType,
-              value: [],
-            };
+    updateMessageDataField(
+      messageDataFieldIndices,
+      (fieldData) => fieldData,
+      (fieldData) => {
+        if (messageDataFieldGenerationTypes.find((t) => t === newType)) {
+          return generationField(
+            fieldData,
+            generationFunctions.find((t) => t.type === newType) ||
+              generationFunctions[0]
+          );
+        } else if (messageDataFieldTypes.find((t) => t === newType)) {
+          switch (newType) {
+            case "object":
+              return {
+                ...fieldData,
+                valueType: newType,
+                value: [],
+              };
 
-          case "array":
-            return {
-              ...fieldData,
-              valueType: newType,
-              count: 1,
-              value: [
-                {
-                  ...getNewDataField(fieldData.depth - 1),
-                  name: {
-                    value: fieldData.name.value,
-                    validate: () => undefined,
-                  },
+            case "array":
+              return {
+                ...fieldData,
+                valueType: newType,
+                count: 1,
+                value: {
+                  valueType: "custom",
+                  value: "",
                 },
-              ],
-            };
+              };
 
-          default:
-            return {
-              ...fieldData,
-              valueType: "custom",
-              value: "",
-            };
+            default:
+              return {
+                ...fieldData,
+                valueType: "custom",
+                value: "",
+              };
+          }
         }
-      }
 
-      return fieldData;
-    });
+        return fieldData;
+      }
+    );
   };
 
-  // Adds a new message data field to an already existing message data field (object or array)
-  const addMessageDataNestedField = (messageDataFieldIndices: number[]) =>
-    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
-      if (fieldData.valueType !== "object") return fieldData;
+  // Adds a new message data field to an already existing message data field
+  const addMessageDataNestedField = (
+    messageDataFieldIndices: number[],
+    parentDepth: number
+  ) =>
+    updateMessageDataField(
+      messageDataFieldIndices,
+      (fieldData) => fieldData,
+      (fieldData) => {
+        if (fieldData.valueType !== "object") return fieldData;
 
-      return {
-        ...fieldData,
-        value: [...fieldData.value, getNewDataField(fieldData.depth)],
-      };
-    });
+        return {
+          ...fieldData,
+          value: [...fieldData.value, getNewDataField(parentDepth)],
+        };
+      }
+    );
 
   const removeMessageDataField = (messageDataFieldIndices: number[]) =>
-    updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
-      ...fieldData,
-      toDelete: true,
-    }));
+    updateMessageDataField(
+      messageDataFieldIndices,
+      (fieldData) => ({
+        ...fieldData,
+        toDelete: true,
+      }),
+      (fieldData) => fieldData
+    );
 
   const removeAllMessageDataFields = () => {
     setMessage((prevState) => ({
@@ -247,24 +273,31 @@ const useMessageForm: () => MessageFormManagement = () => {
   const regenerateMessageDataFieldGeneration = (
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
-      if (fieldData.valueType !== "generation") return fieldData;
+    updateMessageDataField(
+      messageDataFieldIndices,
+      (fieldData) => fieldData,
+      (fieldData) => {
+        if (fieldData.valueType !== "generation") return fieldData;
 
-      return {
-        ...fieldData,
-        value: fieldData.generate(),
-      };
-    });
+        return {
+          ...fieldData,
+          value: fieldData.generate(),
+        };
+      }
+    );
 
   const regenerateAllMessageDataFields = () =>
-    updateAllMessageFields((fieldData) => {
-      if (fieldData.valueType !== "generation") return fieldData;
+    updateAllMessageFields(
+      (fieldData) => fieldData,
+      (fieldData) => {
+        if (fieldData.valueType !== "generation") return fieldData;
 
-      return {
-        ...fieldData,
-        value: fieldData.generate(),
-      };
-    });
+        return {
+          ...fieldData,
+          value: fieldData.generate(),
+        };
+      }
+    );
 
   // Revalidates all form components and returns true if no errors found
   const checkValidation = () => {
@@ -276,40 +309,46 @@ const useMessageForm: () => MessageFormManagement = () => {
       errorMessages: property.validate(property.value),
     });
 
-    const findAnyErrors = (fieldData: MessageDataField): boolean => {
+    const findAnyErrorInSpecific = (
+      fieldData: MessageDataFieldSpecific
+    ): boolean => {
       switch (fieldData.valueType) {
         case "array":
+          return findAnyErrorInSpecific(fieldData.value);
+
         case "object":
-          return (
-            !!updateValidation(fieldData.name).errorMessages ||
-            fieldData.value.some(findAnyErrors)
-          );
+          return fieldData.value.some(findAnyErrorsInCommon);
+
+        // If there are field specific validated values, add cases here
 
         default:
-          return !!updateValidation(fieldData.name).errorMessages;
+          return false;
       }
+    };
+
+    const findAnyErrorsInCommon = (fieldData: MessageDataField): boolean => {
+      return (
+        !!updateValidation(fieldData.name).errorMessages ||
+        findAnyErrorInSpecific(fieldData)
+      );
     };
 
     // Check if valid in current state
     if (updateValidation(message.topic).errorMessages) isValid = false;
-    if (message.data.some(findAnyErrors)) isValid = false;
+    if (message.data.some(findAnyErrorsInCommon)) isValid = false;
 
     // Update validation for all
     setMessage((prevState) => ({
       ...prevState,
       topic: updateValidation(prevState.topic),
-      data: iterateAllMessageFields(message.data, (fieldData) => {
-        switch (fieldData.valueType) {
-          // If there are ValidatedInput<T> on other MessageDataField types
-          // besides the basic MessageDataFieldCommon, write cases here and
-          // update their validation.
-          default:
-            return {
-              ...fieldData,
-              name: updateValidation(fieldData.name),
-            };
-        }
-      }),
+      data: iterateAllMessageFields(
+        message.data,
+        (fieldData) => ({
+          ...fieldData,
+          name: updateValidation(fieldData.name),
+        }),
+        (fieldData) => fieldData
+      ),
     }));
 
     return isValid;

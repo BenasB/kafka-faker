@@ -5,6 +5,7 @@ import {
   MessageDataFieldCustom,
   MessageDataFieldGeneration,
   MessageDataFieldObject,
+  MessageDataFieldSpecific,
 } from "./messageTypes";
 
 // Recreate message types but with only the properties that need to be saved
@@ -29,7 +30,7 @@ export type SaveMessageDataFieldArray = Pick<
   MessageDataFieldArray,
   "count" | "valueType"
 > & {
-  value: SaveMessageDataField;
+  value: SaveMessageDataFieldSpecific;
 };
 
 export type SaveMessageDataFieldGeneration = Pick<
@@ -37,14 +38,14 @@ export type SaveMessageDataFieldGeneration = Pick<
   "generationType" | "value" | "valueType"
 >;
 
-type SaveMessageDataSpecific =
+export type SaveMessageDataFieldSpecific =
   | SaveMessageDataFieldCustom
   | SaveMessageDataFieldObject
   | SaveMessageDataFieldArray
   | SaveMessageDataFieldGeneration;
 
 export type SaveMessageDataField = SaveMessageDataFieldCommon &
-  SaveMessageDataSpecific;
+  SaveMessageDataFieldSpecific;
 
 export type SerializedSaveMessage = Pick<Message, "key" | "autoGeneration"> & {
   topic: string;
@@ -53,7 +54,9 @@ export type SerializedSaveMessage = Pick<Message, "key" | "autoGeneration"> & {
 
 // Converts data from message form to an object used to recreate message form state
 const serializeMessageSave = (message: Message): SerializedSaveMessage => {
-  const mapField = (field: MessageDataField): SaveMessageDataField => {
+  const mapSpecificField = (
+    field: MessageDataFieldSpecific
+  ): SaveMessageDataFieldSpecific => {
     const mapGeneration = (
       field: MessageDataFieldGeneration
     ): SaveMessageDataFieldGeneration => ({
@@ -81,26 +84,30 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
     ): SaveMessageDataFieldArray => ({
       valueType: field.valueType,
       count: field.count,
-      value: field.value.map(mapField)[0],
+      value: mapSpecificField(field.value),
     });
 
+    switch (field.valueType) {
+      case "generation":
+        return mapGeneration(field);
+
+      case "object":
+        return mapObject(field);
+
+      case "custom":
+        return mapCustom(field);
+
+      case "array":
+        return mapArray(field);
+    }
+  };
+
+  const mapField = (field: MessageDataField): SaveMessageDataField => {
     const common: SaveMessageDataFieldCommon = {
       name: field.name.value,
     };
 
-    switch (field.valueType) {
-      case "generation":
-        return { ...common, ...mapGeneration(field) };
-
-      case "object":
-        return { ...common, ...mapObject(field) };
-
-      case "custom":
-        return { ...common, ...mapCustom(field) };
-
-      case "array":
-        return { ...common, ...mapArray(field) };
-    }
+    return { ...common, ...mapSpecificField(field) };
   };
 
   const data = message.data.map<SaveMessageDataField>(mapField);
