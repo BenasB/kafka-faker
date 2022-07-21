@@ -92,7 +92,13 @@ const deserializeMessageSave = (
         validate: validationFunctions.nameValidation,
       },
       count: field.count,
-      value: [mapField(field.value, depth)],
+      value: [
+        {
+          ...mapField(field.value, depth),
+          // Turn off validation for array value field
+          name: { value: field.value.name, validate: () => undefined },
+        },
+      ],
     });
 
     switch (field.valueType) {
