@@ -15,12 +15,12 @@ export type ValidatedInput<T> = {
   validate: (value: T) => string[] | undefined;
 };
 
-type MessageDataFieldCustom = MessageDataFieldCommon & {
+export type MessageDataFieldCustom = MessageDataFieldCommon & {
   valueType: typeof messageDataFieldTypes[0];
   value: string;
 };
 
-type MessageDataFieldObject = MessageDataFieldCommon & {
+export type MessageDataFieldObject = MessageDataFieldCommon & {
   valueType: typeof messageDataFieldTypes[1];
   value: MessageDataField[];
 };

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import deserializeMessageSave from "../components/messageForm/deserializeMessageSave";
 import hookHelpers, {
   iterateAllMessageFields,
 } from "../components/messageForm/hookHelpers";
@@ -9,6 +10,7 @@ import {
   MessageDataFieldGeneration,
   ValidatedInput,
 } from "../components/messageForm/messageTypes";
+import { SerializedSaveMessage } from "../components/messageForm/serializeMessageSave";
 import generationFunctions, {
   GenerationFunction,
   messageDataFieldGenerationTypes,
@@ -61,6 +63,14 @@ const useMessageForm: () => MessageFormManagement = () => {
     key: "",
     data: [],
   });
+
+  useEffect(() => {
+    const parsed: SerializedSaveMessage = JSON.parse(
+      `{"topic":"mano topicas","key":"","autoGeneration":false,"data":[{"name":"pirmas","valueType":"custom","value":"konstanta"},{"name":"antras","valueType":"array","count":4,"value":{"name":"","valueType":"custom","value":"arejusvienas"}},{"name":"trecias","valueType":"object","value":[{"name":"jektasviens","valueType":"generation","generationType":"location","value":"Location62"},{"name":"jektasdu","valueType":"array","count":9,"value":{"name":"jektasdu","valueType":"generation","generationType":"date","value":"Date75"}}]},{"name":"ketvirtas","valueType":"generation","generationType":"name","value":"Benas4"}]}`
+    );
+    const newState = deserializeMessageSave(parsed);
+    setMessage(newState);
+  }, []);
 
   const { updateMessageDataField, updateAllMessageFields } =
     hookHelpers(setMessage);

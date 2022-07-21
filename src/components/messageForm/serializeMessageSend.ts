@@ -8,14 +8,17 @@ export interface SerializedSendMessage {
   jsonStringPretty: string;
 }
 
-type SerializedMessageValue = string | object | SerializedMessageValue[];
+type SerializedSendMessageValue =
+  | string
+  | object
+  | SerializedSendMessageValue[];
 
 // Converts data from message form to a json string for sending to kafka
 const serializeMessageSend = (message: Message): SerializedSendMessage => {
   const reduceField = (
-    result: Record<string, SerializedMessageValue>,
+    result: Record<string, SerializedSendMessageValue>,
     field: MessageDataField
-  ): Record<string, SerializedMessageValue> => {
+  ): Record<string, SerializedSendMessageValue> => {
     switch (field.valueType) {
       case "generation":
         result[field.name.value] = message.autoGeneration
@@ -25,7 +28,7 @@ const serializeMessageSend = (message: Message): SerializedSendMessage => {
 
       case "object":
         result[field.name.value] = field.value.reduce<
-          Record<string, SerializedMessageValue>
+          Record<string, SerializedSendMessageValue>
         >(reduceField, {});
         return result;
 
@@ -44,7 +47,7 @@ const serializeMessageSend = (message: Message): SerializedSendMessage => {
   };
 
   const dataObject = message.data.reduce<
-    Record<string, SerializedMessageValue>
+    Record<string, SerializedSendMessageValue>
   >(reduceField, {});
 
   return {
