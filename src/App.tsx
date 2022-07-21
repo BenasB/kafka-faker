@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Col } from "react-bootstrap";
 import Header from "./components/header/Header";
 import Layout from "./components/layout/Layout";
-import { SerializedMessage } from "./components/messageForm/serializeMessage";
+import { SerializedSendMessage } from "./components/messageForm/serializeMessageSend";
 import HistoryTab from "./components/tabs/HistoryTab";
 import SendTab from "./components/tabs/SendTab";
 
@@ -13,7 +13,9 @@ function App() {
   const [selectedTab, setSelectedTab] =
     useState<typeof tabTypes[number]>(defaultTab);
 
-  const [messageHistory, setMessageHistory] = useState<SerializedMessage[]>([]);
+  const [messageHistory, setMessageHistory] = useState<SerializedSendMessage[]>(
+    []
+  );
 
   return (
     <Layout>

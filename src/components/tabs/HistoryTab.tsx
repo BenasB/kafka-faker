@@ -1,9 +1,9 @@
 import React from "react";
 import { Accordion, Alert, Row } from "react-bootstrap";
-import { SerializedMessage } from "../messageForm/serializeMessage";
+import { SerializedSendMessage } from "../messageForm/serializeMessageSend";
 
 interface Props {
-  messageHistory: SerializedMessage[];
+  messageHistory: SerializedSendMessage[];
 }
 
 const HistoryTab: React.FC<Props> = ({ messageHistory }) => {

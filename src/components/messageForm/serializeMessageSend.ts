@@ -1,6 +1,6 @@
 import { Message, MessageDataField } from "./messageTypes";
 
-export interface SerializedMessage {
+export interface SerializedSendMessage {
   topic: string;
   key?: string;
   timeStamp: Date;
@@ -11,7 +11,7 @@ export interface SerializedMessage {
 type SerializedMessageValue = string | object | SerializedMessageValue[];
 
 // Converts data from message form to a json string for sending to kafka
-const serializeMessage = (message: Message): SerializedMessage => {
+const serializeMessageSend = (message: Message): SerializedSendMessage => {
   const reduceField = (
     result: Record<string, SerializedMessageValue>,
     field: MessageDataField
@@ -56,4 +56,4 @@ const serializeMessage = (message: Message): SerializedMessage => {
   };
 };
 
-export default serializeMessage;
+export default serializeMessageSend;
