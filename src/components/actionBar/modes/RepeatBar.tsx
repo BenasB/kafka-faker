@@ -7,14 +7,17 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap";
+import useShake from "../../../hooks/useShake";
 import { KafkaMessage } from "../../tabs/SendTab";
 
-const RepeatBar: React.FC<KafkaMessage> = ({ send }) => {
+const RepeatBar: React.FC<KafkaMessage> = ({ send, canSend }) => {
   const defaultIntervalSeconds = 5;
   const [intervalSeconds, setIntervalSeconds] = useState<number>(
     defaultIntervalSeconds
   );
   const [running, setRunning] = useState<boolean>(false);
+
+  const { shakeClass, setShaking } = useShake();
 
   let interval: NodeJS.Timer;
   useEffect(() => {
@@ -56,9 +59,10 @@ const RepeatBar: React.FC<KafkaMessage> = ({ send }) => {
         </Button>
       ) : (
         <Button
-          className={"px-4"}
+          className={`px-4 ${shakeClass}`}
           variant="success"
-          onClick={() => setRunning(true)}
+          onClick={() => (!canSend() ? setShaking(true) : setRunning(true))}
+          onAnimationEnd={() => setShaking(false)}
         >
           Start
         </Button>

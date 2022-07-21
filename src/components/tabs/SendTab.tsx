@@ -3,15 +3,14 @@ import useMessageForm from "../../hooks/useMessageForm";
 import useToasts from "../../hooks/useToasts";
 import ActionBar from "../actionBar/ActionBar";
 import MessageForm from "../messageForm/MessageForm";
-import { Message } from "../messageForm/messageTypes";
 import serializeMessage, {
   SerializedMessage,
 } from "../messageForm/serializeMessage";
 import ToastDisplay from "../toasts/ToastDisplay";
 
 export interface KafkaMessage {
+  canSend: () => boolean;
   send: () => void;
-  data: Message;
 }
 
 interface Props {
@@ -23,18 +22,14 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
   const formManagement = useMessageForm();
 
   const kafkaMessage: KafkaMessage = {
+    canSend: formManagement.checkValidation,
     send: () => {
-      const isFormValid = formManagement.checkValidation();
-      if (!isFormValid) return;
-
       const serializedMessage = serializeMessage(formManagement.message);
-      console.log(serializedMessage.jsonStringPretty);
 
       setMessageHistory((prevState) => [serializedMessage, ...prevState]);
 
       addNewToast("Sent");
     },
-    data: formManagement.message,
   };
 
   return (
