@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Row } from "react-bootstrap";
+import { Accordion, Alert, Row } from "react-bootstrap";
 import { SerializedMessage } from "../messageForm/serializeMessage";
 
 interface Props {
@@ -7,9 +7,32 @@ interface Props {
 }
 
 const HistoryTab: React.FC<Props> = ({ messageHistory }) => {
+  if (messageHistory.length === 0)
+    return (
+      <Alert
+        variant="light"
+        className="m-auto text-center bg-transparent border-0"
+      >
+        <Alert.Heading>
+          <i className="bi bi-info-square"></i>
+        </Alert.Heading>
+        <p>No messages sent yet!</p>
+      </Alert>
+    );
+
   return (
-    <div>
-      <Accordion flush alwaysOpen>
+    <div className="mb-3">
+      <Alert variant="light">
+        <Alert.Heading className="text-center">
+          <i className="bi bi-info-square"></i>
+        </Alert.Heading>
+        <p>
+          This is your session&apos;s message history. If you refresh the page,
+          the session will be reset and the message history will be emptied.
+          Click on a message to see its details.
+        </p>
+      </Alert>
+      <Accordion flush alwaysOpen className={"border-start border-end"}>
         {messageHistory.map((message) => (
           <Accordion.Item
             eventKey={message.timeStamp.getTime().toString()}
