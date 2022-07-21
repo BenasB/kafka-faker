@@ -4,6 +4,7 @@ import {
   Message,
   MessageDataField,
   MessageDataFieldArray,
+  MessageDataFieldCommon,
   MessageDataFieldCustom,
   MessageDataFieldGeneration,
   MessageDataFieldObject,
@@ -27,8 +28,7 @@ const deserializeMessageSave = (
     depth: number
   ): MessageDataField => {
     const mapGeneration = (
-      field: SaveMessageDataFieldGeneration,
-      depth: number
+      field: SaveMessageDataFieldGeneration
     ): MessageDataFieldGeneration => {
       let generationFunction = generationFunctions.find(
         (t) => t.type === field.generationType
@@ -44,11 +44,6 @@ const deserializeMessageSave = (
 
       return {
         valueType: "generation",
-        depth,
-        name: {
-          value: field.name,
-          validate: validationFunctions.nameValidation,
-        },
         generate: generationFunction,
         generationType: field.generationType,
         value: field.value,
@@ -56,41 +51,23 @@ const deserializeMessageSave = (
     };
 
     const mapCustom = (
-      field: SaveMessageDataFieldCustom,
-      depth: number
+      field: SaveMessageDataFieldCustom
     ): MessageDataFieldCustom => ({
       valueType: "custom",
-      depth,
-      name: {
-        value: field.name,
-        validate: validationFunctions.nameValidation,
-      },
       value: field.value,
     });
 
     const mapObject = (
-      field: SaveMessageDataFieldObject,
-      depth: number
+      field: SaveMessageDataFieldObject
     ): MessageDataFieldObject => ({
       valueType: "object",
-      depth,
-      name: {
-        value: field.name,
-        validate: validationFunctions.nameValidation,
-      },
       value: field.value.map((nestedField) => mapField(nestedField, depth + 1)),
     });
 
     const mapArray = (
-      field: SaveMessageDataFieldArray,
-      depth: number
+      field: SaveMessageDataFieldArray
     ): MessageDataFieldArray => ({
       valueType: "array",
-      depth,
-      name: {
-        value: field.name,
-        validate: validationFunctions.nameValidation,
-      },
       count: field.count,
       value: [
         {
@@ -101,18 +78,26 @@ const deserializeMessageSave = (
       ],
     });
 
+    const common: MessageDataFieldCommon = {
+      depth,
+      name: {
+        value: field.name,
+        validate: validationFunctions.nameValidation,
+      },
+    };
+
     switch (field.valueType) {
       case "generation":
-        return mapGeneration(field, depth);
+        return { ...common, ...mapGeneration(field) };
 
       case "object":
-        return mapObject(field, depth);
+        return { ...common, ...mapObject(field) };
 
       case "custom":
-        return mapCustom(field, depth);
+        return { ...common, ...mapCustom(field) };
 
       case "array":
-        return mapArray(field, depth);
+        return { ...common, ...mapArray(field) };
     }
   };
 

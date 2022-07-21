@@ -7,7 +7,6 @@ import {
   Message,
   messageDataFieldTypes,
   MessageDataField,
-  MessageDataFieldGeneration,
   ValidatedInput,
 } from "../components/messageForm/messageTypes";
 import { SerializedSaveMessage } from "../components/messageForm/serializeMessageSave";
@@ -166,7 +165,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     const generationField = (
       fieldData: MessageDataField,
       generationFunction: GenerationFunction
-    ): MessageDataFieldGeneration => ({
+    ): MessageDataField => ({
       ...fieldData,
       valueType: "generation",
       generationType:

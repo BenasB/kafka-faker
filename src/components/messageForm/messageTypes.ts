@@ -3,7 +3,7 @@ import { messageDataFieldGenerationTypes } from "../../data/generationFunctions"
 export const messageDataFieldTypes = ["custom", "object", "array"] as const;
 
 // Common shared properties between all message data field types
-type MessageDataFieldCommon = {
+export type MessageDataFieldCommon = {
   name: ValidatedInput<string>;
   depth: number;
   toDelete?: boolean;
@@ -15,17 +15,17 @@ export type ValidatedInput<T> = {
   validate: (value: T) => string[] | undefined;
 };
 
-export type MessageDataFieldCustom = MessageDataFieldCommon & {
+export type MessageDataFieldCustom = {
   valueType: typeof messageDataFieldTypes[0];
   value: string;
 };
 
-export type MessageDataFieldObject = MessageDataFieldCommon & {
+export type MessageDataFieldObject = {
   valueType: typeof messageDataFieldTypes[1];
   value: MessageDataField[];
 };
 
-export type MessageDataFieldArray = MessageDataFieldCommon & {
+export type MessageDataFieldArray = {
   valueType: typeof messageDataFieldTypes[2];
   count: number;
 
@@ -33,18 +33,20 @@ export type MessageDataFieldArray = MessageDataFieldCommon & {
   value: FixedLengthArray<[MessageDataField]>;
 };
 
-export type MessageDataFieldGeneration = MessageDataFieldCommon & {
+export type MessageDataFieldGeneration = {
   valueType: "generation";
   generationType: typeof messageDataFieldGenerationTypes[number];
   generate: () => string;
   value: string;
 };
 
-export type MessageDataField =
+type MessageDataFieldSpecifc =
   | MessageDataFieldCustom
   | MessageDataFieldObject
   | MessageDataFieldGeneration
   | MessageDataFieldArray;
+
+export type MessageDataField = MessageDataFieldCommon & MessageDataFieldSpecifc;
 
 // State interface
 export interface Message {

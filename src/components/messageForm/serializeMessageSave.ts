@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import {
   Message,
   MessageDataField,
@@ -14,27 +13,38 @@ type SaveMessageDataFieldCommon = {
   name: string;
 };
 
-export type SaveMessageDataFieldCustom = SaveMessageDataFieldCommon &
-  Pick<MessageDataFieldCustom, "value" | "valueType">;
+export type SaveMessageDataFieldCustom = Pick<
+  MessageDataFieldCustom,
+  "value" | "valueType"
+>;
 
-export type SaveMessageDataFieldObject = SaveMessageDataFieldCommon &
-  Pick<MessageDataFieldObject, "valueType"> & {
-    value: SaveMessageDataField[];
-  };
+export type SaveMessageDataFieldObject = Pick<
+  MessageDataFieldObject,
+  "valueType"
+> & {
+  value: SaveMessageDataField[];
+};
 
-export type SaveMessageDataFieldArray = SaveMessageDataFieldCommon &
-  Pick<MessageDataFieldArray, "count" | "valueType"> & {
-    value: SaveMessageDataField;
-  };
+export type SaveMessageDataFieldArray = Pick<
+  MessageDataFieldArray,
+  "count" | "valueType"
+> & {
+  value: SaveMessageDataField;
+};
 
-export type SaveMessageDataFieldGeneration = SaveMessageDataFieldCommon &
-  Pick<MessageDataFieldGeneration, "generationType" | "value" | "valueType">;
+export type SaveMessageDataFieldGeneration = Pick<
+  MessageDataFieldGeneration,
+  "generationType" | "value" | "valueType"
+>;
 
-export type SaveMessageDataField =
+type SaveMessageDataSpecific =
   | SaveMessageDataFieldCustom
   | SaveMessageDataFieldObject
   | SaveMessageDataFieldArray
   | SaveMessageDataFieldGeneration;
+
+export type SaveMessageDataField = SaveMessageDataFieldCommon &
+  SaveMessageDataSpecific;
 
 export type SerializedSaveMessage = Pick<Message, "key" | "autoGeneration"> & {
   topic: string;
@@ -47,7 +57,6 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
     const mapGeneration = (
       field: MessageDataFieldGeneration
     ): SaveMessageDataFieldGeneration => ({
-      name: field.name.value,
       valueType: field.valueType,
       generationType: field.generationType,
       value: field.value,
@@ -56,7 +65,6 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
     const mapCustom = (
       field: MessageDataFieldCustom
     ): SaveMessageDataFieldCustom => ({
-      name: field.name.value,
       valueType: field.valueType,
       value: field.value,
     });
@@ -64,7 +72,6 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
     const mapObject = (
       field: MessageDataFieldObject
     ): SaveMessageDataFieldObject => ({
-      name: field.name.value,
       valueType: field.valueType,
       value: field.value.map(mapField),
     });
@@ -72,24 +79,27 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
     const mapArray = (
       field: MessageDataFieldArray
     ): SaveMessageDataFieldArray => ({
-      name: field.name.value,
       valueType: field.valueType,
       count: field.count,
       value: field.value.map(mapField)[0],
     });
 
+    const common: SaveMessageDataFieldCommon = {
+      name: field.name.value,
+    };
+
     switch (field.valueType) {
       case "generation":
-        return mapGeneration(field);
+        return { ...common, ...mapGeneration(field) };
 
       case "object":
-        return mapObject(field);
+        return { ...common, ...mapObject(field) };
 
       case "custom":
-        return mapCustom(field);
+        return { ...common, ...mapCustom(field) };
 
       case "array":
-        return mapArray(field);
+        return { ...common, ...mapArray(field) };
     }
   };
 
