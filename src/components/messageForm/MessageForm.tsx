@@ -117,6 +117,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
             <Form.Check
               type="switch"
               label="Auto generation"
+              id="auto-generation-switch"
               value={message.autoGeneration.toString()}
               onClick={() => toggleAutoGeneration()}
             />
