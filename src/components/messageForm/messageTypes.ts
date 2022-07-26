@@ -50,7 +50,7 @@ export type MessageDataField = MessageDataFieldCommon &
 // State interface
 export interface Message {
   topic: ValidatedInput<string>;
-  key: string;
+  key?: string;
   autoGeneration: boolean;
   data: MessageDataField[];
 }
