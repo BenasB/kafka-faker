@@ -1,5 +1,5 @@
-import generationFunctions from "../../data/generationFunctions";
-import validationFunctions from "../../data/validationFunctions";
+import generationFunctions from "../data/generationFunctions";
+import validationFunctions from "../data/validationFunctions";
 import {
   Message,
   MessageDataField,
@@ -9,7 +9,7 @@ import {
   MessageDataFieldGeneration,
   MessageDataFieldObject,
   MessageDataFieldSpecific,
-} from "./messageTypes";
+} from "../components/messageForm/messageTypes";
 import {
   SaveMessageDataField,
   SaveMessageDataFieldArray,

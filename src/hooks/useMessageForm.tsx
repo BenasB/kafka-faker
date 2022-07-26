@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import deserializeMessageSave from "../components/messageForm/deserializeMessageSave";
+import deserializeMessageSave from "../io/deserializeMessageSave";
 import hookHelpers, {
   iterateAllMessageFields,
 } from "../components/messageForm/hookHelpers";
@@ -10,7 +10,7 @@ import {
   ValidatedInput,
   MessageDataFieldSpecific,
 } from "../components/messageForm/messageTypes";
-import { SerializedSaveMessage } from "../components/messageForm/serializeMessageSave";
+import { SerializedSaveMessage } from "../io/serializeMessageSave";
 import generationFunctions, {
   GenerationFunction,
   messageDataFieldGenerationTypes,

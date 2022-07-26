@@ -3,10 +3,10 @@ import useMessageForm from "../../hooks/useMessageForm";
 import useToasts from "../../hooks/useToasts";
 import ActionBar from "../actionBar/ActionBar";
 import MessageForm from "../messageForm/MessageForm";
-import serializeMessageSave from "../messageForm/serializeMessageSave";
+import serializeMessageSave from "../../io/serializeMessageSave";
 import serializeMessageSend, {
   SerializedSendMessage,
-} from "../messageForm/serializeMessageSend";
+} from "../../io/serializeMessageSend";
 import ToastDisplay from "../toasts/ToastDisplay";
 
 export interface KafkaMessage {

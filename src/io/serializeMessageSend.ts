@@ -2,7 +2,7 @@ import {
   Message,
   MessageDataField,
   MessageDataFieldSpecific,
-} from "./messageTypes";
+} from "../components/messageForm/messageTypes";
 
 export interface SerializedSendMessage {
   topic: string;

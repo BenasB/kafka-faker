@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Col } from "react-bootstrap";
 import Header from "./components/header/Header";
 import Layout from "./components/layout/Layout";
-import { SerializedSendMessage } from "./components/messageForm/serializeMessageSend";
+import { SerializedSendMessage } from "./io/serializeMessageSend";
 import HistoryTab from "./components/tabs/HistoryTab";
 import SendTab from "./components/tabs/SendTab";
 

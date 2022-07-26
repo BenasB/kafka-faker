@@ -6,7 +6,7 @@ import {
   MessageDataFieldGeneration,
   MessageDataFieldObject,
   MessageDataFieldSpecific,
-} from "./messageTypes";
+} from "../components/messageForm/messageTypes";
 
 // Recreate message types but with only the properties that need to be saved
 // (only the properties that are used to recreate state)

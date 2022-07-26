@@ -1,6 +1,6 @@
 import React from "react";
 import { Accordion, Alert, Row } from "react-bootstrap";
-import { SerializedSendMessage } from "../messageForm/serializeMessageSend";
+import { SerializedSendMessage } from "../../io/serializeMessageSend";
 
 interface Props {
   messageHistory: SerializedSendMessage[];
