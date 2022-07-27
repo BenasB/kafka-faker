@@ -20,7 +20,7 @@ const MessageLoadModal: React.FC<Props> = ({ show, turnOff, setMessage }) => {
   return (
     <Modal show={show} onHide={turnOff}>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>Load message schema</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={(e) => e.preventDefault()} noValidate>
