@@ -3,7 +3,7 @@ import useMessageForm from "../../hooks/useMessageForm";
 import useToasts from "../../hooks/useToasts";
 import ActionBar from "../actionBar/ActionBar";
 import MessageForm from "../messageForm/MessageForm";
-import serializeMessageSave from "../../io/serializeMessageSave";
+import serializeMessageSchema from "../../io/serializeMessageSchema";
 import serializeMessageSend, {
   SerializedSendMessage,
 } from "../../io/serializeMessageSend";
@@ -31,7 +31,9 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
     canSend: formManagement.checkValidation,
     send: () => {
       const serializedMessage = serializeMessageSend(formManagement.message);
-      console.log(JSON.stringify(serializeMessageSave(formManagement.message)));
+      console.log(
+        JSON.stringify(serializeMessageSchema(formManagement.message))
+      );
 
       setMessageHistory((prevState) => [serializedMessage, ...prevState]);
 

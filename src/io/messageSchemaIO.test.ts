@@ -6,8 +6,8 @@ import {
 } from "../components/messageForm/messageTypes";
 import generationFunctions from "../data/generationFunctions";
 import validationFunctions from "../data/validationFunctions";
-import deserializeMessageSave from "./deserializeMessageSave";
-import serializeMessageSave from "./serializeMessageSave";
+import deserializeMessageSchema from "./deserializeMessageSchema";
+import serializeMessageSchema from "./serializeMessageSchema";
 
 const genericMessageWithNoData: Message = {
   topic: {
@@ -43,7 +43,7 @@ test("Empty data", () => {
   const messageToSave: Message = genericMessageWithNoData;
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -54,7 +54,7 @@ test("One data field", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -69,7 +69,7 @@ test("Multiple data fields", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -85,7 +85,7 @@ test("Generation data field", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -103,7 +103,7 @@ test("Array data field", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -121,7 +121,7 @@ test("Array data field count 0", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -138,7 +138,7 @@ test("Object data field no children", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -157,7 +157,7 @@ test("Object data field single child", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -182,7 +182,7 @@ test("Object data field multiple children", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -211,7 +211,7 @@ test("Array data field with object inside", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 
@@ -246,7 +246,7 @@ test("Array data field with object inside with array inside", () => {
   };
 
   expect(
-    deserializeMessageSave(serializeMessageSave(messageToSave))
+    deserializeMessageSchema(serializeMessageSchema(messageToSave))
   ).toStrictEqual(messageToSave);
 });
 

@@ -13,26 +13,24 @@ import {
   MessageDataFieldSpecific,
 } from "../components/messageForm/messageTypes";
 import {
-  SaveMessageDataField,
-  SaveMessageDataFieldArray,
-  SaveMessageDataFieldCustom,
-  SaveMessageDataFieldGeneration,
-  SaveMessageDataFieldObject,
-  SaveMessageDataFieldSpecific,
-  SerializedSaveMessage,
-} from "./serializeMessageSave";
+  MessageSchemaDataField,
+  MessageSchemaDataFieldArray,
+  MessageSchemaDataFieldCustom,
+  MessageSchemaDataFieldGeneration,
+  MessageSchemaDataFieldObject,
+  MessageSchemaDataFieldSpecific,
+  MessageSchema,
+} from "./serializeMessageSchema";
 
 // Converts data from a message save to message form state
 // Reverses the changes made to the message form state by serializeMessageSave function
-const deserializeMessageSave = (
-  messageSave: SerializedSaveMessage
-): Message => {
+const deserializeMessageSchema = (messageSave: MessageSchema): Message => {
   const mapSpecificField = (
-    field: SaveMessageDataFieldSpecific,
+    field: MessageSchemaDataFieldSpecific,
     depth: number
   ): MessageDataFieldSpecific => {
     const mapGeneration = (
-      field: SaveMessageDataFieldGeneration
+      field: MessageSchemaDataFieldGeneration
     ): MessageDataFieldGeneration => {
       const generationType =
         messageDataFieldGenerationTypes.find(
@@ -55,21 +53,21 @@ const deserializeMessageSave = (
     };
 
     const mapCustom = (
-      field: SaveMessageDataFieldCustom
+      field: MessageSchemaDataFieldCustom
     ): MessageDataFieldCustom => ({
       valueType: "custom",
       value: field.value,
     });
 
     const mapObject = (
-      field: SaveMessageDataFieldObject
+      field: MessageSchemaDataFieldObject
     ): MessageDataFieldObject => ({
       valueType: "object",
       value: field.value.map((nestedField) => mapField(nestedField, depth + 1)),
     });
 
     const mapArray = (
-      field: SaveMessageDataFieldArray
+      field: MessageSchemaDataFieldArray
     ): MessageDataFieldArray => ({
       valueType: "array",
       count: field.count,
@@ -92,7 +90,7 @@ const deserializeMessageSave = (
   };
 
   const mapField = (
-    field: SaveMessageDataField,
+    field: MessageSchemaDataField,
     depth: number
   ): MessageDataField => {
     const common: MessageDataFieldCommon = {
@@ -121,4 +119,4 @@ const deserializeMessageSave = (
   };
 };
 
-export default deserializeMessageSave;
+export default deserializeMessageSchema;

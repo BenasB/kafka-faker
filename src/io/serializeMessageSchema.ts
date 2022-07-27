@@ -10,56 +10,56 @@ import {
 
 // Recreate message types but with only the properties that need to be saved
 // (only the properties that are used to recreate state)
-type SaveMessageDataFieldCommon = {
+type MessageSchemaDataFieldCommon = {
   name: string;
 };
 
-export type SaveMessageDataFieldCustom = Pick<
+export type MessageSchemaDataFieldCustom = Pick<
   MessageDataFieldCustom,
   "value" | "valueType"
 >;
 
-export type SaveMessageDataFieldObject = Pick<
+export type MessageSchemaDataFieldObject = Pick<
   MessageDataFieldObject,
   "valueType"
 > & {
-  value: SaveMessageDataField[];
+  value: MessageSchemaDataField[];
 };
 
-export type SaveMessageDataFieldArray = Pick<
+export type MessageSchemaDataFieldArray = Pick<
   MessageDataFieldArray,
   "count" | "valueType"
 > & {
-  value: SaveMessageDataFieldSpecific;
+  value: MessageSchemaDataFieldSpecific;
 };
 
-export type SaveMessageDataFieldGeneration = Pick<
+export type MessageSchemaDataFieldGeneration = Pick<
   MessageDataFieldGeneration,
   "generationType" | "value" | "valueType"
 >;
 
-export type SaveMessageDataFieldSpecific =
-  | SaveMessageDataFieldCustom
-  | SaveMessageDataFieldObject
-  | SaveMessageDataFieldArray
-  | SaveMessageDataFieldGeneration;
+export type MessageSchemaDataFieldSpecific =
+  | MessageSchemaDataFieldCustom
+  | MessageSchemaDataFieldObject
+  | MessageSchemaDataFieldArray
+  | MessageSchemaDataFieldGeneration;
 
-export type SaveMessageDataField = SaveMessageDataFieldCommon &
-  SaveMessageDataFieldSpecific;
+export type MessageSchemaDataField = MessageSchemaDataFieldCommon &
+  MessageSchemaDataFieldSpecific;
 
-export type SerializedSaveMessage = Pick<Message, "key" | "autoGeneration"> & {
+export type MessageSchema = Pick<Message, "key" | "autoGeneration"> & {
   topic: string;
-  data: SaveMessageDataField[];
+  data: MessageSchemaDataField[];
 };
 
 // Converts data from message form to an object used to recreate message form state
-const serializeMessageSave = (message: Message): SerializedSaveMessage => {
+const serializeMessageSchema = (message: Message): MessageSchema => {
   const mapSpecificField = (
     field: MessageDataFieldSpecific
-  ): SaveMessageDataFieldSpecific => {
+  ): MessageSchemaDataFieldSpecific => {
     const mapGeneration = (
       field: MessageDataFieldGeneration
-    ): SaveMessageDataFieldGeneration => ({
+    ): MessageSchemaDataFieldGeneration => ({
       valueType: field.valueType,
       generationType: field.generationType,
       value: field.value,
@@ -67,21 +67,21 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
 
     const mapCustom = (
       field: MessageDataFieldCustom
-    ): SaveMessageDataFieldCustom => ({
+    ): MessageSchemaDataFieldCustom => ({
       valueType: field.valueType,
       value: field.value,
     });
 
     const mapObject = (
       field: MessageDataFieldObject
-    ): SaveMessageDataFieldObject => ({
+    ): MessageSchemaDataFieldObject => ({
       valueType: field.valueType,
       value: field.value.map(mapField),
     });
 
     const mapArray = (
       field: MessageDataFieldArray
-    ): SaveMessageDataFieldArray => ({
+    ): MessageSchemaDataFieldArray => ({
       valueType: field.valueType,
       count: field.count,
       value: mapSpecificField(field.value),
@@ -102,15 +102,15 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
     }
   };
 
-  const mapField = (field: MessageDataField): SaveMessageDataField => {
-    const common: SaveMessageDataFieldCommon = {
+  const mapField = (field: MessageDataField): MessageSchemaDataField => {
+    const common: MessageSchemaDataFieldCommon = {
       name: field.name.value,
     };
 
     return { ...common, ...mapSpecificField(field) };
   };
 
-  const data = message.data.map<SaveMessageDataField>(mapField);
+  const data = message.data.map<MessageSchemaDataField>(mapField);
 
   return {
     topic: message.topic.value,
@@ -120,4 +120,4 @@ const serializeMessageSave = (message: Message): SerializedSaveMessage => {
   };
 };
 
-export default serializeMessageSave;
+export default serializeMessageSchema;
