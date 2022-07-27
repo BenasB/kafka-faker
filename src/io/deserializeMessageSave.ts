@@ -1,4 +1,6 @@
-import generationFunctions from "../data/generationFunctions";
+import generationFunctions, {
+  messageDataFieldGenerationTypes,
+} from "../data/generationFunctions";
 import validationFunctions from "../data/validationFunctions";
 import {
   Message,
@@ -32,22 +34,22 @@ const deserializeMessageSave = (
     const mapGeneration = (
       field: SaveMessageDataFieldGeneration
     ): MessageDataFieldGeneration => {
-      let generationFunction = generationFunctions.find(
-        (t) => t.type === field.generationType
-      )?.function;
-      if (!generationFunction) {
-        const functionReplacement = generationFunctions[0];
-        generationFunction = functionReplacement.function;
+      const generationType =
+        messageDataFieldGenerationTypes.find(
+          (t) => t === field.generationType
+        ) || messageDataFieldGenerationTypes[0];
+
+      if (generationType !== field.generationType) {
         console.error(
           `Could not locate a generation function of type ${field.generationType}.
-               Replacing that function by the default generation type ${functionReplacement.type}`
+               Replacing that function by the default generation type ${generationType}`
         );
       }
 
       return {
         valueType: "generation",
-        generate: generationFunction,
-        generationType: field.generationType,
+        generationType,
+        generate: generationFunctions[generationType],
         value: field.value,
       };
     };

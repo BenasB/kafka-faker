@@ -4,24 +4,15 @@ export const messageDataFieldGenerationTypes = [
   "location",
 ] as const;
 
-export interface GenerationFunction {
-  type: typeof messageDataFieldGenerationTypes[number];
-  function: () => string;
-}
+export type GenerationFunctions = Record<
+  typeof messageDataFieldGenerationTypes[number],
+  () => string
+>;
 
-const generationFunctions: GenerationFunction[] = [
-  {
-    type: "name",
-    function: () => "Benas" + Math.floor(Math.random() * 100),
-  },
-  {
-    type: "date",
-    function: () => "Date" + Math.floor(Math.random() * 100),
-  },
-  {
-    type: "location",
-    function: () => "Location" + Math.floor(Math.random() * 100),
-  },
-];
+const generationFunctions: GenerationFunctions = {
+  name: () => "Benas" + Math.floor(Math.random() * 100),
+  date: () => "Date" + Math.floor(Math.random() * 100),
+  location: () => "Location" + Math.floor(Math.random() * 100),
+};
 
 export default generationFunctions;

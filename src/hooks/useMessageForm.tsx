@@ -12,7 +12,6 @@ import {
 } from "../components/messageForm/messageTypes";
 import { SerializedSaveMessage } from "../io/serializeMessageSave";
 import generationFunctions, {
-  GenerationFunction,
   messageDataFieldGenerationTypes,
 } from "../data/generationFunctions";
 import validationFunctions from "../data/validationFunctions";
@@ -180,15 +179,13 @@ const useMessageForm: () => MessageFormManagement = () => {
   ) => {
     const generationField = (
       fieldData: MessageDataFieldSpecific,
-      generationFunction: GenerationFunction
+      generationType: typeof messageDataFieldGenerationTypes[number]
     ): MessageDataFieldSpecific => ({
       ...fieldData,
       valueType: "generation",
-      generationType:
-        messageDataFieldGenerationTypes.find((t) => t === newType) ||
-        messageDataFieldGenerationTypes[0],
-      generate: generationFunction.function,
-      value: generationFunction.function(),
+      generationType,
+      generate: generationFunctions[generationType],
+      value: generationFunctions[generationType](),
     });
 
     updateMessageDataField(
@@ -198,8 +195,8 @@ const useMessageForm: () => MessageFormManagement = () => {
         if (messageDataFieldGenerationTypes.find((t) => t === newType)) {
           return generationField(
             fieldData,
-            generationFunctions.find((t) => t.type === newType) ||
-              generationFunctions[0]
+            messageDataFieldGenerationTypes.find((t) => t === newType) ||
+              messageDataFieldGenerationTypes[0]
           );
         } else if (messageDataFieldTypes.find((t) => t === newType)) {
           switch (newType) {

@@ -2,12 +2,12 @@ import {
   Message,
   MessageDataFieldCommon,
   MessageDataFieldCustom,
+  MessageDataFieldGeneration,
 } from "../components/messageForm/messageTypes";
+import generationFunctions from "../data/generationFunctions";
 import validationFunctions from "../data/validationFunctions";
 import deserializeMessageSave from "./deserializeMessageSave";
-import serializeMessageSave, {
-  SerializedSaveMessage,
-} from "./serializeMessageSave";
+import serializeMessageSave from "./serializeMessageSave";
 
 const genericMessageWithNoData: Message = {
   topic: {
@@ -27,6 +27,13 @@ const genericCommonDataField: MessageDataFieldCommon = {
   depth: 0,
 };
 
+const genericGenerationDataField: MessageDataFieldGeneration = {
+  valueType: "generation",
+  generationType: "date",
+  generate: generationFunctions.date,
+  value: generationFunctions.date(),
+};
+
 const genericCustomDataField: MessageDataFieldCustom = {
   valueType: "custom",
   value: "Hello World!",
@@ -35,13 +42,9 @@ const genericCustomDataField: MessageDataFieldCustom = {
 test("Empty data", () => {
   const messageToSave: Message = genericMessageWithNoData;
 
-  const serializedMessage: SerializedSaveMessage =
-    serializeMessageSave(messageToSave);
-
-  const deserializedMessage: Message =
-    deserializeMessageSave(serializedMessage);
-
-  expect(deserializedMessage).toStrictEqual(messageToSave);
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
 });
 
 test("One data field", () => {
@@ -50,13 +53,9 @@ test("One data field", () => {
     data: [{ ...genericCommonDataField, ...genericCustomDataField }],
   };
 
-  const serializedMessage: SerializedSaveMessage =
-    serializeMessageSave(messageToSave);
-
-  const deserializedMessage: Message =
-    deserializeMessageSave(serializedMessage);
-
-  expect(deserializedMessage).toStrictEqual(messageToSave);
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
 });
 
 test("Multiple data fields", () => {
@@ -69,13 +68,25 @@ test("Multiple data fields", () => {
     ],
   };
 
-  const serializedMessage: SerializedSaveMessage =
-    serializeMessageSave(messageToSave);
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
+});
 
-  const deserializedMessage: Message =
-    deserializeMessageSave(serializedMessage);
+test("Generation data field", () => {
+  const messageToSave: Message = {
+    ...genericMessageWithNoData,
+    data: [
+      {
+        ...genericCommonDataField,
+        ...genericGenerationDataField,
+      },
+    ],
+  };
 
-  expect(deserializedMessage).toStrictEqual(messageToSave);
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
 });
 
 test("Array data field", () => {
@@ -91,13 +102,9 @@ test("Array data field", () => {
     ],
   };
 
-  const serializedMessage: SerializedSaveMessage =
-    serializeMessageSave(messageToSave);
-
-  const deserializedMessage: Message =
-    deserializeMessageSave(serializedMessage);
-
-  expect(deserializedMessage).toStrictEqual(messageToSave);
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
 });
 
 test("Array data field count 0", () => {
@@ -113,13 +120,134 @@ test("Array data field count 0", () => {
     ],
   };
 
-  const serializedMessage: SerializedSaveMessage =
-    serializeMessageSave(messageToSave);
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
+});
 
-  const deserializedMessage: Message =
-    deserializeMessageSave(serializedMessage);
+test("Object data field no children", () => {
+  const messageToSave: Message = {
+    ...genericMessageWithNoData,
+    data: [
+      {
+        ...genericCommonDataField,
+        valueType: "object",
+        value: [],
+      },
+    ],
+  };
 
-  expect(deserializedMessage).toStrictEqual(messageToSave);
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
+});
+
+test("Object data field single child", () => {
+  const messageToSave: Message = {
+    ...genericMessageWithNoData,
+    data: [
+      {
+        ...genericCommonDataField,
+        valueType: "object",
+        value: [
+          { ...genericCommonDataField, ...genericCustomDataField, depth: 1 },
+        ],
+      },
+    ],
+  };
+
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
+});
+
+test("Object data field multiple children", () => {
+  const messageToSave: Message = {
+    ...genericMessageWithNoData,
+    data: [
+      {
+        ...genericCommonDataField,
+        valueType: "object",
+        value: [
+          { ...genericCommonDataField, ...genericCustomDataField, depth: 1 },
+          {
+            ...genericCommonDataField,
+            ...genericGenerationDataField,
+            depth: 1,
+          },
+          { ...genericCommonDataField, ...genericCustomDataField, depth: 1 },
+        ],
+      },
+    ],
+  };
+
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
+});
+
+test("Array data field with object inside", () => {
+  const messageToSave: Message = {
+    ...genericMessageWithNoData,
+    data: [
+      {
+        ...genericCommonDataField,
+        valueType: "array",
+        value: {
+          valueType: "object",
+          value: [
+            { ...genericCommonDataField, ...genericCustomDataField, depth: 1 },
+            {
+              ...genericCommonDataField,
+              ...genericGenerationDataField,
+              depth: 1,
+            },
+            { ...genericCommonDataField, ...genericCustomDataField, depth: 1 },
+          ],
+        },
+        count: 5,
+      },
+    ],
+  };
+
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
+});
+
+test("Array data field with object inside with array inside", () => {
+  const messageToSave: Message = {
+    ...genericMessageWithNoData,
+    data: [
+      {
+        ...genericCommonDataField,
+        valueType: "array",
+        value: {
+          valueType: "object",
+          value: [
+            {
+              ...genericCommonDataField,
+              ...genericGenerationDataField,
+              depth: 1,
+            },
+            {
+              ...genericCommonDataField,
+              valueType: "array",
+              value: genericGenerationDataField,
+              count: 5,
+              depth: 1,
+            },
+            { ...genericCommonDataField, ...genericCustomDataField, depth: 1 },
+          ],
+        },
+        count: 5,
+      },
+    ],
+  };
+
+  expect(
+    deserializeMessageSave(serializeMessageSave(messageToSave))
+  ).toStrictEqual(messageToSave);
 });
 
 export {};
