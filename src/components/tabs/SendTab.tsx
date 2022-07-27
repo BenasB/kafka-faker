@@ -8,6 +8,9 @@ import serializeMessageSend, {
   SerializedSendMessage,
 } from "../../io/serializeMessageSend";
 import ToastDisplay from "../toasts/ToastDisplay";
+import MessageLoad from "../messageLoad/MessageLoad";
+import { Stack } from "react-bootstrap";
+import MessageSave from "../messageLoad/MessageSave";
 
 export interface KafkaMessage {
   canSend: () => boolean;
@@ -38,9 +41,17 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
 
   return (
     <>
-      <div className="col">
+      <Stack className="col" gap={3}>
+        <Stack
+          className="d-flex justify-content-end"
+          direction="horizontal"
+          gap={3}
+        >
+          <MessageSave />
+          <MessageLoad />
+        </Stack>
         <MessageForm {...formManagement} />
-      </div>
+      </Stack>
       <ActionBar {...kafkaMessage} />
       <ToastDisplay toastList={toastList} />
     </>
