@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import deserializeMessageSchema from "../io/deserializeMessageSchema";
+import { useState } from "react";
 import hookHelpers, {
   iterateAllMessageFields,
 } from "../components/messageForm/hookHelpers";
@@ -10,7 +9,6 @@ import {
   ValidatedInput,
   MessageDataFieldSpecific,
 } from "../components/messageForm/messageTypes";
-import { MessageSchema } from "../io/serializeMessageSchema";
 import generationFunctions, {
   messageDataFieldGenerationTypes,
 } from "../data/generationFunctions";
@@ -53,6 +51,9 @@ export interface MessageFormManagement {
   ) => void;
   regenerateAllMessageDataFields: () => void;
   checkValidation: () => boolean;
+
+  // Only use for message schema io
+  setMessage: React.Dispatch<React.SetStateAction<Message>>;
 }
 
 const useMessageForm: () => MessageFormManagement = () => {
@@ -65,14 +66,6 @@ const useMessageForm: () => MessageFormManagement = () => {
     key: "",
     data: [],
   });
-
-  useEffect(() => {
-    const parsed: MessageSchema = JSON.parse(
-      `{"topic":"mano topicas","key":"","autoGeneration":true,"data":[{"name":"pirmas","valueType":"custom","value":"konstanta"},{"name":"antras","valueType":"array","count":4,"value":{"valueType":"custom","value":"arejusvienas"}},{"name":"trecias","valueType":"object","value":[{"name":"jektasviens","valueType":"generation","generationType":"location","value":"Location28"},{"name":"jektasdu","valueType":"array","count":9,"value":{"valueType":"generation","generationType":"date","value":"Date95"}}]},{"name":"ketvirtas","valueType":"generation","generationType":"name","value":"Benas28"}]}`
-    );
-    const newState = deserializeMessageSchema(parsed);
-    setMessage(newState);
-  }, []);
 
   const { updateMessageDataField, updateAllMessageFields } =
     hookHelpers(setMessage);
@@ -367,6 +360,7 @@ const useMessageForm: () => MessageFormManagement = () => {
     regenerateAllMessageDataFields,
     removeAllMessageDataFields,
     checkValidation,
+    setMessage,
   };
 };
 

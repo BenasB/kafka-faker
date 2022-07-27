@@ -24,7 +24,7 @@ import {
 
 // Converts data from a message save to message form state
 // Reverses the changes made to the message form state by serializeMessageSave function
-const deserializeMessageSchema = (messageSave: MessageSchema): Message => {
+const deserializeMessageSchema = (messageSchema: MessageSchema): Message => {
   const mapSpecificField = (
     field: MessageSchemaDataFieldSpecific,
     depth: number
@@ -104,17 +104,17 @@ const deserializeMessageSchema = (messageSave: MessageSchema): Message => {
     return { ...common, ...mapSpecificField(field, depth) };
   };
 
-  const data = messageSave.data.map<MessageDataField>((field) =>
+  const data = messageSchema.data.map<MessageDataField>((field) =>
     mapField(field, 0)
   );
 
   return {
     topic: {
-      value: messageSave.topic,
+      value: messageSchema.topic,
       validate: validationFunctions.topicValidation,
     },
-    key: messageSave.key,
-    autoGeneration: messageSave.autoGeneration,
+    key: messageSchema.key,
+    autoGeneration: messageSchema.autoGeneration,
     data,
   };
 };

@@ -10,7 +10,7 @@ import serializeMessageSend, {
 import ToastDisplay from "../toasts/ToastDisplay";
 import MessageLoad from "../messageLoad/MessageLoad";
 import { Stack } from "react-bootstrap";
-import MessageSave from "../messageLoad/MessageSave";
+import MessageSave from "../messageSave/MessageSave";
 
 export interface KafkaMessage {
   canSend: () => boolean;
@@ -50,7 +50,7 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
           gap={3}
         >
           <MessageSave />
-          <MessageLoad />
+          <MessageLoad setMessage={formManagement.setMessage} />
         </Stack>
         <MessageForm {...formManagement} />
       </Stack>

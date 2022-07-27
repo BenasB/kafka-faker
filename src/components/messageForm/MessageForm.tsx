@@ -119,7 +119,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
               label="Auto generation"
               id="auto-generation-switch"
               checked={message.autoGeneration}
-              onClick={() => toggleAutoGeneration()}
+              onChange={() => toggleAutoGeneration()}
             />
           </OverlayTrigger>
         </div>
