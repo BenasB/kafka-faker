@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Form,
@@ -23,6 +23,10 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
 }) => {
   const [schemaName, setSchemaName] = useState<string>("");
 
+  useEffect(() => {
+    setSchemaName("");
+  }, [show]);
+
   return (
     <Modal show={show} onHide={turnOff}>
       <Modal.Header closeButton>
@@ -34,6 +38,7 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
             <Form.Control
               value={schemaName}
               onChange={(e) => setSchemaName(e.target.value)}
+              placeholder={"Title"}
             />
             <DropdownButton variant="outline-secondary" title="" align="end">
               {demoSchemas.map((existingSchema) => (
