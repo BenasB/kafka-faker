@@ -4,12 +4,16 @@ import deserializeMessageSchema from "../../io/deserializeMessageSchema";
 import demoSchemas, { Schema } from "./demoSchemas";
 import { MessageLoadProps } from "./MessageLoad";
 
-interface Props extends MessageLoadProps {
+interface Props {
   show: boolean;
   turnOff: () => void;
 }
 
-const MessageLoadModal: React.FC<Props> = ({ show, turnOff, setMessage }) => {
+const MessageLoadModal: React.FC<Props & MessageLoadProps> = ({
+  show,
+  turnOff,
+  setMessage,
+}) => {
   const defaultSchema = demoSchemas[0];
   const [selectedSchema, setSelectedSchema] = useState<Schema>(defaultSchema);
 
