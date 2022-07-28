@@ -5,8 +5,10 @@ import Layout from "./components/layout/Layout";
 import { SerializedSendMessage } from "./io/serializeMessageSend";
 import HistoryTab from "./components/tabs/HistoryTab";
 import SendTab from "./components/tabs/SendTab";
+import axios, { AxiosInstance } from "axios";
+import SettingsTab from "./components/tabs/SettingsTab";
 
-export const tabTypes = ["send", "history"] as const;
+export const tabTypes = ["send", "history", "settings"] as const;
 
 function App() {
   const defaultTab: typeof tabTypes[number] = "send";
@@ -17,6 +19,19 @@ function App() {
     []
   );
 
+  const backEndClient: AxiosInstance = axios.create({
+    baseURL: "https://localhost:7204/",
+    timeout: 1000,
+  });
+
+  const getTabClassName = (
+    tab: typeof tabTypes[number]
+  ): { className: string } => {
+    return {
+      className: `${selectedTab === tab ? "" : "d-none"} d-flex flex-column`,
+    };
+  };
+
   return (
     <Layout>
       <Header
@@ -24,19 +39,14 @@ function App() {
         defaultTab={defaultTab}
         onTabChange={(newTab) => setSelectedTab(newTab)}
       />
-      <Col
-        className={`${
-          selectedTab === "send" ? "" : "d-none"
-        } d-flex flex-column`}
-      >
+      <Col {...getTabClassName("send")}>
         <SendTab setMessageHistory={setMessageHistory} />
       </Col>
-      <Col
-        className={`${
-          selectedTab === "history" ? "" : "d-none"
-        } d-flex flex-column`}
-      >
+      <Col {...getTabClassName("history")}>
         <HistoryTab messageHistory={messageHistory} />
+      </Col>
+      <Col {...getTabClassName("settings")}>
+        <SettingsTab backEndClient={backEndClient} />
       </Col>
     </Layout>
   );
