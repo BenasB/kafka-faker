@@ -61,7 +61,7 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
           variant="primary"
           onClick={() => {
             console.log(
-              `Saving ${schemaName} schema:`,
+              `Saving '${schemaName}' schema:`,
               JSON.stringify(serializeMessageSchema(message))
             );
 
