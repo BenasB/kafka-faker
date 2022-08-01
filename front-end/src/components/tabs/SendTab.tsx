@@ -10,6 +10,7 @@ import ToastDisplay from "../toasts/ToastDisplay";
 import MessageLoad from "../messageLoad/MessageLoad";
 import { Stack } from "react-bootstrap";
 import MessageSave from "../messageSave/MessageSave";
+import { AxiosInstance } from "axios";
 
 export interface KafkaMessage {
   canSend: () => boolean;
@@ -20,9 +21,10 @@ interface Props {
   setMessageHistory: React.Dispatch<
     React.SetStateAction<SerializedSendMessage[]>
   >;
+  backEndClient: AxiosInstance;
 }
 
-const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
+const SendTab: React.FC<Props> = ({ setMessageHistory, backEndClient }) => {
   const { toastList, addNewToast } = useToasts();
   const formManagement = useMessageForm();
 
@@ -31,6 +33,11 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
     send: () => {
       const serializedMessage = serializeMessageSend(formManagement.message);
 
+      backEndClient.post("Send", {
+        topic: serializedMessage.topic,
+        message: serializedMessage.jsonString,
+        key: serializedMessage.key,
+      });
       setMessageHistory((prevState) => [serializedMessage, ...prevState]);
 
       addNewToast("Sent");

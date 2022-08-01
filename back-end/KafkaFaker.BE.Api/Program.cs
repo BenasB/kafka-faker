@@ -1,3 +1,5 @@
+using KafkaFaker.BE;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +10,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors();
+
+builder.Services.AddSingleton<Producer>();
 
 var app = builder.Build();
 

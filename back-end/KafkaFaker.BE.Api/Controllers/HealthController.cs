@@ -14,7 +14,7 @@ public class HealthController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult GetBackEndHealth()
     {
         return Ok();
     }

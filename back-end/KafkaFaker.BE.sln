@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaFaker.BE.Api", "KafkaFaker.BE.Api\KafkaFaker.BE.Api.csproj", "{6F7C3C73-C853-4D1B-9C85-A7845705A925}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaFaker.BE", "KafkaFaker.BE\KafkaFaker.BE.csproj", "{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{6F7C3C73-C853-4D1B-9C85-A7845705A925}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F7C3C73-C853-4D1B-9C85-A7845705A925}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F7C3C73-C853-4D1B-9C85-A7845705A925}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

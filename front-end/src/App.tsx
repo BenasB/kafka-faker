@@ -40,7 +40,10 @@ function App() {
         onTabChange={(newTab) => setSelectedTab(newTab)}
       />
       <Col {...getTabClassName("send")}>
-        <SendTab setMessageHistory={setMessageHistory} />
+        <SendTab
+          setMessageHistory={setMessageHistory}
+          backEndClient={backEndClient}
+        />
       </Col>
       <Col {...getTabClassName("history")}>
         <HistoryTab messageHistory={messageHistory} />
