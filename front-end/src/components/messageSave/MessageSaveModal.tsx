@@ -7,7 +7,10 @@ import {
   DropdownButton,
   InputGroup,
 } from "react-bootstrap";
+import validationFunctions from "../../data/validationFunctions";
 import serializeMessageSchema from "../../io/serializeMessageSchema";
+import { ValidatedInput } from "../messageForm/messageTypes";
+import ValidationErrorMessage from "../messageForm/ValidationErrorMessage";
 import demoSchemas from "../messageLoad/demoSchemas";
 import { MessageSaveProps } from "./MessageSave";
 
@@ -21,10 +24,17 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
   turnOff,
   message,
 }) => {
-  const [schemaName, setSchemaName] = useState<string>("");
+  const [schemaTitle, setSchemaTitle] = useState<ValidatedInput<string>>({
+    value: "",
+    validate: validationFunctions.schemaTitleValidation,
+  });
 
   useEffect(() => {
-    setSchemaName("");
+    setSchemaTitle((prevState) => ({
+      ...prevState,
+      value: "",
+      errorMessages: undefined,
+    }));
   }, [show]);
 
   return (
@@ -34,22 +44,36 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={(e) => e.preventDefault()} noValidate>
-          <InputGroup className="mb-3">
+          <InputGroup className="mb-3" hasValidation>
             <Form.Control
-              value={schemaName}
-              onChange={(e) => setSchemaName(e.target.value)}
+              value={schemaTitle.value}
+              onChange={(e) =>
+                setSchemaTitle((prevState) => ({
+                  ...prevState,
+                  value: e.target.value,
+                  errorMessages: prevState.validate(e.target.value),
+                }))
+              }
               placeholder={"Title"}
+              isInvalid={!!schemaTitle.errorMessages}
             />
             <DropdownButton variant="outline-secondary" title="" align="end">
               {demoSchemas.map((existingSchema) => (
                 <Dropdown.Item
                   key={existingSchema.title}
-                  onClick={() => setSchemaName(existingSchema.title)}
+                  onClick={() =>
+                    setSchemaTitle((prevState) => ({
+                      ...prevState,
+                      value: existingSchema.title,
+                      errorMessages: prevState.validate(existingSchema.title),
+                    }))
+                  }
                 >
                   {existingSchema.title}
                 </Dropdown.Item>
               ))}
             </DropdownButton>
+            <ValidationErrorMessage {...schemaTitle} />
           </InputGroup>
         </Form>
       </Modal.Body>
@@ -60,13 +84,21 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
         <Button
           variant="primary"
           onClick={() => {
+            if (schemaTitle.validate(schemaTitle.value)) {
+              setSchemaTitle((prevState) => ({
+                ...prevState,
+                errorMessages: prevState.validate(prevState.value),
+              }));
+              return;
+            }
+
             console.log(
-              `Saving '${schemaName}' schema:`,
+              `Saving '${schemaTitle}' schema:`,
               JSON.stringify(serializeMessageSchema(message))
             );
 
             const existingSchema = demoSchemas.find(
-              (s) => s.title === schemaName
+              (s) => s.title === schemaTitle.value
             );
 
             if (existingSchema) {
@@ -75,7 +107,7 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
               );
             } else {
               demoSchemas.push({
-                title: schemaName,
+                title: schemaTitle.value,
                 jsonString: JSON.stringify(serializeMessageSchema(message)),
               });
             }

@@ -8,4 +8,8 @@ const topicValidation: ValidationFunction<string> = (value) => {
   return value.length > 0 ? undefined : ["Topic must not be empty"];
 };
 
-export default { nameValidation, topicValidation };
+const schemaTitleValidation: ValidationFunction<string> = (value) => {
+  return value.length > 0 ? undefined : ["Schema title must not be empty"];
+};
+
+export default { nameValidation, topicValidation, schemaTitleValidation };
