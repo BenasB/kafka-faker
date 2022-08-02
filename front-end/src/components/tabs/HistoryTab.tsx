@@ -2,8 +2,12 @@ import React from "react";
 import { Accordion, Alert, Row } from "react-bootstrap";
 import { SerializedSendMessage } from "../../io/serializeMessageSend";
 
+export interface HistoryMessage extends SerializedSendMessage {
+  isSuccess: boolean;
+}
+
 interface Props {
-  messageHistory: SerializedSendMessage[];
+  messageHistory: HistoryMessage[];
 }
 
 const HistoryTab: React.FC<Props> = ({ messageHistory }) => {
@@ -41,7 +45,7 @@ const HistoryTab: React.FC<Props> = ({ messageHistory }) => {
             <Accordion.Header>
               <div className="d-flex justify-content-between w-100 pe-5">
                 <div>{message.timeStamp.toLocaleTimeString()}</div>
-                <div>Sent</div>
+                <div>{message.isSuccess ? "Sent" : "Failed"}</div>
               </div>
             </Accordion.Header>
             <Accordion.Body>

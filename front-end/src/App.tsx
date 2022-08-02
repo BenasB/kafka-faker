@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Col } from "react-bootstrap";
 import Header from "./components/header/Header";
 import Layout from "./components/layout/Layout";
-import { SerializedSendMessage } from "./io/serializeMessageSend";
-import HistoryTab from "./components/tabs/HistoryTab";
+import HistoryTab, { HistoryMessage } from "./components/tabs/HistoryTab";
 import SendTab from "./components/tabs/SendTab";
 import axios, { AxiosInstance } from "axios";
 import SettingsTab from "./components/tabs/SettingsTab";
@@ -15,13 +14,11 @@ function App() {
   const [selectedTab, setSelectedTab] =
     useState<typeof tabTypes[number]>(defaultTab);
 
-  const [messageHistory, setMessageHistory] = useState<SerializedSendMessage[]>(
-    []
-  );
+  const [messageHistory, setMessageHistory] = useState<HistoryMessage[]>([]);
 
   const backEndClient: AxiosInstance = axios.create({
     baseURL: "https://localhost:7204/",
-    timeout: 1000,
+    timeout: 5000,
   });
 
   const getTabClassName = (

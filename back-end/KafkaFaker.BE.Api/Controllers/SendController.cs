@@ -7,8 +7,6 @@ namespace KafkaFaker.BE.Api.Controllers;
 [Route("[controller]")]
 public class SendController : ControllerBase
 {
-
-
     private readonly ILogger<SendController> _logger;
     private readonly Producer _producer;
 
