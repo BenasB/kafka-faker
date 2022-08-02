@@ -6,16 +6,24 @@ export interface ToastData {
   timeStamp: Date;
   delay?: number;
   success?: boolean;
+  title?: string;
   onClose: (toastToRemove: ToastData) => void;
 }
 
 const ToastPrefab: React.FC<ToastData> = (data) => {
   const [show, setShow] = useState<boolean>(true);
-  const { text, timeStamp, onClose, delay = 3000, success = true } = data;
+  const {
+    text,
+    timeStamp,
+    onClose,
+    delay = 3000,
+    success = true,
+    title,
+  } = data;
 
   return (
     <Toast
-      bg={!success ? "warning" : ""}
+      bg={!success ? "danger" : ""}
       delay={delay}
       autohide
       onTransitionEnd={() => onClose(data)}
@@ -25,7 +33,7 @@ const ToastPrefab: React.FC<ToastData> = (data) => {
       }}
     >
       <Toast.Header>
-        <strong className="me-auto">Kafka</strong>
+        <strong className="me-auto">{title || "Kafka"}</strong>
         <small className="text-muted">{timeStamp.toLocaleTimeString()}</small>
       </Toast.Header>
       <Toast.Body>{text}</Toast.Body>

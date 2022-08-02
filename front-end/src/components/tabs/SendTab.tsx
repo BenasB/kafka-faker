@@ -8,8 +8,8 @@ import ToastDisplay from "../toasts/ToastDisplay";
 import MessageLoad from "../messageLoad/MessageLoad";
 import { Stack } from "react-bootstrap";
 import MessageSave from "../messageSave/MessageSave";
-import { AxiosInstance } from "axios";
 import { HistoryMessage } from "./HistoryTab";
+import backEndClient from "../../io/backEndClient";
 
 export interface KafkaMessage {
   canSend: () => boolean;
@@ -18,12 +18,12 @@ export interface KafkaMessage {
 
 interface Props {
   setMessageHistory: React.Dispatch<React.SetStateAction<HistoryMessage[]>>;
-  backEndClient: AxiosInstance;
 }
 
-const SendTab: React.FC<Props> = ({ setMessageHistory, backEndClient }) => {
+const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
   const { toastList, addNewToast } = useToasts();
   const formManagement = useMessageForm();
+  const backEnd = backEndClient;
 
   const kafkaMessage: KafkaMessage = {
     canSend: formManagement.checkValidation,
@@ -32,7 +32,7 @@ const SendTab: React.FC<Props> = ({ setMessageHistory, backEndClient }) => {
 
       let isSuccess = false;
       try {
-        const response = await backEndClient.post("Send", {
+        const response = await backEnd.postMessage({
           topic: serializedMessage.topic,
           message: serializedMessage.jsonString,
           key: serializedMessage.key,
@@ -47,11 +47,13 @@ const SendTab: React.FC<Props> = ({ setMessageHistory, backEndClient }) => {
         ...prevState,
       ]);
 
-      addNewToast(
-        isSuccess
-          ? "Sent"
-          : `Failed send request at ${serializedMessage.timeStamp.toLocaleTimeString()}`
-      );
+      addNewToast({
+        text: isSuccess
+          ? "Sucess"
+          : `Failed request at ${serializedMessage.timeStamp.toLocaleTimeString()}`,
+        success: isSuccess,
+        title: "Send",
+      });
     },
   };
 

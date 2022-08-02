@@ -2,7 +2,9 @@ import { useState } from "react";
 import { ToastData } from "../components/toasts/ToastPrefab";
 
 interface ToastManagement {
-  addNewToast: (text: string) => void;
+  addNewToast: (
+    toastDetails: Pick<ToastData, "text" | "success" | "title">
+  ) => void;
   toastList: ToastData[];
 }
 
@@ -16,11 +18,13 @@ const useToasts: () => ToastManagement = () => {
     );
   };
 
-  const addNewToast = (text: string) =>
+  const addNewToast = (
+    toastDetails: Pick<ToastData, "text" | "success" | "title">
+  ) =>
     setToastList((prevState) => [
       ...prevState,
       {
-        text,
+        ...toastDetails,
         timeStamp: new Date(),
         onClose: removeToastFromList,
       },
