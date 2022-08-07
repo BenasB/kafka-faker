@@ -1,3 +1,4 @@
+using Confluent.Kafka;
 using KafkaFaker.BE.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,8 +17,31 @@ public class SendController : ControllerBase
         _producer = producer;
     }
 
-    [HttpPost]
-    public async Task<ActionResult<MessageRequest>> PostMessageToKafkaAsync(MessageRequest request)
+    [HttpPost("Message")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> PostMessage(MessageRequest request)
+    {
+        try
+        {
+            await _producer.ProduceAsync(
+                request.Topic,
+                request.Message);
+
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [HttpPost("KeyMessage")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> PostKeyMessage(KeyMessageRequest request)
     {
         try
         {
@@ -26,7 +50,7 @@ public class SendController : ControllerBase
                 request.Message,
                 request.Key);
 
-            return request;
+            return Ok();
         }
         catch (System.Exception)
         {

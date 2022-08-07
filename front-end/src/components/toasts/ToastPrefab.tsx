@@ -23,7 +23,7 @@ const ToastPrefab: React.FC<ToastData> = (data) => {
 
   return (
     <Toast
-      bg={!success ? "danger" : ""}
+      bg={!success ? "warning" : ""}
       delay={delay}
       autohide
       onTransitionEnd={() => onClose(data)}

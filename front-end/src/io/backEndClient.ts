@@ -13,8 +13,11 @@ const httpClient: AxiosInstance = axios.create({
 
 const postMessage = (
   messageModel: BackEndMessageModel
-): Promise<AxiosResponse<BackEndMessageModel, BackEndMessageModel>> => {
-  return httpClient.post<BackEndMessageModel>("Send", messageModel);
+): Promise<AxiosResponse<never>> => {
+  if (messageModel.key)
+    return httpClient.post<never>("Send/KeyMessage", messageModel);
+
+  return httpClient.post<never>("Send/Message", messageModel);
 };
 
 export default { postMessage };

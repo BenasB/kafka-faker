@@ -5,8 +5,7 @@ namespace KafkaFaker.BE.Api.Models;
 public class MessageRequest
 {
     [Required]
-    public string Topic { get; set; }
+    public string Topic { get; set; } = null!;
     [Required]
-    public string Message { get; set; }
-    public string? Key { get; set; }
+    public string Message { get; set; } = null!;
 }
