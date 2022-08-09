@@ -49,7 +49,7 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
 
       addNewToast({
         text: isSuccess
-          ? "Sucess"
+          ? "Success"
           : `Failed request at ${serializedMessage.timeStamp.toLocaleTimeString()}`,
         success: isSuccess,
         title: "Send",

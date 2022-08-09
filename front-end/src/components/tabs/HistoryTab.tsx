@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Alert, Row } from "react-bootstrap";
+import { Accordion, Alert, Row, Stack } from "react-bootstrap";
 import { SerializedSendMessage } from "../../io/serializeMessageSend";
 
 export interface HistoryMessage extends SerializedSendMessage {
@@ -45,7 +45,16 @@ const HistoryTab: React.FC<Props> = ({ messageHistory }) => {
             <Accordion.Header>
               <div className="d-flex justify-content-between w-100 pe-5">
                 <div>{message.timeStamp.toLocaleTimeString()}</div>
-                <div>{message.isSuccess ? "Sent" : "Failed"}</div>
+                <div>
+                  {message.isSuccess ? (
+                    <div>Sent</div>
+                  ) : (
+                    <Stack direction="horizontal">
+                      <div className="me-2">Failed</div>
+                      <i className="bi bi-exclamation-triangle"></i>
+                    </Stack>
+                  )}
+                </div>
               </div>
             </Accordion.Header>
             <Accordion.Body>
