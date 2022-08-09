@@ -12,7 +12,7 @@ const topicValidation: ValidationFunction<string> = (value) => {
       "Topic must only contain letters, dots, dashes and underscores"
     );
   if (value.length > 255)
-    errors.push("Topic must not contain more that 255 characters");
+    errors.push("Topic must not contain more than 255 characters");
 
   return errors.length > 0 ? errors : undefined;
 };
