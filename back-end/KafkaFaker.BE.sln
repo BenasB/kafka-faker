@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaFaker.BE.Api", "KafkaF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaFaker.BE", "KafkaFaker.BE\KafkaFaker.BE.csproj", "{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaFaker.BE.Models", "KafkaFaker.BE.Models\KafkaFaker.BE.Models.csproj", "{BC7B72C5-1636-43BC-89E9-4D403AAF0B60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaFaker.BE.Migrations", "KafkaFaker.BE.Migrations\KafkaFaker.BE.Migrations.csproj", "{B0B111E1-FB19-4E3B-BC72-78F9D36971C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3506BCC4-55CD-4033-90B1-52BBF59DBFAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC7B72C5-1636-43BC-89E9-4D403AAF0B60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC7B72C5-1636-43BC-89E9-4D403AAF0B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC7B72C5-1636-43BC-89E9-4D403AAF0B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC7B72C5-1636-43BC-89E9-4D403AAF0B60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0B111E1-FB19-4E3B-BC72-78F9D36971C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0B111E1-FB19-4E3B-BC72-78F9D36971C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0B111E1-FB19-4E3B-BC72-78F9D36971C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0B111E1-FB19-4E3B-BC72-78F9D36971C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

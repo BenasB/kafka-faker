@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KafkaFaker.BE\KafkaFaker.BE.csproj" />
+    <ProjectReference Include="..\KafkaFaker.BE.Models\KafkaFaker.BE.Models.csproj" />
+    <ProjectReference Include="..\KafkaFaker.BE.Migrations\KafkaFaker.BE.Migrations.csproj" />
   </ItemGroup>
 
 </Project>

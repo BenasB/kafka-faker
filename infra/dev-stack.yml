@@ -26,3 +26,23 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  db:
+    image: mysql
+    container_name: db
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: kafka-faker
+    volumes:
+      - schema-volume:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - 8080:8080
+
+volumes:
+  schema-volume:

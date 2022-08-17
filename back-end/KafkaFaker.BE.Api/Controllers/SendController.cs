@@ -1,5 +1,4 @@
-using Confluent.Kafka;
-using KafkaFaker.BE.Api.Models;
+using KafkaFaker.BE.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KafkaFaker.BE.Api.Controllers;
@@ -8,53 +7,53 @@ namespace KafkaFaker.BE.Api.Controllers;
 [Route("[controller]")]
 public class SendController : ControllerBase
 {
-    private readonly ILogger<SendController> _logger;
-    private readonly Producer _producer;
+  private readonly ILogger<SendController> _logger;
+  private readonly Producer _producer;
 
-    public SendController(ILogger<SendController> logger, Producer producer)
+  public SendController(ILogger<SendController> logger, Producer producer)
+  {
+    _logger = logger;
+    _producer = producer;
+  }
+
+  [HttpPost("Message")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> PostMessage(MessageRequest request)
+  {
+    try
     {
-        _logger = logger;
-        _producer = producer;
-    }
+      await _producer.ProduceAsync(
+          request.Topic,
+          request.Message);
 
-    [HttpPost("Message")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostMessage(MessageRequest request)
+      return Ok();
+    }
+    catch (System.Exception)
     {
-        try
-        {
-            await _producer.ProduceAsync(
-                request.Topic,
-                request.Message);
-
-            return Ok();
-        }
-        catch (System.Exception)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError);
-        }
+      return StatusCode(StatusCodes.Status500InternalServerError);
     }
+  }
 
-    [HttpPost("KeyMessage")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostKeyMessage(KeyMessageRequest request)
+  [HttpPost("KeyMessage")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> PostKeyMessage(KeyMessageRequest request)
+  {
+    try
     {
-        try
-        {
-            await _producer.ProduceAsync(
-                request.Topic,
-                request.Message,
-                request.Key);
+      await _producer.ProduceAsync(
+          request.Topic,
+          request.Message,
+          request.Key);
 
-            return Ok();
-        }
-        catch (System.Exception)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError);
-        }
+      return Ok();
     }
+    catch (System.Exception)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError);
+    }
+  }
 }
