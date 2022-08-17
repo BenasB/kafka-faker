@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import deserializeMessageSchema from "../../io/deserializeMessageSchema";
-import demoSchemas, { Schema } from "./demoSchemas";
+import demoSchemas, { Schema } from "../../data/demoSchemas";
 import { MessageLoadProps } from "./MessageLoad";
 
 interface Props {

@@ -11,7 +11,7 @@ import validationFunctions from "../../data/validationFunctions";
 import serializeMessageSchema from "../../io/serializeMessageSchema";
 import { ValidatedInput } from "../messageForm/messageTypes";
 import ValidationErrorMessage from "../messageForm/ValidationErrorMessage";
-import demoSchemas from "../messageLoad/demoSchemas";
+import demoSchemas from "../../data/demoSchemas";
 import { MessageSaveProps } from "./MessageSave";
 
 interface Props {
