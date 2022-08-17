@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Stack } from "react-bootstrap";
 import deserializeMessageSchema from "../../io/deserializeMessageSchema";
-import demoSchemas, { Schema } from "../../data/demoSchemas";
 import { MessageLoadProps } from "./MessageLoad";
+import backEndClient, { BackEndSchemaModel } from "../../io/backEndClient";
+import demoSchemas from "../../data/demoSchemas";
 
 interface Props {
   show: boolean;
@@ -14,12 +15,34 @@ const MessageLoadModal: React.FC<Props & MessageLoadProps> = ({
   turnOff,
   setMessage,
 }) => {
-  const defaultSchema = demoSchemas[0];
-  const [selectedSchema, setSelectedSchema] = useState<Schema>(defaultSchema);
+  const backEnd = backEndClient;
+  const [schemaList, setSchemaList] = useState<BackEndSchemaModel[]>([]);
 
-  useEffect(() => {
-    setSelectedSchema(defaultSchema);
-  }, [show]);
+  const [selectedSchema, setSelectedSchema] = useState<
+    BackEndSchemaModel | undefined
+  >(schemaList[0]);
+
+  const refreshSchemas = () => {
+    // In demo use demoSchemas
+    if (!process.env.REACT_APP_BACK_END_URL) {
+      setSchemaList(demoSchemas);
+      setSelectedSchema(demoSchemas[0]);
+      return;
+    }
+
+    refreshSchemasFromBackEnd().catch(() => {
+      setSchemaList([]);
+      setSelectedSchema(undefined);
+    });
+  };
+
+  const refreshSchemasFromBackEnd = async () => {
+    const allSchemasResponse = await backEnd.getAllSchemas();
+    setSchemaList(allSchemasResponse.data);
+    setSelectedSchema(allSchemasResponse.data[0]);
+  };
+
+  useEffect(refreshSchemas, [show]);
 
   return (
     <Modal show={show} onHide={turnOff}>
@@ -27,40 +50,62 @@ const MessageLoadModal: React.FC<Props & MessageLoadProps> = ({
         <Modal.Title>Load message schema</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={(e) => e.preventDefault()} noValidate>
-          <Form.Select
-            autoFocus
-            defaultValue={selectedSchema.title}
-            onChange={(e) =>
-              setSelectedSchema(
-                demoSchemas.find((s) => s.title === e.target.value) ||
-                  selectedSchema
-              )
-            }
-          >
-            {demoSchemas.map((schema) => (
-              <option value={schema.title} key={schema.title}>
-                {schema.title}
-              </option>
-            ))}
-          </Form.Select>
-        </Form>
+        {selectedSchema && schemaList.length > 0 ? (
+          <Form onSubmit={(e) => e.preventDefault()} noValidate>
+            <Form.Select
+              autoFocus
+              defaultValue={selectedSchema.title}
+              onChange={(e) =>
+                setSelectedSchema(
+                  schemaList.find((s) => s.title === e.target.value) ||
+                    selectedSchema
+                )
+              }
+            >
+              {schemaList.map((schema) => (
+                <option value={schema.title} key={schema.title}>
+                  {schema.title}
+                </option>
+              ))}
+            </Form.Select>
+          </Form>
+        ) : (
+          <div>No schemas yet!</div>
+        )}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={turnOff}>
-          Close
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            setMessage(
-              deserializeMessageSchema(JSON.parse(selectedSchema.jsonString))
-            );
-            turnOff();
-          }}
-        >
-          Load
-        </Button>
+      <Modal.Footer className="d-flex justify-content-between">
+        <div>
+          {selectedSchema && (
+            <Button
+              variant="outline-danger"
+              onClick={() =>
+                backEnd.deleteSchema(selectedSchema.title).then(refreshSchemas)
+              }
+            >
+              <i className="bi bi-trash"></i>
+            </Button>
+          )}
+        </div>
+        <Stack direction="horizontal" gap={2}>
+          <Button variant="secondary" onClick={turnOff}>
+            Close
+          </Button>
+          {selectedSchema && (
+            <Button
+              variant="primary"
+              onClick={() => {
+                setMessage(
+                  deserializeMessageSchema(
+                    JSON.parse(selectedSchema.jsonString)
+                  )
+                );
+                turnOff();
+              }}
+            >
+              Load
+            </Button>
+          )}
+        </Stack>
       </Modal.Footer>
     </Modal>
   );

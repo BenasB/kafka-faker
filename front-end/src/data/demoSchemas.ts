@@ -1,9 +1,6 @@
-export interface Schema {
-  title: string;
-  jsonString: string;
-}
+import { BackEndSchemaModel } from "../io/backEndClient";
 
-const demoSchemas: Schema[] = [
+const demoSchemas: BackEndSchemaModel[] = [
   {
     title: "Demo #1",
     jsonString: `{"topic":"mano-topicas","key":"","autoGeneration":false,"data":[{"name":"My awesome name","valueType":"custom","value":"Hello"},{"name":"otherName","valueType":"custom","value":"World!"}]}`,

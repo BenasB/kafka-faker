@@ -30,6 +30,22 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
     send: async () => {
       const serializedMessage = serializeMessageSend(formManagement.message);
 
+      // In demo fake send
+      if (!process.env.REACT_APP_BACK_END_URL) {
+        setMessageHistory((prevState) => [
+          { ...serializedMessage, isSuccess: true },
+          ...prevState,
+        ]);
+
+        addNewToast({
+          text: "This request would've been sent to Kafka!",
+          success: true,
+          title: "Send",
+        });
+
+        return;
+      }
+
       let isSuccess = false;
       try {
         const response = await backEnd.postMessage({

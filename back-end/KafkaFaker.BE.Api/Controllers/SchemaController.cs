@@ -30,7 +30,7 @@ public class SchemaController : ControllerBase
   [ProducesResponseType(typeof(Schema), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetAllSchemas(string title)
+  public async Task<IActionResult> GetSchema(string title)
   {
     var schema = await _schemaDatabase.GetSchemaAsync(title);
 
@@ -38,6 +38,20 @@ public class SchemaController : ControllerBase
       return NotFound();
 
     return Ok(schema);
+  }
+
+  [HttpDelete("{title}")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> DeleteSchema(string title)
+  {
+    var rowsAffected = await _schemaDatabase.DeleteSchemaAsync(title);
+
+    if (rowsAffected == 0)
+      return NotFound();
+
+    return Ok();
   }
 
   [HttpPost]

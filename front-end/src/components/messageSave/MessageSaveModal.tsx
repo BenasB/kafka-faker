@@ -13,6 +13,7 @@ import { ValidatedInput } from "../messageForm/messageTypes";
 import ValidationErrorMessage from "../messageForm/ValidationErrorMessage";
 import demoSchemas from "../../data/demoSchemas";
 import { MessageSaveProps } from "./MessageSave";
+import backEndClient, { BackEndSchemaModel } from "../../io/backEndClient";
 
 interface Props {
   show: boolean;
@@ -24,10 +25,32 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
   turnOff,
   message,
 }) => {
+  const backEnd = backEndClient;
+
+  const [schemaList, setSchemaList] = useState<BackEndSchemaModel[]>([]);
   const [schemaTitle, setSchemaTitle] = useState<ValidatedInput<string>>({
     value: "",
     validate: validationFunctions.schemaTitleValidation,
   });
+
+  const refreshSchemas = () => {
+    // In demo use demoSchemas
+    if (!process.env.REACT_APP_BACK_END_URL) {
+      setSchemaList(demoSchemas);
+      return;
+    }
+
+    refreshSchemasFromBackEnd().catch(() => {
+      setSchemaList([]);
+    });
+  };
+
+  const refreshSchemasFromBackEnd = async () => {
+    const allSchemasResponse = await backEnd.getAllSchemas();
+    setSchemaList(allSchemasResponse.data);
+  };
+
+  useEffect(refreshSchemas, [show]);
 
   useEffect(() => {
     setSchemaTitle((prevState) => ({
@@ -57,22 +80,24 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
               placeholder={"Title"}
               isInvalid={!!schemaTitle.errorMessages}
             />
-            <DropdownButton variant="outline-secondary" title="" align="end">
-              {demoSchemas.map((existingSchema) => (
-                <Dropdown.Item
-                  key={existingSchema.title}
-                  onClick={() =>
-                    setSchemaTitle((prevState) => ({
-                      ...prevState,
-                      value: existingSchema.title,
-                      errorMessages: prevState.validate(existingSchema.title),
-                    }))
-                  }
-                >
-                  {existingSchema.title}
-                </Dropdown.Item>
-              ))}
-            </DropdownButton>
+            {schemaList.length > 0 && (
+              <DropdownButton variant="outline-secondary" title="" align="end">
+                {schemaList.map((existingSchema) => (
+                  <Dropdown.Item
+                    key={existingSchema.title}
+                    onClick={() =>
+                      setSchemaTitle((prevState) => ({
+                        ...prevState,
+                        value: existingSchema.title,
+                        errorMessages: prevState.validate(existingSchema.title),
+                      }))
+                    }
+                  >
+                    {existingSchema.title}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
+            )}
             <ValidationErrorMessage {...schemaTitle} />
           </InputGroup>
         </Form>
@@ -83,7 +108,7 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
         </Button>
         <Button
           variant="primary"
-          onClick={() => {
+          onClick={async () => {
             if (schemaTitle.validate(schemaTitle.value)) {
               setSchemaTitle((prevState) => ({
                 ...prevState,
@@ -92,29 +117,30 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
               return;
             }
 
-            console.log(
-              `Saving '${schemaTitle}' schema:`,
-              JSON.stringify(serializeMessageSchema(message))
-            );
+            const backEndSchemaModel: BackEndSchemaModel = {
+              title: schemaTitle.value,
+              jsonString: JSON.stringify(serializeMessageSchema(message)),
+            };
 
-            const existingSchema = demoSchemas.find(
-              (s) => s.title === schemaTitle.value
-            );
-
-            if (existingSchema) {
-              existingSchema.jsonString = JSON.stringify(
-                serializeMessageSchema(message)
+            // In demo use demoSchemas
+            if (!process.env.REACT_APP_BACK_END_URL) {
+              const existingSchema = demoSchemas.find(
+                (s) => s.title === backEndSchemaModel.title
               );
+
+              if (existingSchema)
+                existingSchema.jsonString = backEndSchemaModel.jsonString;
+              else demoSchemas.push(backEndSchemaModel);
             } else {
-              demoSchemas.push({
-                title: schemaTitle.value,
-                jsonString: JSON.stringify(serializeMessageSchema(message)),
-              });
+              await backEnd.upsertSchema(backEndSchemaModel);
             }
+
             turnOff();
           }}
         >
-          Save
+          {schemaList.find((s) => s.title === schemaTitle.value)
+            ? "Update"
+            : "Save"}
         </Button>
       </Modal.Footer>
     </Modal>

@@ -23,4 +23,7 @@ public class SchemaDatabase
   public Task UpsertSchemaAsync(Schema schema) => _connection.ExecuteAsync(
     @"INSERT INTO `Schemas`(Title, JsonString) VALUES (@Title, @JsonString) ON DUPLICATE KEY UPDATE JsonString=@JsonString",
     schema);
+
+  public Task<int> DeleteSchemaAsync(string title) => _connection.ExecuteAsync(
+    @"DELETE FROM `Schemas` WHERE Title = @Title", new { Title = title });
 }
