@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import toNonCamelCase from "../utils/toNonCamelCase";
+import WithOptional from "../utils/withOptional";
 
 export const messageDataFieldGenerationGroups = [
   "address",
@@ -49,7 +50,7 @@ export type GenerationGroup = {
 };
 
 type PartialGenerationGroup = Omit<GenerationGroup, "functions"> & {
-  functions: Omit<GenerationFunction, "group" | "displayName">[];
+  functions: WithOptional<Omit<GenerationFunction, "group">, "displayName">[];
 };
 
 const partialGenerationGroups: PartialGenerationGroup[] = [

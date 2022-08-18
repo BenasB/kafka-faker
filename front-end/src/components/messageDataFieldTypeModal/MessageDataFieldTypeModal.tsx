@@ -1,5 +1,6 @@
 import React from "react";
-import { Col, Modal, Nav, Row, Stack, Tab } from "react-bootstrap";
+import { Col, Modal, Nav, Row, Tab } from "react-bootstrap";
+import generalMessageDataFieldTypeData from "../../data/generalMessageDataFieldTypeData";
 import {
   generationGroups,
   messageDataFieldGenerationGroups,
@@ -7,6 +8,7 @@ import {
 } from "../../data/generationFunctions";
 import { messageDataFieldTypes } from "../messageForm/messageTypes";
 import GenerationTypeSelectionCard from "./GenerationTypeSelectionCard";
+import GenerationTypeSelectionPane from "./GenerationTypeSelectionPane";
 
 interface Props {
   show: boolean;
@@ -20,8 +22,13 @@ interface Props {
   ) => void;
 }
 
-const MessageDataFieldTypeModal: React.FC<Props> = (props) => {
-  const { show, turnOff } = props;
+const MessageDataFieldTypeModal: React.FC<Props> = ({
+  show,
+  turnOff,
+  indices,
+  updateMessageDataType,
+}) => {
+  const generalGroup = "general";
 
   return (
     <Modal show={show} onHide={turnOff} size="xl">
@@ -29,29 +36,47 @@ const MessageDataFieldTypeModal: React.FC<Props> = (props) => {
         <Modal.Title>Change data field type</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container defaultActiveKey={messageDataFieldGenerationGroups[0]}>
+        <Tab.Container defaultActiveKey={generalGroup}>
           <Row>
             <Col sm={9}>
               <Tab.Content>
+                <GenerationTypeSelectionPane eventKey={generalGroup}>
+                  {generalMessageDataFieldTypeData.map(
+                    (generalFieldTypeData) => (
+                      <GenerationTypeSelectionCard
+                        updateMessageDataType={updateMessageDataType}
+                        turnOff={turnOff}
+                        indices={indices}
+                        displayName={generalFieldTypeData.displayName}
+                        description={generalFieldTypeData.description}
+                        type={generalFieldTypeData.type}
+                        key={generalFieldTypeData.type}
+                      />
+                    )
+                  )}
+                </GenerationTypeSelectionPane>
                 {generationGroups.map((generationGroup) => (
-                  <Tab.Pane
+                  <GenerationTypeSelectionPane
                     eventKey={generationGroup.group}
                     key={generationGroup.group}
                   >
-                    <Stack
-                      direction="horizontal"
-                      gap={3}
-                      className={"flex-wrap"}
-                    >
-                      {generationGroup.functions.map((generationFunction) => (
-                        <GenerationTypeSelectionCard
-                          {...props}
-                          generationFunction={generationFunction}
-                          key={generationFunction.type}
-                        />
-                      ))}
-                    </Stack>
-                  </Tab.Pane>
+                    {generationGroup.functions.map((generationFunction) => (
+                      <GenerationTypeSelectionCard
+                        updateMessageDataType={updateMessageDataType}
+                        turnOff={turnOff}
+                        indices={indices}
+                        displayName={generationFunction.displayName}
+                        description={
+                          <>
+                            <i className="bi bi-chevron-right"> </i>
+                            {generationFunction.function()}
+                          </>
+                        }
+                        type={generationFunction.type}
+                        key={generationFunction.type}
+                      />
+                    ))}
+                  </GenerationTypeSelectionPane>
                 ))}
               </Tab.Content>
             </Col>
@@ -62,6 +87,11 @@ const MessageDataFieldTypeModal: React.FC<Props> = (props) => {
                 navbarScroll
                 style={{ maxHeight: "70vh" }}
               >
+                <Nav.Item role="button">
+                  <Nav.Link eventKey={generalGroup}>
+                    {generalGroup.toFirstUpperCase()}
+                  </Nav.Link>
+                </Nav.Item>
                 {messageDataFieldGenerationGroups.map((group) => (
                   <Nav.Item key={group} role="button">
                     <Nav.Link eventKey={group}>

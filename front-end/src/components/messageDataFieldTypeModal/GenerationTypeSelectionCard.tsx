@@ -1,9 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import {
-  GenerationFunction,
-  messageDataFieldGenerationTypes,
-} from "../../data/generationFunctions";
+import { messageDataFieldGenerationTypes } from "../../data/generationFunctions";
 import { messageDataFieldTypes } from "../messageForm/messageTypes";
 
 interface Props {
@@ -14,32 +11,34 @@ interface Props {
       | typeof messageDataFieldGenerationTypes[number],
     messageDataFieldIndices: number[]
   ) => void;
-  generationFunction: GenerationFunction;
   turnOff: () => void;
+  type:
+    | typeof messageDataFieldTypes[number]
+    | typeof messageDataFieldGenerationTypes[number];
+  displayName: string;
+  description: React.ReactNode;
 }
 
 const GenerationTypeSelectionCard: React.FC<Props> = ({
   indices,
   updateMessageDataType,
-  generationFunction,
   turnOff,
+  type,
+  displayName,
+  description,
 }) => {
   return (
     <Card
       role="button"
-      style={{ width: "18rem" }}
-      key={generationFunction.type}
+      style={{ width: "16rem" }}
       onClick={() => {
-        updateMessageDataType(generationFunction.type, indices);
+        updateMessageDataType(type, indices);
         turnOff();
       }}
     >
       <Card.Body>
-        <Card.Title>{generationFunction.type.toNonCamelCase()}</Card.Title>
-        <Card.Text className={"text-muted"}>
-          <i className="bi bi-chevron-right"> </i>
-          {generationFunction.function()}
-        </Card.Text>
+        <Card.Title>{displayName}</Card.Title>
+        <Card.Text className={"text-muted"}>{description}</Card.Text>
       </Card.Body>
     </Card>
   );
