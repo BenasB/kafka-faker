@@ -101,6 +101,14 @@ export const messageDataFieldGenerationTypes = [
   "engine",
   "mongodbObjectId",
   "databaseType",
+  "bigInt",
+  "boolean",
+  "datetime",
+  "float",
+  "hexadecimal",
+  "number",
+  "string",
+  "uuid",
 ] as const;
 
 export type GenerationFunction = {
@@ -431,6 +439,45 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "databaseType",
         function: faker.database.type,
+      },
+    ],
+  },
+  {
+    group: "datatype",
+    functions: [
+      {
+        type: "bigInt",
+        function: () => faker.datatype.bigInt().toString(),
+        displayName: "BigInt",
+      },
+      {
+        type: "boolean",
+        function: () => faker.datatype.boolean().toString(),
+      },
+      {
+        type: "datetime",
+        function: () => faker.datatype.datetime().toISOString(),
+      },
+      {
+        type: "float",
+        function: () => faker.datatype.float().toString(),
+      },
+      {
+        type: "hexadecimal",
+        function: faker.datatype.hexadecimal,
+      },
+      {
+        type: "number",
+        function: () => faker.datatype.number().toString(),
+      },
+      {
+        type: "string",
+        function: faker.datatype.string,
+      },
+      {
+        type: "uuid",
+        function: faker.datatype.uuid,
+        displayName: "UUID",
       },
     ],
   },
