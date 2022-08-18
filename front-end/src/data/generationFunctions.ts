@@ -86,6 +86,16 @@ export const messageDataFieldGenerationTypes = [
   "productDescription",
   "productMaterial",
   "productName",
+  "corporateSpeak",
+  "corporateSpeakAdjective",
+  "corporateSpeakBuzz",
+  "corporateSpeakNoun",
+  "catchPhrase",
+  "catchPhraseAdjective",
+  "catchPhraseDescriptor",
+  "catchPhraseNoun",
+  "companySuffix",
+  "companyName",
 ] as const;
 
 export type GenerationFunction = {
@@ -346,6 +356,51 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "productName",
         function: faker.commerce.productName,
+      },
+    ],
+  },
+  {
+    group: "company",
+    functions: [
+      {
+        type: "corporateSpeak",
+        function: faker.company.bs,
+      },
+      {
+        type: "corporateSpeakAdjective",
+        function: faker.company.bsAdjective,
+      },
+      {
+        type: "corporateSpeakBuzz",
+        function: faker.company.bsBuzz,
+      },
+      {
+        type: "corporateSpeakNoun",
+        function: faker.company.bsNoun,
+      },
+      {
+        type: "catchPhrase",
+        function: faker.company.catchPhrase,
+      },
+      {
+        type: "catchPhraseAdjective",
+        function: faker.company.catchPhraseAdjective,
+      },
+      {
+        type: "catchPhraseDescriptor",
+        function: faker.company.catchPhraseDescriptor,
+      },
+      {
+        type: "catchPhraseNoun",
+        function: faker.company.catchPhraseNoun,
+      },
+      {
+        type: "companySuffix",
+        function: faker.company.companySuffix,
+      },
+      {
+        type: "companyName",
+        function: faker.company.name,
       },
     ],
   },
