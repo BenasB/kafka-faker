@@ -96,6 +96,11 @@ export const messageDataFieldGenerationTypes = [
   "catchPhraseNoun",
   "companySuffix",
   "companyName",
+  "collation",
+  "column",
+  "engine",
+  "mongodbObjectId",
+  "databaseType",
 ] as const;
 
 export type GenerationFunction = {
@@ -401,6 +406,31 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "companyName",
         function: faker.company.name,
+      },
+    ],
+  },
+  {
+    group: "database",
+    functions: [
+      {
+        type: "collation",
+        function: faker.database.collation,
+      },
+      {
+        type: "column",
+        function: faker.database.column,
+      },
+      {
+        type: "engine",
+        function: faker.database.engine,
+      },
+      {
+        type: "mongodbObjectId",
+        function: faker.database.mongodbObjectId,
+      },
+      {
+        type: "databaseType",
+        function: faker.database.type,
       },
     ],
   },
