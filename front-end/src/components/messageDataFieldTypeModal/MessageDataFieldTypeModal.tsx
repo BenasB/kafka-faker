@@ -1,11 +1,12 @@
 import React from "react";
-import { Card, Col, Modal, Nav, Row, Stack, Tab } from "react-bootstrap";
+import { Col, Modal, Nav, Row, Stack, Tab } from "react-bootstrap";
 import {
   generationGroups,
   messageDataFieldGenerationGroups,
   messageDataFieldGenerationTypes,
 } from "../../data/generationFunctions";
-import { messageDataFieldTypes } from "./messageTypes";
+import { messageDataFieldTypes } from "../messageForm/messageTypes";
+import GenerationTypeSelectionCard from "./GenerationTypeSelectionCard";
 
 interface Props {
   show: boolean;
@@ -19,12 +20,9 @@ interface Props {
   ) => void;
 }
 
-const MessageDataFieldTypeModal: React.FC<Props> = ({
-  show,
-  turnOff,
-  indices,
-  updateMessageDataType,
-}) => {
+const MessageDataFieldTypeModal: React.FC<Props> = (props) => {
+  const { show, turnOff } = props;
+
   return (
     <Modal show={show} onHide={turnOff} size="xl">
       <Modal.Header closeButton>
@@ -46,28 +44,11 @@ const MessageDataFieldTypeModal: React.FC<Props> = ({
                       className={"flex-wrap"}
                     >
                       {generationGroup.functions.map((generationFunction) => (
-                        <Card
-                          role="button"
-                          style={{ width: "18rem" }}
+                        <GenerationTypeSelectionCard
+                          {...props}
+                          generationFunction={generationFunction}
                           key={generationFunction.type}
-                          onClick={() => {
-                            updateMessageDataType(
-                              generationFunction.type,
-                              indices
-                            );
-                            turnOff();
-                          }}
-                        >
-                          <Card.Body>
-                            <Card.Title>
-                              {generationFunction.type.toNonCamelCase()}
-                            </Card.Title>
-                            <Card.Text className={"text-muted"}>
-                              <i className="bi bi-chevron-right"> </i>
-                              {generationFunction.function()}
-                            </Card.Text>
-                          </Card.Body>
-                        </Card>
+                        />
                       ))}
                     </Stack>
                   </Tab.Pane>

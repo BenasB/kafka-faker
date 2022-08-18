@@ -32,6 +32,8 @@ const genericGenerationDataField: MessageDataFieldGeneration = {
   generationType: "buildingNumber",
   generate: generationFunctions[0].function,
   value: generationFunctions[0].function(),
+  displayName: generationFunctions[0].displayName,
+  generationGroup: generationFunctions[0].group,
 };
 
 const genericCustomDataField: MessageDataFieldCustom = {

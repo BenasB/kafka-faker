@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
-import MessageDataFieldTypeModal from "./MessageDataFieldTypeModal";
+import MessageDataFieldTypeModal from "../messageDataFieldTypeModal/MessageDataFieldTypeModal";
 import { MessageDataFieldSpecific } from "./messageTypes";
 
 interface Props {

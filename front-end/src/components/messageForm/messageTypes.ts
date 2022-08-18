@@ -33,6 +33,8 @@ export type MessageDataFieldArray = {
 
 export type MessageDataFieldGeneration = {
   valueType: "generation";
+  displayName: string;
+  generationGroup: string;
   generationType: typeof messageDataFieldGenerationTypes[number];
   generate: () => string;
   value: string;

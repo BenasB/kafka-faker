@@ -35,7 +35,7 @@ export type MessageSchemaDataFieldArray = Pick<
 
 export type MessageSchemaDataFieldGeneration = Pick<
   MessageDataFieldGeneration,
-  "generationType" | "value" | "valueType"
+  "generationType" | "value" | "valueType" | "displayName" | "generationGroup"
 >;
 
 export type MessageSchemaDataFieldSpecific =
@@ -63,6 +63,8 @@ const serializeMessageSchema = (message: Message): MessageSchema => {
       valueType: field.valueType,
       generationType: field.generationType,
       value: field.value,
+      displayName: field.displayName,
+      generationGroup: field.generationGroup,
     });
 
     const mapCustom = (

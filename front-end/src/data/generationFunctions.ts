@@ -38,8 +38,9 @@ export const messageDataFieldGenerationTypes = [
 
 export type GenerationFunction = {
   type: typeof messageDataFieldGenerationTypes[number];
+  group: typeof messageDataFieldGenerationGroups[number];
   function: () => string;
-  displayName?: string;
+  displayName: string;
 };
 
 export type GenerationGroup = {
@@ -47,7 +48,11 @@ export type GenerationGroup = {
   functions: GenerationFunction[];
 };
 
-export const generationGroups: GenerationGroup[] = [
+type PartialGenerationGroup = Omit<GenerationGroup, "functions"> & {
+  functions: Omit<GenerationFunction, "group" | "displayName">[];
+};
+
+const partialGenerationGroups: PartialGenerationGroup[] = [
   {
     group: "address",
     functions: [
@@ -63,14 +68,28 @@ export const generationGroups: GenerationGroup[] = [
   },
 ];
 
-const generationFunctions: GenerationFunction[] = generationGroups
-  .reduce<GenerationFunction[]>(
-    (prev, value) => [...prev, ...value.functions],
-    []
-  )
-  .map((o) => ({
-    displayName: toNonCamelCase(o.type),
-    ...o,
-  }));
+export const generationGroups: GenerationGroup[] = partialGenerationGroups.map(
+  (generationGroup) => ({
+    ...generationGroup,
+    functions: generationGroup.functions.map<GenerationFunction>((f) => ({
+      ...f,
+      group: generationGroup.group,
+      displayName: toNonCamelCase(f.type),
+    })),
+  })
+);
+
+const generationFunctions: GenerationFunction[] = generationGroups.reduce<
+  GenerationFunction[]
+>(
+  (prev, value) => [
+    ...prev,
+    ...value.functions.map<GenerationFunction>((f) => ({
+      ...f,
+      group: value.group,
+    })),
+  ],
+  []
+);
 
 export default generationFunctions;

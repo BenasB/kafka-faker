@@ -185,6 +185,8 @@ const useMessageForm: () => MessageFormManagement = () => {
         generationType,
         generate: generationFunction.function,
         value: generationFunction.function(),
+        displayName: generationFunction.displayName,
+        generationGroup: generationFunction.group,
       };
     };
 

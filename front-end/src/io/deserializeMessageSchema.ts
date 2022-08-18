@@ -40,8 +40,7 @@ const deserializeMessageSchema = (messageSchema: MessageSchema): Message => {
 
       if (generationType !== field.generationType) {
         console.error(
-          `Could not locate a generation function type ${field.generationType}.
-               Replacing that type by the default generation type ${generationType}`
+          `Could not locate a generation function type '${field.generationType}'. Replacing that type with the default generation type '${generationType}'`
         );
       }
 
@@ -51,8 +50,7 @@ const deserializeMessageSchema = (messageSchema: MessageSchema): Message => {
 
       if (generationFunction.type !== generationType) {
         console.error(
-          `Could not locate a generation function of type ${generationType}.
-               Replacing that function by the default generation type ${generationFunction.type}`
+          `Could not locate a generation function of type '${generationType}'. Replacing that function with the default generation function with type '${generationFunction.type}'`
         );
       }
 
@@ -60,6 +58,8 @@ const deserializeMessageSchema = (messageSchema: MessageSchema): Message => {
         valueType: "generation",
         generationType,
         generate: generationFunction.function,
+        displayName: generationFunction.displayName,
+        generationGroup: generationFunction.group,
         value: field.value,
       };
     };
