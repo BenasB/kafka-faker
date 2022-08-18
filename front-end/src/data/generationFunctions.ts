@@ -53,6 +53,21 @@ export const messageDataFieldGenerationTypes = [
   "streetName",
   "timeZone",
   "zipCode",
+  "bear",
+  "bird",
+  "cat",
+  "cetacean",
+  "cow",
+  "crocodilia",
+  "dog",
+  "fish",
+  "horse",
+  "insect",
+  "lion",
+  "rabbit",
+  "rodent",
+  "snake",
+  "animalType",
 ] as const;
 
 export type GenerationFunction = {
@@ -150,11 +165,76 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       },
       {
         type: "timeZone",
-        function: faker.address.city,
+        function: faker.address.timeZone,
       },
       {
         type: "zipCode",
         function: faker.address.zipCode,
+      },
+    ],
+  },
+  {
+    group: "animal",
+    functions: [
+      {
+        type: "bear",
+        function: faker.animal.bear,
+      },
+      {
+        type: "bird",
+        function: faker.animal.bird,
+      },
+      {
+        type: "cat",
+        function: faker.animal.cat,
+      },
+      {
+        type: "cetacean",
+        function: faker.animal.cetacean,
+      },
+      {
+        type: "cow",
+        function: faker.animal.cow,
+      },
+      {
+        type: "crocodilia",
+        function: faker.animal.crocodilia,
+      },
+      {
+        type: "dog",
+        function: faker.animal.dog,
+      },
+      {
+        type: "fish",
+        function: faker.animal.fish,
+      },
+      {
+        type: "horse",
+        function: faker.animal.horse,
+      },
+      {
+        type: "insect",
+        function: faker.animal.insect,
+      },
+      {
+        type: "lion",
+        function: faker.animal.lion,
+      },
+      {
+        type: "rabbit",
+        function: faker.animal.rabbit,
+      },
+      {
+        type: "rodent",
+        function: faker.animal.rodent,
+      },
+      {
+        type: "snake",
+        function: faker.animal.snake,
+      },
+      {
+        type: "animalType",
+        function: faker.animal.type,
       },
     ],
   },
