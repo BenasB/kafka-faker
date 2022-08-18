@@ -68,6 +68,17 @@ export const messageDataFieldGenerationTypes = [
   "rodent",
   "snake",
   "animalType",
+  "cmyk",
+  "colorByCSSColorSpace",
+  "cssSupportedFunction",
+  "cssSupportedSpace",
+  "hsl",
+  "humanColor",
+  "hwb",
+  "lab",
+  "lch",
+  "rgb",
+  "colorSpace",
 ] as const;
 
 export type GenerationFunction = {
@@ -236,6 +247,65 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "animalType",
         function: faker.animal.type,
+      },
+    ],
+  },
+  {
+    group: "color",
+    functions: [
+      {
+        type: "cmyk",
+        function: () => faker.color.cmyk().toString(),
+        displayName: "CMYK",
+      },
+      {
+        type: "colorByCSSColorSpace",
+        function: () => faker.color.colorByCSSColorSpace().toString(),
+        displayName: "Color by CSS color space",
+      },
+      {
+        type: "cssSupportedFunction",
+        function: faker.color.cssSupportedFunction,
+        displayName: "CSS supported function",
+      },
+      {
+        type: "cssSupportedSpace",
+        function: faker.color.cssSupportedSpace,
+        displayName: "CSS supported space",
+      },
+      {
+        type: "hsl",
+        function: () => faker.color.hsl().toString(),
+        displayName: "HSL",
+      },
+      {
+        type: "humanColor",
+        function: faker.color.human,
+        displayName: "Human readable color",
+      },
+      {
+        type: "hwb",
+        function: () => faker.color.hwb().toString(),
+        displayName: "HWB",
+      },
+      {
+        type: "lab",
+        function: () => faker.color.lab().toString(),
+        displayName: "LAB",
+      },
+      {
+        type: "lch",
+        function: () => faker.color.lch().toString(),
+        displayName: "LCH",
+      },
+      {
+        type: "rgb",
+        function: () => faker.color.rgb().toString(),
+        displayName: "RGB",
+      },
+      {
+        type: "colorSpace",
+        function: faker.color.space,
       },
     ],
   },
