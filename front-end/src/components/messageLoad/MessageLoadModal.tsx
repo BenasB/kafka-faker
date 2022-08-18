@@ -78,9 +78,15 @@ const MessageLoadModal: React.FC<Props & MessageLoadProps> = ({
           {selectedSchema && (
             <Button
               variant="outline-danger"
-              onClick={() =>
-                backEnd.deleteSchema(selectedSchema.title).then(refreshSchemas)
-              }
+              onClick={() => {
+                if (!process.env.REACT_APP_BACK_END_URL) {
+                  demoSchemas.splice(demoSchemas.indexOf(selectedSchema), 1);
+                  refreshSchemas();
+                  return;
+                }
+
+                backEnd.deleteSchema(selectedSchema.title).then(refreshSchemas);
+              }}
             >
               <i className="bi bi-trash"></i>
             </Button>
