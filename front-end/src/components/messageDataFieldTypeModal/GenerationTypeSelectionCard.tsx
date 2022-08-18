@@ -17,6 +17,7 @@ interface Props {
     | typeof messageDataFieldGenerationTypes[number];
   displayName: string;
   description: React.ReactNode;
+  active: boolean;
 }
 
 const GenerationTypeSelectionCard: React.FC<Props> = ({
@@ -26,6 +27,7 @@ const GenerationTypeSelectionCard: React.FC<Props> = ({
   type,
   displayName,
   description,
+  active,
 }) => {
   return (
     <Card
@@ -35,6 +37,7 @@ const GenerationTypeSelectionCard: React.FC<Props> = ({
         updateMessageDataType(type, indices);
         turnOff();
       }}
+      bg={active ? "light" : ""}
     >
       <Card.Body>
         <Card.Title>{displayName}</Card.Title>

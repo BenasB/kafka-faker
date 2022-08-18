@@ -6,11 +6,15 @@ import {
   messageDataFieldGenerationGroups,
   messageDataFieldGenerationTypes,
 } from "../../data/generationFunctions";
-import { messageDataFieldTypes } from "../messageForm/messageTypes";
+import {
+  MessageDataFieldSpecific,
+  messageDataFieldTypes,
+} from "../messageForm/messageTypes";
 import GenerationTypeSelectionCard from "./GenerationTypeSelectionCard";
 import GenerationTypeSelectionPane from "./GenerationTypeSelectionPane";
 
 interface Props {
+  dataField: MessageDataFieldSpecific;
   show: boolean;
   turnOff: () => void;
   indices: number[];
@@ -23,6 +27,7 @@ interface Props {
 }
 
 const MessageDataFieldTypeModal: React.FC<Props> = ({
+  dataField,
   show,
   turnOff,
   indices,
@@ -30,13 +35,23 @@ const MessageDataFieldTypeModal: React.FC<Props> = ({
 }) => {
   const generalGroup = "general";
 
+  const defaultActiveKey =
+    dataField.valueType === "generation"
+      ? dataField.generationGroup
+      : generalGroup;
+
+  const selectedType =
+    dataField.valueType === "generation"
+      ? dataField.generationType
+      : dataField.valueType;
+
   return (
     <Modal show={show} onHide={turnOff} size="xl">
       <Modal.Header closeButton>
         <Modal.Title>Change data field type</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Tab.Container defaultActiveKey={generalGroup}>
+        <Tab.Container defaultActiveKey={defaultActiveKey}>
           <Row>
             <Col sm={9}>
               <Tab.Content>
@@ -51,6 +66,7 @@ const MessageDataFieldTypeModal: React.FC<Props> = ({
                         description={generalFieldTypeData.description}
                         type={generalFieldTypeData.type}
                         key={generalFieldTypeData.type}
+                        active={selectedType === generalFieldTypeData.type}
                       />
                     )
                   )}
@@ -74,6 +90,7 @@ const MessageDataFieldTypeModal: React.FC<Props> = ({
                         }
                         type={generationFunction.type}
                         key={generationFunction.type}
+                        active={selectedType === generationFunction.type}
                       />
                     ))}
                   </GenerationTypeSelectionPane>

@@ -106,6 +106,7 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
         </>
       )}
       <MessageDataFieldTypeModal
+        dataField={dataField}
         show={showTypeModal}
         turnOff={() => setShowTypeModal(false)}
         indices={indices}
