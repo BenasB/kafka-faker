@@ -133,6 +133,7 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "gpsCoordinate",
         function: () => faker.address.nearbyGPSCoordinate().toString(),
+        displayName: "GPS coordinate",
       },
       {
         type: "ordinalDirection",
@@ -244,9 +245,9 @@ export const generationGroups: GenerationGroup[] = partialGenerationGroups.map(
   (generationGroup) => ({
     ...generationGroup,
     functions: generationGroup.functions.map<GenerationFunction>((f) => ({
+      displayName: toNonCamelCase(f.type),
       ...f,
       group: generationGroup.group,
-      displayName: toNonCamelCase(f.type),
     })),
   })
 );

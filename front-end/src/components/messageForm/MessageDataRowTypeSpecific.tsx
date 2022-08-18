@@ -41,10 +41,9 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
           variant="outline-primary"
           onClick={() => setShowTypeModal(true)}
         >
-          {(dataField.valueType === "generation"
-            ? dataField.generationType
-            : dataField.valueType
-          ).toNonCamelCase()}
+          {dataField.valueType === "generation"
+            ? dataField.displayName
+            : dataField.valueType.toNonCamelCase()}
         </Button>
       </Col>
       {dataField.valueType === "array" && (
