@@ -54,7 +54,10 @@ const MessageDataFieldTypeModal: React.FC<Props> = ({
         <Tab.Container defaultActiveKey={defaultActiveKey}>
           <Row>
             <Col sm={9}>
-              <Tab.Content>
+              <Tab.Content
+                className={"overflow-auto"}
+                style={{ maxHeight: "70vh" }}
+              >
                 <GenerationTypeSelectionPane eventKey={generalGroup}>
                   {generalMessageDataFieldTypeData.map(
                     (generalFieldTypeData) => (

@@ -35,6 +35,24 @@ export const messageDataFieldGenerationGroups = [
 export const messageDataFieldGenerationTypes = [
   "buildingNumber",
   "cardinalDirection",
+  "city",
+  "cityName",
+  "country",
+  "countryCode",
+  "county",
+  "direction",
+  "latitude",
+  "longitude",
+  "gpsCoordinate",
+  "ordinalDirection",
+  "secondaryAddress",
+  "state",
+  "stateAbbr",
+  "street",
+  "streetAddress",
+  "streetName",
+  "timeZone",
+  "zipCode",
 ] as const;
 
 export type GenerationFunction = {
@@ -64,6 +82,79 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "cardinalDirection",
         function: faker.address.cardinalDirection,
+      },
+      {
+        type: "city",
+        function: faker.address.city,
+      },
+      {
+        type: "cityName",
+        function: faker.address.cityName,
+      },
+      {
+        type: "country",
+        function: faker.address.country,
+      },
+      {
+        type: "countryCode",
+        function: faker.address.countryCode,
+      },
+      {
+        type: "county",
+        function: faker.address.county,
+      },
+      {
+        type: "direction",
+        function: faker.address.direction,
+      },
+      {
+        type: "latitude",
+        function: faker.address.latitude,
+      },
+      {
+        type: "longitude",
+        function: faker.address.longitude,
+      },
+      {
+        type: "gpsCoordinate",
+        function: () => faker.address.nearbyGPSCoordinate().toString(),
+      },
+      {
+        type: "ordinalDirection",
+        function: faker.address.ordinalDirection,
+      },
+      {
+        type: "secondaryAddress",
+        function: faker.address.secondaryAddress,
+      },
+      {
+        type: "state",
+        function: faker.address.state,
+      },
+      {
+        type: "stateAbbr",
+        function: faker.address.stateAbbr,
+        displayName: "State abbreviation",
+      },
+      {
+        type: "street",
+        function: faker.address.street,
+      },
+      {
+        type: "streetAddress",
+        function: faker.address.streetAddress,
+      },
+      {
+        type: "streetName",
+        function: faker.address.streetName,
+      },
+      {
+        type: "timeZone",
+        function: faker.address.city,
+      },
+      {
+        type: "zipCode",
+        function: faker.address.zipCode,
       },
     ],
   },
