@@ -79,6 +79,13 @@ export const messageDataFieldGenerationTypes = [
   "lch",
   "rgb",
   "colorSpace",
+  "department",
+  "price",
+  "product",
+  "productAdjective",
+  "productDescription",
+  "productMaterial",
+  "productName",
 ] as const;
 
 export type GenerationFunction = {
@@ -306,6 +313,39 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "colorSpace",
         function: faker.color.space,
+      },
+    ],
+  },
+  {
+    group: "commerce",
+    functions: [
+      {
+        type: "department",
+        function: faker.commerce.department,
+      },
+      {
+        type: "price",
+        function: faker.commerce.price,
+      },
+      {
+        type: "product",
+        function: faker.commerce.product,
+      },
+      {
+        type: "productAdjective",
+        function: faker.commerce.productAdjective,
+      },
+      {
+        type: "productDescription",
+        function: faker.commerce.productDescription,
+      },
+      {
+        type: "productMaterial",
+        function: faker.commerce.productMaterial,
+      },
+      {
+        type: "productName",
+        function: faker.commerce.productName,
       },
     ],
   },
