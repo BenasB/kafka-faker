@@ -1,4 +1,5 @@
 import generationFunctions, {
+  GenerationFunction,
   messageDataFieldGenerationTypes,
 } from "../data/generationFunctions";
 import validationFunctions from "../data/validationFunctions";
@@ -39,15 +40,26 @@ const deserializeMessageSchema = (messageSchema: MessageSchema): Message => {
 
       if (generationType !== field.generationType) {
         console.error(
-          `Could not locate a generation function of type ${field.generationType}.
-               Replacing that function by the default generation type ${generationType}`
+          `Could not locate a generation function type ${field.generationType}.
+               Replacing that type by the default generation type ${generationType}`
+        );
+      }
+
+      const generationFunction: GenerationFunction =
+        generationFunctions.find((f) => f.type === generationType) ||
+        generationFunctions[0];
+
+      if (generationFunction.type !== generationType) {
+        console.error(
+          `Could not locate a generation function of type ${generationType}.
+               Replacing that function by the default generation type ${generationFunction.type}`
         );
       }
 
       return {
         valueType: "generation",
         generationType,
-        generate: generationFunctions[generationType],
+        generate: generationFunction.function,
         value: field.value,
       };
     };

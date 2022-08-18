@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Col,
   Form,
@@ -7,12 +7,9 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { messageDataFieldGenerationTypes } from "../../data/generationFunctions";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
-import {
-  MessageDataFieldSpecific,
-  messageDataFieldTypes,
-} from "./messageTypes";
+import MessageDataFieldTypeModal from "./MessageDataFieldTypeModal";
+import { MessageDataFieldSpecific } from "./messageTypes";
 
 interface Props {
   dataField: MessageDataFieldSpecific;
@@ -35,34 +32,20 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
     regenerateMessageDataFieldGeneration,
   } = props;
 
+  const [showTypeModal, setShowTypeModal] = useState<boolean>(false);
+
   return (
     <>
-      <Col xs={2}>
-        <Form.Select
-          onChange={(e) =>
-            updateMessageDataType(
-              messageDataFieldGenerationTypes.find(
-                (t) => t === e.target.value
-              ) ||
-                messageDataFieldTypes.find((t) => t === e.target.value) ||
-                messageDataFieldTypes[0],
-              indices
-            )
-          }
-          value={
-            dataField.valueType === "generation"
-              ? dataField.generationType
-              : dataField.valueType
-          }
+      <Col xs={"auto"}>
+        <Button
+          variant="outline-primary"
+          onClick={() => setShowTypeModal(true)}
         >
-          {[...messageDataFieldGenerationTypes, ...messageDataFieldTypes].map(
-            (m) => (
-              <option key={m} value={m}>
-                {m.toFirstUpperCase()}
-              </option>
-            )
-          )}
-        </Form.Select>
+          {(dataField.valueType === "generation"
+            ? dataField.generationType
+            : dataField.valueType
+          ).toNonCamelCase()}
+        </Button>
       </Col>
       {dataField.valueType === "array" && (
         <Col xs={2}>
@@ -122,6 +105,12 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
           </Col>
         </>
       )}
+      <MessageDataFieldTypeModal
+        show={showTypeModal}
+        turnOff={() => setShowTypeModal(false)}
+        indices={indices}
+        updateMessageDataType={updateMessageDataType}
+      />
     </>
   );
 };

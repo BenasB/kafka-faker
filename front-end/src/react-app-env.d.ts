@@ -2,4 +2,5 @@
 
 declare interface String {
   toFirstUpperCase(): string;
+  toNonCamelCase(): string;
 }

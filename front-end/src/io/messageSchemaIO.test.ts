@@ -29,9 +29,9 @@ const genericCommonDataField: MessageDataFieldCommon = {
 
 const genericGenerationDataField: MessageDataFieldGeneration = {
   valueType: "generation",
-  generationType: "date",
-  generate: generationFunctions.date,
-  value: generationFunctions.date(),
+  generationType: "buildingNumber",
+  generate: generationFunctions[0].function,
+  value: generationFunctions[0].function(),
 };
 
 const genericCustomDataField: MessageDataFieldCustom = {

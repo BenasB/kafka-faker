@@ -10,6 +10,7 @@ import {
   MessageDataFieldSpecific,
 } from "../components/messageForm/messageTypes";
 import generationFunctions, {
+  GenerationFunction,
   messageDataFieldGenerationTypes,
 } from "../data/generationFunctions";
 import validationFunctions from "../data/validationFunctions";
@@ -173,13 +174,19 @@ const useMessageForm: () => MessageFormManagement = () => {
     const generationField = (
       fieldData: MessageDataFieldSpecific,
       generationType: typeof messageDataFieldGenerationTypes[number]
-    ): MessageDataFieldSpecific => ({
-      ...fieldData,
-      valueType: "generation",
-      generationType,
-      generate: generationFunctions[generationType],
-      value: generationFunctions[generationType](),
-    });
+    ): MessageDataFieldSpecific => {
+      const generationFunction: GenerationFunction =
+        generationFunctions.find((f) => f.type === generationType) ||
+        generationFunctions[0];
+
+      return {
+        ...fieldData,
+        valueType: "generation",
+        generationType,
+        generate: generationFunction.function,
+        value: generationFunction.function(),
+      };
+    };
 
     updateMessageDataField(
       messageDataFieldIndices,
