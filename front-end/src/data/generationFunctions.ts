@@ -23,7 +23,6 @@ export const messageDataFieldGenerationGroups = [
   "random",
   "science",
   "system",
-  "unique",
   "vehicle",
   "word",
 ] as const;
@@ -222,6 +221,22 @@ export const messageDataFieldGenerationTypes = [
   "mimeType",
   "networkInterface",
   "semver",
+  "bicycle",
+  "vehicleColor",
+  "fuel",
+  "manufacturer",
+  "vehicleModel",
+  "vehicleType",
+  "vehicle",
+  "vin",
+  "vrm",
+  "adjective",
+  "adverb",
+  "conjunction",
+  "interjection",
+  "noun",
+  "preposition",
+  "verb",
 ] as const;
 
 export type GenerationFunction = {
@@ -1130,6 +1145,82 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "semver",
         function: faker.system.semver,
+      },
+    ],
+  },
+  {
+    group: "vehicle",
+    functions: [
+      {
+        type: "bicycle",
+        function: faker.vehicle.bicycle,
+      },
+      {
+        type: "vehicleColor",
+        function: faker.vehicle.color,
+      },
+      {
+        type: "fuel",
+        function: faker.vehicle.fuel,
+      },
+      {
+        type: "manufacturer",
+        function: faker.vehicle.manufacturer,
+      },
+      {
+        type: "vehicleModel",
+        function: faker.vehicle.model,
+      },
+      {
+        type: "vehicleType",
+        function: faker.vehicle.type,
+      },
+      {
+        type: "vehicle",
+        function: faker.vehicle.vehicle,
+      },
+      {
+        type: "vin",
+        function: faker.vehicle.vin,
+        displayName: "VIN",
+      },
+      {
+        type: "vrm",
+        function: faker.vehicle.vrm,
+        displayName: "VRM",
+      },
+    ],
+  },
+  {
+    group: "word",
+    functions: [
+      {
+        type: "adjective",
+        function: faker.word.adjective,
+      },
+      {
+        type: "adverb",
+        function: faker.word.adverb,
+      },
+      {
+        type: "conjunction",
+        function: faker.word.conjunction,
+      },
+      {
+        type: "interjection",
+        function: faker.word.interjection,
+      },
+      {
+        type: "noun",
+        function: faker.word.noun,
+      },
+      {
+        type: "preposition",
+        function: faker.word.preposition,
+      },
+      {
+        type: "verb",
+        function: faker.word.verb,
       },
     ],
   },
