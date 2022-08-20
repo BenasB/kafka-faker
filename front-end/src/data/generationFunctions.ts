@@ -17,7 +17,6 @@ export const messageDataFieldGenerationGroups = [
   "image",
   "internet",
   "lorem",
-  "mersenne",
   "music",
   "name",
   "phone",
@@ -185,6 +184,8 @@ export const messageDataFieldGenerationTypes = [
   "text",
   "word",
   "words",
+  "genre",
+  "songName",
 ] as const;
 
 export type GenerationFunction = {
@@ -910,6 +911,19 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "words",
         function: faker.lorem.words,
+      },
+    ],
+  },
+  {
+    group: "music",
+    functions: [
+      {
+        type: "genre",
+        function: faker.music.genre,
+      },
+      {
+        type: "songName",
+        function: faker.music.songName,
       },
     ],
   },
