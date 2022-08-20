@@ -160,6 +160,23 @@ export const messageDataFieldGenerationTypes = [
   "sportsImage",
   "technicsImage",
   "transportImage",
+  "domainName",
+  "domainSuffix",
+  "domainWord",
+  "email",
+  "emoji",
+  "exampleEmail",
+  "httpMethod",
+  "httpStatusCode",
+  "ipv4",
+  "ipv6",
+  "mac",
+  "password",
+  "port",
+  "protocol",
+  "url",
+  "userAgent",
+  "userName",
 ] as const;
 
 export type GenerationFunction = {
@@ -768,6 +785,82 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "transportImage",
         function: faker.image.transport,
+      },
+    ],
+  },
+  {
+    group: "internet",
+    functions: [
+      {
+        type: "domainName",
+        function: faker.internet.domainName,
+      },
+      {
+        type: "domainSuffix",
+        function: faker.internet.domainSuffix,
+      },
+      {
+        type: "domainWord",
+        function: faker.internet.domainWord,
+      },
+      {
+        type: "email",
+        function: faker.internet.email,
+      },
+      {
+        type: "emoji",
+        function: faker.internet.emoji,
+      },
+      {
+        type: "exampleEmail",
+        function: faker.internet.exampleEmail,
+      },
+      {
+        type: "httpMethod",
+        function: faker.internet.httpMethod,
+      },
+      {
+        type: "httpStatusCode",
+        function: () => faker.internet.httpStatusCode().toString(),
+      },
+      {
+        type: "ipv4",
+        function: faker.internet.ipv4,
+        displayName: "IPv4",
+      },
+      {
+        type: "ipv6",
+        function: faker.internet.ipv6,
+        displayName: "IPv6",
+      },
+      {
+        type: "mac",
+        function: faker.internet.mac,
+      },
+      {
+        type: "password",
+        function: faker.internet.password,
+      },
+      {
+        type: "port",
+        function: () => faker.internet.port().toString(),
+      },
+      {
+        type: "protocol",
+        function: faker.internet.protocol,
+      },
+      {
+        type: "url",
+        function: faker.internet.url,
+        displayName: "URL",
+      },
+      {
+        type: "userAgent",
+        function: faker.internet.userAgent,
+      },
+      {
+        type: "userName",
+        function: faker.internet.userName,
       },
     ],
   },
