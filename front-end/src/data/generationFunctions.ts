@@ -182,8 +182,8 @@ export const messageDataFieldGenerationTypes = [
   "sentences",
   "slug",
   "text",
-  "word",
-  "words",
+  "loremWord",
+  "loremWords",
   "genre",
   "songName",
   "firstName",
@@ -198,6 +198,19 @@ export const messageDataFieldGenerationTypes = [
   "prefix",
   "sex",
   "suffix",
+  "imei",
+  "phoneNumber",
+  "alpha",
+  "alphaNumeric",
+  "locale",
+  "numeric",
+  "word",
+  "words",
+  "chemicalElementSymbol",
+  "chemicalElementName",
+  "chemicalElementAtomicNumber",
+  "unitName",
+  "unitSymbol",
 ] as const;
 
 export type GenerationFunction = {
@@ -917,11 +930,11 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
         function: faker.lorem.text,
       },
       {
-        type: "word",
+        type: "loremWord",
         function: faker.lorem.word,
       },
       {
-        type: "words",
+        type: "loremWords",
         function: faker.lorem.words,
       },
     ],
@@ -989,6 +1002,74 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "suffix",
         function: faker.name.suffix,
+      },
+    ],
+  },
+  {
+    group: "phone",
+    functions: [
+      {
+        type: "imei",
+        function: faker.phone.imei,
+        displayName: "IMEI",
+      },
+      {
+        type: "phoneNumber",
+        function: faker.phone.number,
+      },
+    ],
+  },
+  {
+    group: "random",
+    functions: [
+      {
+        type: "alpha",
+        function: faker.random.alpha,
+      },
+      {
+        type: "alphaNumeric",
+        function: faker.random.alphaNumeric,
+      },
+      {
+        type: "locale",
+        function: faker.random.locale,
+      },
+      {
+        type: "numeric",
+        function: faker.random.numeric,
+      },
+      {
+        type: "word",
+        function: faker.random.word,
+      },
+      {
+        type: "words",
+        function: faker.random.words,
+      },
+    ],
+  },
+  {
+    group: "science",
+    functions: [
+      {
+        type: "chemicalElementSymbol",
+        function: () => faker.science.chemicalElement().symbol,
+      },
+      {
+        type: "chemicalElementName",
+        function: () => faker.science.chemicalElement().name,
+      },
+      {
+        type: "chemicalElementAtomicNumber",
+        function: () => faker.science.chemicalElement().atomicNumber.toString(),
+      },
+      {
+        type: "unitName",
+        function: () => faker.science.unit().name,
+      },
+      {
+        type: "unitSymbol",
+        function: () => faker.science.unit().symbol,
       },
     ],
   },
