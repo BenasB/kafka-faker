@@ -134,6 +134,11 @@ export const messageDataFieldGenerationTypes = [
   "routingNumber",
   "transactionDescription",
   "transactionType",
+  "branch",
+  "commitEntry",
+  "commitMessage",
+  "commitSha",
+  "shortSha",
 ] as const;
 
 export type GenerationFunction = {
@@ -618,6 +623,31 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "transactionType",
         function: faker.finance.transactionType,
+      },
+    ],
+  },
+  {
+    group: "git",
+    functions: [
+      {
+        type: "branch",
+        function: faker.git.branch,
+      },
+      {
+        type: "commitEntry",
+        function: () => faker.git.commitEntry({ eol: "LF" }),
+      },
+      {
+        type: "commitMessage",
+        function: faker.git.commitMessage,
+      },
+      {
+        type: "commitSha",
+        function: faker.git.commitSha,
+      },
+      {
+        type: "shortSha",
+        function: faker.git.shortSha,
       },
     ],
   },
