@@ -16,7 +16,6 @@ export const messageDataFieldGenerationGroups = [
   "hacker",
   "image",
   "internet",
-  "localization",
   "lorem",
   "mersenne",
   "music",
@@ -177,6 +176,15 @@ export const messageDataFieldGenerationTypes = [
   "url",
   "userAgent",
   "userName",
+  "lines",
+  "paragraph",
+  "paragraphs",
+  "sentence",
+  "sentences",
+  "slug",
+  "text",
+  "word",
+  "words",
 ] as const;
 
 export type GenerationFunction = {
@@ -861,6 +869,47 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "userName",
         function: faker.internet.userName,
+      },
+    ],
+  },
+  {
+    group: "lorem",
+    functions: [
+      {
+        type: "lines",
+        function: faker.lorem.lines,
+      },
+      {
+        type: "paragraph",
+        function: faker.lorem.paragraph,
+      },
+      {
+        type: "paragraphs",
+        function: faker.lorem.paragraphs,
+      },
+      {
+        type: "sentence",
+        function: faker.lorem.sentence,
+      },
+      {
+        type: "sentences",
+        function: faker.lorem.sentences,
+      },
+      {
+        type: "slug",
+        function: faker.lorem.slug,
+      },
+      {
+        type: "text",
+        function: faker.lorem.text,
+      },
+      {
+        type: "word",
+        function: faker.lorem.word,
+      },
+      {
+        type: "words",
+        function: faker.lorem.words,
       },
     ],
   },
