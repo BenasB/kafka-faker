@@ -211,6 +211,17 @@ export const messageDataFieldGenerationTypes = [
   "chemicalElementAtomicNumber",
   "unitName",
   "unitSymbol",
+  "commonFileExt",
+  "commonFileName",
+  "commonFileType",
+  "directoryPath",
+  "fileExt",
+  "fileName",
+  "filePath",
+  "fileType",
+  "mimeType",
+  "networkInterface",
+  "semver",
 ] as const;
 
 export type GenerationFunction = {
@@ -1070,6 +1081,55 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "unitSymbol",
         function: () => faker.science.unit().symbol,
+      },
+    ],
+  },
+  {
+    group: "system",
+    functions: [
+      {
+        type: "commonFileExt",
+        function: faker.system.commonFileExt,
+      },
+      {
+        type: "commonFileName",
+        function: faker.system.commonFileName,
+      },
+      {
+        type: "commonFileType",
+        function: faker.system.commonFileType,
+      },
+      {
+        type: "directoryPath",
+        function: faker.system.directoryPath,
+      },
+      {
+        type: "fileExt",
+        function: faker.system.fileExt,
+      },
+      {
+        type: "fileName",
+        function: faker.system.fileName,
+      },
+      {
+        type: "filePath",
+        function: faker.system.filePath,
+      },
+      {
+        type: "fileType",
+        function: faker.system.fileType,
+      },
+      {
+        type: "mimeType",
+        function: faker.system.mimeType,
+      },
+      {
+        type: "networkInterface",
+        function: faker.system.networkInterface,
+      },
+      {
+        type: "semver",
+        function: faker.system.semver,
       },
     ],
   },
