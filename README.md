@@ -21,6 +21,8 @@ When developing applications which use Apache Kafka as a messaging queue, it is 
 
 You can try out the demo mode of the UI [here](https://benasb.github.io/kafka-faker)!
 
+Disclaimer: this application is inteded for desktop/laptop users, so the design is not mobile responsive.
+
 ## Application stack 📚
 
 1. [Front end](./front-end/README.md)
