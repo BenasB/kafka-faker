@@ -86,10 +86,18 @@ const MessageDataFieldTypeModal: React.FC<Props> = ({
                         indices={indices}
                         displayName={generationFunction.displayName}
                         description={
-                          <>
-                            <i className="bi bi-chevron-right"> </i>
-                            {generationFunction.function()}
-                          </>
+                          generationGroup.group === "image" &&
+                          generationFunction.type !== "svgDataUri" ? (
+                            <img
+                              src={generationFunction.function()}
+                              className="w-100 mt-2"
+                            />
+                          ) : (
+                            <>
+                              <i className="bi bi-chevron-right"> </i>
+                              {generationFunction.function().limitLength(150)}
+                            </>
+                          )
                         }
                         type={generationFunction.type}
                         key={generationFunction.type}
