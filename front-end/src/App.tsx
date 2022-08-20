@@ -4,9 +4,8 @@ import Header from "./components/header/Header";
 import Layout from "./components/layout/Layout";
 import HistoryTab, { HistoryMessage } from "./components/tabs/HistoryTab";
 import SendTab from "./components/tabs/SendTab";
-import SettingsTab from "./components/tabs/SettingsTab";
 
-export const tabTypes = ["send", "history", "settings"] as const;
+export const tabTypes = ["send", "history"] as const;
 
 function App() {
   const defaultTab: typeof tabTypes[number] = "send";
@@ -35,9 +34,6 @@ function App() {
       </Col>
       <Col {...getTabClassName("history")}>
         <HistoryTab messageHistory={messageHistory} />
-      </Col>
-      <Col {...getTabClassName("settings")}>
-        <SettingsTab />
       </Col>
     </Layout>
   );
