@@ -139,6 +139,12 @@ export const messageDataFieldGenerationTypes = [
   "commitMessage",
   "commitSha",
   "shortSha",
+  "hackerAbbreviation",
+  "hackerAdjective",
+  "hackerIngverb",
+  "hackerNoun",
+  "hackerPhrase",
+  "hackerVerb",
 ] as const;
 
 export type GenerationFunction = {
@@ -648,6 +654,35 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "shortSha",
         function: faker.git.shortSha,
+      },
+    ],
+  },
+  {
+    group: "hacker",
+    functions: [
+      {
+        type: "hackerAbbreviation",
+        function: faker.hacker.abbreviation,
+      },
+      {
+        type: "hackerAdjective",
+        function: faker.hacker.adjective,
+      },
+      {
+        type: "hackerIngverb",
+        function: faker.hacker.ingverb,
+      },
+      {
+        type: "hackerNoun",
+        function: faker.hacker.noun,
+      },
+      {
+        type: "hackerPhrase",
+        function: faker.hacker.phrase,
+      },
+      {
+        type: "hackerVerb",
+        function: faker.hacker.verb,
       },
     ],
   },
