@@ -1,5 +1,6 @@
 import { BackEndSchemaModel } from "../io/backEndClient";
 
+// TODO: Update when generation types are finalized
 const demoSchemas: BackEndSchemaModel[] = [
   {
     title: "Demo #1",

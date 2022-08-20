@@ -1,6 +1,7 @@
 import React from "react";
 import { Nav, Navbar } from "react-bootstrap";
 import { tabTypes } from "../../App";
+import { ReactComponent as BrandIcon } from "../../assets/kafka-faker-logo.svg";
 
 interface Props {
   tabs: typeof tabTypes;
@@ -12,7 +13,9 @@ const Header: React.FC<Props> = ({ tabs, defaultTab, onTabChange }) => {
   return (
     <Navbar className="mb-3 d-block">
       <Nav variant="tabs" defaultActiveKey={defaultTab}>
-        <Navbar.Brand>Kafka faker</Navbar.Brand>
+        <Navbar.Brand>
+          <BrandIcon width={150} />
+        </Navbar.Brand>
         {tabs.map((tab) => (
           <Nav.Item key={tab}>
             <Nav.Link

@@ -1,7 +1,6 @@
 using KafkaFaker.BE;
 using KafkaFaker.BE.Migrations;
 using MySqlConnector;
-using FluentMigrator.Runner;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +11,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors();
 
-builder.Services.AddSingleton<Producer>();
-var schemaDatabaseConnectionString = builder.Configuration["ConnectionStrings:SchemaDatabase"];
+builder.Services.AddSingleton<Producer>(_ => new Producer(builder.Configuration.GetValue<string>("BootstrapServers")));
+var schemaDatabaseConnectionString = builder.Configuration.GetConnectionString("SchemaDatabase");
 builder.Services.AddTransient<MySqlConnection>(_ => new MySqlConnection(schemaDatabaseConnectionString));
 builder.Services.AddTransient<SchemaDatabase>();
 
@@ -28,11 +27,7 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(builder.Configuration["FrontEndUrl"]));
-
-app.UseAuthorization();
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(builder.Configuration.GetValue<string>("FrontEndUrl")));
 
 app.MapControllers();
 
