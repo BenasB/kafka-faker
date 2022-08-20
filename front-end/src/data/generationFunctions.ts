@@ -186,6 +186,18 @@ export const messageDataFieldGenerationTypes = [
   "words",
   "genre",
   "songName",
+  "firstName",
+  "fullName",
+  "gender",
+  "jobArea",
+  "jobDescriptor",
+  "jobTitle",
+  "jobType",
+  "lastName",
+  "middleName",
+  "prefix",
+  "sex",
+  "suffix",
 ] as const;
 
 export type GenerationFunction = {
@@ -924,6 +936,59 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "songName",
         function: faker.music.songName,
+      },
+    ],
+  },
+  {
+    group: "name",
+    functions: [
+      {
+        type: "firstName",
+        function: faker.name.firstName,
+      },
+      {
+        type: "fullName",
+        function: faker.name.fullName,
+      },
+      {
+        type: "gender",
+        function: faker.name.gender,
+      },
+      {
+        type: "jobArea",
+        function: faker.name.jobArea,
+      },
+      {
+        type: "jobDescriptor",
+        function: faker.name.jobDescriptor,
+      },
+      {
+        type: "jobTitle",
+        function: faker.name.jobTitle,
+      },
+      {
+        type: "jobType",
+        function: faker.name.jobType,
+      },
+      {
+        type: "lastName",
+        function: faker.name.lastName,
+      },
+      {
+        type: "middleName",
+        function: faker.name.middleName,
+      },
+      {
+        type: "prefix",
+        function: faker.name.prefix,
+      },
+      {
+        type: "sex",
+        function: () => faker.name.gender(true),
+      },
+      {
+        type: "suffix",
+        function: faker.name.suffix,
       },
     ],
   },
