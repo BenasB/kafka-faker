@@ -11,7 +11,6 @@ export const messageDataFieldGenerationGroups = [
   "database",
   "datatype",
   "date",
-  "fake",
   "finance",
   "git",
   "hacker",
@@ -116,6 +115,25 @@ export const messageDataFieldGenerationTypes = [
   "recent",
   "soon",
   "weekday",
+  "account",
+  "accountName",
+  "amount",
+  "bic",
+  "bitcoinAddress",
+  "creditCardCVV",
+  "creditCardIssuer",
+  "creditCardNumber",
+  "currencyCode",
+  "currencyName",
+  "currencySymbol",
+  "ethereumAddress",
+  "iban",
+  "litecoinAddress",
+  "mask",
+  "pin",
+  "routingNumber",
+  "transactionDescription",
+  "transactionType",
 ] as const;
 
 export type GenerationFunction = {
@@ -518,6 +536,88 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "weekday",
         function: faker.date.weekday,
+      },
+    ],
+  },
+  {
+    group: "finance",
+    functions: [
+      {
+        type: "account",
+        function: faker.finance.account,
+      },
+      {
+        type: "accountName",
+        function: faker.finance.accountName,
+      },
+      {
+        type: "amount",
+        function: faker.finance.amount,
+      },
+      {
+        type: "bic",
+        function: faker.finance.bic,
+      },
+      {
+        type: "bitcoinAddress",
+        function: faker.finance.bitcoinAddress,
+      },
+      {
+        type: "creditCardCVV",
+        function: faker.finance.creditCardCVV,
+        displayName: "Credit card CVV",
+      },
+      {
+        type: "creditCardIssuer",
+        function: faker.finance.creditCardIssuer,
+      },
+      {
+        type: "creditCardNumber",
+        function: faker.finance.creditCardNumber,
+      },
+      {
+        type: "currencyCode",
+        function: faker.finance.currencyCode,
+      },
+      {
+        type: "currencyName",
+        function: faker.finance.currencyName,
+      },
+      {
+        type: "currencySymbol",
+        function: faker.finance.currencySymbol,
+      },
+      {
+        type: "ethereumAddress",
+        function: faker.finance.ethereumAddress,
+      },
+      {
+        type: "iban",
+        function: faker.finance.iban,
+      },
+      {
+        type: "litecoinAddress",
+        function: faker.finance.litecoinAddress,
+      },
+      {
+        type: "mask",
+        function: faker.finance.mask,
+      },
+      {
+        type: "pin",
+        function: faker.finance.pin,
+      },
+      {
+        type: "routingNumber",
+        function: faker.finance.routingNumber,
+      },
+      {
+        type: "transactionDescription",
+        function: faker.finance.transactionDescription,
+      },
+      {
+        type: "transactionType",
+        function: faker.finance.transactionType,
       },
     ],
   },
