@@ -109,6 +109,13 @@ export const messageDataFieldGenerationTypes = [
   "number",
   "string",
   "uuid",
+  "birthdate",
+  "future",
+  "month",
+  "past",
+  "recent",
+  "soon",
+  "weekday",
 ] as const;
 
 export type GenerationFunction = {
@@ -478,6 +485,39 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
         type: "uuid",
         function: faker.datatype.uuid,
         displayName: "UUID",
+      },
+    ],
+  },
+  {
+    group: "date",
+    functions: [
+      {
+        type: "birthdate",
+        function: () => faker.date.birthdate().toISOString(),
+      },
+      {
+        type: "future",
+        function: () => faker.date.future().toISOString(),
+      },
+      {
+        type: "month",
+        function: faker.date.month,
+      },
+      {
+        type: "past",
+        function: () => faker.date.past().toISOString(),
+      },
+      {
+        type: "recent",
+        function: () => faker.date.recent().toISOString(),
+      },
+      {
+        type: "soon",
+        function: () => faker.date.soon().toISOString(),
+      },
+      {
+        type: "weekday",
+        function: faker.date.weekday,
       },
     ],
   },
