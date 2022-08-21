@@ -6,3 +6,4 @@ import "@testing-library/jest-dom";
 import "./utils/toFirstUpperCase";
 import "./utils/toNonCamelCase";
 import "./utils/limitLength";
+import "./utils/escapeSpecialCharacters";

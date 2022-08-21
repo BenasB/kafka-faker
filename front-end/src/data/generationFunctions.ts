@@ -45,7 +45,6 @@ export const messageDataFieldGenerationTypes = [
   "stateAbbr",
   "street",
   "streetAddress",
-  "streetName",
   "timeZone",
   "zipCode",
   "bear",
@@ -328,10 +327,6 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "streetAddress",
         function: faker.address.streetAddress,
-      },
-      {
-        type: "streetName",
-        function: faker.address.streetName,
       },
       {
         type: "timeZone",
