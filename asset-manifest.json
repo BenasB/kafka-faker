@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/kafka-faker/static/css/main.e810e95a.css",
+    "main.css": "/kafka-faker/static/css/main.5e840df1.css",
     "main.js": "/kafka-faker/static/js/main.e9b9c168.js",
     "static/media/kafka-faker-logo.svg": "/kafka-faker/static/media/kafka-faker-logo.e0535c25596e57bd62e79389112ffa51.svg",
     "index.html": "/kafka-faker/index.html",
-    "main.e810e95a.css.map": "/kafka-faker/static/css/main.e810e95a.css.map",
+    "main.5e840df1.css.map": "/kafka-faker/static/css/main.5e840df1.css.map",
     "main.e9b9c168.js.map": "/kafka-faker/static/js/main.e9b9c168.js.map"
   },
   "entrypoints": [
-    "static/css/main.e810e95a.css",
+    "static/css/main.5e840df1.css",
     "static/js/main.e9b9c168.js"
   ]
 }
