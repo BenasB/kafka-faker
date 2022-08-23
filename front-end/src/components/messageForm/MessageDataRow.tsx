@@ -18,7 +18,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
   return (
     <>
       <Row
-        style={{ marginLeft: 30 * dataField.depth + "px" }}
+        style={{ paddingLeft: 30 * dataField.depth + "px" }}
         className={"w-100"}
       >
         <Col xs={3}>
