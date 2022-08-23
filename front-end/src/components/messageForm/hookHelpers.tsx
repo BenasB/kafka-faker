@@ -10,70 +10,57 @@ import {
 const findAndUpdateField = (
   dataFields: MessageDataField[],
   indices: number[],
-  fieldCommonUpdate: (
-    fieldData: MessageDataFieldCommon
-  ) => MessageDataFieldCommon,
-  fieldSpecificUpdate: (
-    fieldData: MessageDataFieldSpecific
-  ) => MessageDataFieldSpecific,
-  indexCount = 1
+  fieldUpdate: (fieldData: MessageDataField) => MessageDataField,
+  depthIndex = 1
 ): MessageDataField[] => {
-  const mapSpecificField = (
-    specificDataField: MessageDataFieldSpecific,
-    i: number,
-    indexCount: number
-  ): MessageDataFieldSpecific => {
-    if (indexCount !== indices.length && i === indices[indexCount - 1]) {
-      if (specificDataField.valueType === "object")
-        return {
-          ...specificDataField,
-          value: specificDataField.value
-            .map<MessageDataField>((nestedField, i) =>
-              mapField(nestedField, i, indexCount + 1)
-            )
-            .filter((d) => !d.toDelete),
-        };
+  const sliceIndex = indices[depthIndex - 1];
+  const sliceIndexField = dataFields[sliceIndex];
+  if (depthIndex !== indices.length) {
+    // not yet at item, need to dig deeper
+    switch (sliceIndexField.valueType) {
+      case "object":
+        return [
+          ...dataFields.slice(0, sliceIndex),
+          {
+            ...sliceIndexField,
+            value: findAndUpdateField(
+              sliceIndexField.value,
+              indices,
+              fieldUpdate,
+              depthIndex + 1
+            ),
+          },
+          ...dataFields.slice(sliceIndex + 1),
+        ].filter((d) => !d.toDelete);
 
-      if (specificDataField.valueType === "array")
-        return {
-          ...specificDataField,
-          value: mapSpecificField(specificDataField.value, 0, indexCount + 1),
-        };
+      case "array":
+        return [
+          ...dataFields.slice(0, sliceIndex),
+          {
+            ...sliceIndexField,
+            value: findAndUpdateField(
+              // Array values are specific only (not a full field),
+              // so add on common properties from the array to its value
+              [{ ...sliceIndexField, ...sliceIndexField.value }],
+              indices,
+              fieldUpdate,
+              depthIndex + 1
+            )[0],
+          },
+          ...dataFields.slice(sliceIndex + 1),
+        ].filter((d) => !d.toDelete);
+
+      default:
+        return [];
     }
-
-    if (indexCount === indices.length && i === indices[indexCount - 1])
-      return fieldSpecificUpdate(specificDataField);
-
-    return specificDataField;
-  };
-
-  const mapField = (
-    dataField: MessageDataField,
-    i: number,
-    indexCount: number
-  ): MessageDataField => {
-    if (indexCount !== indices.length && i === indices[indexCount - 1]) {
-      return { ...dataField, ...mapSpecificField(dataField, i, indexCount) };
-    }
-
-    if (indexCount === indices.length && i === indices[indexCount - 1]) {
-      const afterCommonUpdate = {
-        ...dataField,
-        ...fieldCommonUpdate(dataField),
-      };
-
-      return {
-        ...afterCommonUpdate,
-        ...fieldSpecificUpdate(afterCommonUpdate),
-      };
-    }
-
-    return dataField;
-  };
-
-  return dataFields
-    .map<MessageDataField>((dataField, i) => mapField(dataField, i, indexCount))
-    .filter((d) => !d.toDelete);
+  } else {
+    // At item
+    return [
+      ...dataFields.slice(0, sliceIndex),
+      fieldUpdate(sliceIndexField),
+      ...dataFields.slice(sliceIndex + 1),
+    ].filter((d) => !d.toDelete);
+  }
 };
 
 // Helper to iterate recursively through all of message data fields
@@ -129,21 +116,11 @@ const hookHelpers = (
   // Reusable function to update a single field
   const updateMessageDataField = (
     indices: number[],
-    fieldCommonUpdate: (
-      fieldData: MessageDataFieldCommon
-    ) => MessageDataFieldCommon,
-    fieldSpecificUpdate: (
-      fieldData: MessageDataFieldSpecific
-    ) => MessageDataFieldSpecific
+    fieldUpdate: (fieldData: MessageDataField) => MessageDataField
   ): void => {
     setMessage((prevState) => ({
       ...prevState,
-      data: findAndUpdateField(
-        prevState.data,
-        indices,
-        fieldCommonUpdate,
-        fieldSpecificUpdate
-      ),
+      data: findAndUpdateField(prevState.data, indices, fieldUpdate),
     }));
   };
 

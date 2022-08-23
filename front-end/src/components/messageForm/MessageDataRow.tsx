@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import MessageDataRowTypeSpecific from "./MessageDataRowTypeSpecific";
-import { MessageDataField } from "./messageTypes";
+import { MessageDataField, MessageDataFieldSpecific } from "./messageTypes";
 import NestedDataFields from "./NestedDataFields";
 import ValidationErrorMessage from "./ValidationErrorMessage";
 
@@ -17,7 +17,10 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
 
   return (
     <>
-      <Row style={{ marginLeft: 30 * dataField.depth + "px" }}>
+      <Row
+        style={{ marginLeft: 30 * dataField.depth + "px" }}
+        className={"w-100"}
+      >
         <Col xs={3}>
           <Form.Control
             type="text"
@@ -43,4 +46,48 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
   );
 };
 
-export default MessageDataRow;
+// Comparing function to significantly increase the performace by using memoization
+// Determines if the row should re-render
+const areEqualForMemo: (
+  prevField: MessageDataField,
+  currField: MessageDataField
+) => boolean = (prevField, currField) => {
+  const areEqualBasedOnFieldType: (
+    prevSpecific: MessageDataFieldSpecific,
+    currSpecific: MessageDataFieldSpecific
+  ) => boolean = (prevSpecific, currSpecific) => {
+    if (prevSpecific.valueType !== currSpecific.valueType) return false;
+
+    if (
+      prevSpecific.valueType === "object" &&
+      currSpecific.valueType === "object"
+    ) {
+      return (
+        prevSpecific.value.length === currSpecific.value.length &&
+        currSpecific.value.every((s, index) =>
+          areEqualForMemo(prevSpecific.value[index], s)
+        )
+      );
+    } else if (
+      prevSpecific.valueType === "array" &&
+      currSpecific.valueType === "array"
+    ) {
+      return (
+        prevSpecific.count === currSpecific.count &&
+        areEqualBasedOnFieldType(prevSpecific.value, currSpecific.value)
+      );
+    }
+
+    return prevSpecific.value === currSpecific.value;
+  };
+
+  return (
+    prevField.name.value === currField.name.value &&
+    prevField.name.errorMessages === currField.name.errorMessages &&
+    areEqualBasedOnFieldType(prevField, currField)
+  );
+};
+
+export default React.memo(MessageDataRow, (prevProps, currProps) =>
+  areEqualForMemo(prevProps.dataField, currProps.dataField)
+);

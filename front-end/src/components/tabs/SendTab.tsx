@@ -77,7 +77,7 @@ const SendTab: React.FC<Props> = ({ setMessageHistory }) => {
     <>
       <Stack className="col" gap={3}>
         <Stack
-          className="d-flex justify-content-end"
+          className="d-flex justify-content-end w-100"
           direction="horizontal"
           gap={3}
         >

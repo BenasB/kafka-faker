@@ -35,33 +35,37 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
       gap={3}
       autoComplete={"off"}
     >
-      <Form.Group as={Row}>
-        <Form.Label column sm={2}>
-          Topic
-        </Form.Label>
-        <Col sm={10}>
-          <Form.Control
-            type="text"
-            placeholder="Topic"
-            value={message.topic.value}
-            onChange={(e) => updateTopic(e.target.value)}
-            isInvalid={!!message.topic.errorMessages}
-          />
-          <ValidationErrorMessage {...message.topic} />
-        </Col>
+      <Form.Group>
+        <Row className={"w-100"}>
+          <Form.Label column sm={2}>
+            Topic
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              type="text"
+              placeholder="Topic"
+              value={message.topic.value}
+              onChange={(e) => updateTopic(e.target.value)}
+              isInvalid={!!message.topic.errorMessages}
+            />
+            <ValidationErrorMessage {...message.topic} />
+          </Col>
+        </Row>
       </Form.Group>
-      <Form.Group as={Row}>
-        <Form.Label column sm={2}>
-          Key
-        </Form.Label>
-        <Col sm={10}>
-          <Form.Control
-            type="text"
-            placeholder="Key (optional)"
-            value={message.key}
-            onChange={(e) => updateKey(e.target.value)}
-          />
-        </Col>
+      <Form.Group>
+        <Row className={"w-100"}>
+          <Form.Label column sm={2}>
+            Key
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              type="text"
+              placeholder="Key (optional)"
+              value={message.key}
+              onChange={(e) => updateKey(e.target.value)}
+            />
+          </Col>
+        </Row>
       </Form.Group>
       <Form.Group as={Stack} gap={3}>
         <div className="d-flex justify-content-between">
@@ -131,11 +135,15 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
             key={index}
           />
         ))}
-        <Row sm={5} className={"justify-content-center my-3"}>
-          <Button variant="primary" onClick={() => addMessageDataField()}>
+        <div className={"d-flex justify-content-center my-3 w-100"}>
+          <Button
+            variant="primary"
+            onClick={() => addMessageDataField()}
+            className={"px-5"}
+          >
             Add field
           </Button>
-        </Row>
+        </div>
       </Form.Group>
     </Form>
   );

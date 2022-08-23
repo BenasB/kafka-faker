@@ -118,52 +118,40 @@ const useMessageForm: () => MessageFormManagement = () => {
     newName: string,
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(
-      messageDataFieldIndices,
-      (fieldData) => ({
-        ...fieldData,
-        name: {
-          ...fieldData.name,
-          value: newName,
-          errorMessages: fieldData.name.validate(newName),
-        },
-      }),
-      (fieldData) => fieldData
-    );
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
+      ...fieldData,
+      name: {
+        ...fieldData.name,
+        value: newName,
+        errorMessages: fieldData.name.validate(newName),
+      },
+    }));
 
   const updateMessageDataCustomValue = (
     newValue: string,
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(
-      messageDataFieldIndices,
-      (fieldData) => fieldData,
-      (fieldData) => {
-        if (fieldData.valueType !== "custom") return fieldData;
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "custom") return fieldData;
 
-        return {
-          ...fieldData,
-          value: newValue,
-        };
-      }
-    );
+      return {
+        ...fieldData,
+        value: newValue,
+      };
+    });
 
   const updateMessageDataArrayCount = (
     newCount: number,
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(
-      messageDataFieldIndices,
-      (fieldData) => fieldData,
-      (fieldData) => {
-        if (fieldData.valueType !== "array") return fieldData;
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "array") return fieldData;
 
-        return {
-          ...fieldData,
-          count: newCount,
-        };
-      }
-    );
+      return {
+        ...fieldData,
+        count: newCount,
+      };
+    });
 
   const updateMessageDataType = (
     newType:
@@ -172,9 +160,9 @@ const useMessageForm: () => MessageFormManagement = () => {
     messageDataFieldIndices: number[]
   ) => {
     const generationField = (
-      fieldData: MessageDataFieldSpecific,
+      fieldData: MessageDataField,
       generationType: typeof messageDataFieldGenerationTypes[number]
-    ): MessageDataFieldSpecific => {
+    ): MessageDataField => {
       const generationFunction: GenerationFunction =
         generationFunctions.find((f) => f.type === generationType) ||
         generationFunctions[0];
@@ -190,48 +178,44 @@ const useMessageForm: () => MessageFormManagement = () => {
       };
     };
 
-    updateMessageDataField(
-      messageDataFieldIndices,
-      (fieldData) => fieldData,
-      (fieldData) => {
-        if (messageDataFieldGenerationTypes.find((t) => t === newType)) {
-          return generationField(
-            fieldData,
-            messageDataFieldGenerationTypes.find((t) => t === newType) ||
-              messageDataFieldGenerationTypes[0]
-          );
-        } else if (messageDataFieldTypes.find((t) => t === newType)) {
-          switch (newType) {
-            case "object":
-              return {
-                ...fieldData,
-                valueType: newType,
-                value: [],
-              };
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (messageDataFieldGenerationTypes.find((t) => t === newType)) {
+        return generationField(
+          fieldData,
+          messageDataFieldGenerationTypes.find((t) => t === newType) ||
+            messageDataFieldGenerationTypes[0]
+        );
+      } else if (messageDataFieldTypes.find((t) => t === newType)) {
+        switch (newType) {
+          case "object":
+            return {
+              ...fieldData,
+              valueType: newType,
+              value: [],
+            };
 
-            case "array":
-              return {
-                ...fieldData,
-                valueType: newType,
-                count: 1,
-                value: {
-                  valueType: "custom",
-                  value: "",
-                },
-              };
-
-            default:
-              return {
-                ...fieldData,
+          case "array":
+            return {
+              ...fieldData,
+              valueType: newType,
+              count: 1,
+              value: {
                 valueType: "custom",
                 value: "",
-              };
-          }
-        }
+              },
+            };
 
-        return fieldData;
+          default:
+            return {
+              ...fieldData,
+              valueType: "custom",
+              value: "",
+            };
+        }
       }
-    );
+
+      return fieldData;
+    });
   };
 
   // Adds a new message data field to an already existing message data field
@@ -239,28 +223,20 @@ const useMessageForm: () => MessageFormManagement = () => {
     messageDataFieldIndices: number[],
     parentDepth: number
   ) =>
-    updateMessageDataField(
-      messageDataFieldIndices,
-      (fieldData) => fieldData,
-      (fieldData) => {
-        if (fieldData.valueType !== "object") return fieldData;
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "object") return fieldData;
 
-        return {
-          ...fieldData,
-          value: [...fieldData.value, getNewDataField(parentDepth)],
-        };
-      }
-    );
+      return {
+        ...fieldData,
+        value: [...fieldData.value, getNewDataField(parentDepth)],
+      };
+    });
 
   const removeMessageDataField = (messageDataFieldIndices: number[]) =>
-    updateMessageDataField(
-      messageDataFieldIndices,
-      (fieldData) => ({
-        ...fieldData,
-        toDelete: true,
-      }),
-      (fieldData) => fieldData
-    );
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => ({
+      ...fieldData,
+      toDelete: true,
+    }));
 
   const removeAllMessageDataFields = () => {
     setMessage((prevState) => ({
@@ -272,18 +248,14 @@ const useMessageForm: () => MessageFormManagement = () => {
   const regenerateMessageDataFieldGeneration = (
     messageDataFieldIndices: number[]
   ) =>
-    updateMessageDataField(
-      messageDataFieldIndices,
-      (fieldData) => fieldData,
-      (fieldData) => {
-        if (fieldData.valueType !== "generation") return fieldData;
+    updateMessageDataField(messageDataFieldIndices, (fieldData) => {
+      if (fieldData.valueType !== "generation") return fieldData;
 
-        return {
-          ...fieldData,
-          value: fieldData.generate(),
-        };
-      }
-    );
+      return {
+        ...fieldData,
+        value: fieldData.generate(),
+      };
+    });
 
   const regenerateAllMessageDataFields = () =>
     updateAllMessageFields(
