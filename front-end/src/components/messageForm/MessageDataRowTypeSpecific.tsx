@@ -7,6 +7,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import generalMessageDataFieldTypeData from "../../data/generalMessageDataFieldTypeData";
+import generationFunctions from "../../data/generationFunctions";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import MessageDataFieldTypeModal from "../messageDataFieldTypeModal/MessageDataFieldTypeModal";
 import { MessageDataFieldSpecific } from "./messageTypes";
@@ -41,9 +43,14 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
           variant="outline-primary"
           onClick={() => setShowTypeModal(true)}
         >
-          {dataField.valueType === "generation"
-            ? dataField.displayName
-            : dataField.valueType.toNonCamelCase()}
+          {generalMessageDataFieldTypeData.find(
+            (d) => d.type === dataField.valueType
+          )?.displayName ||
+            (dataField.valueType === "generation" &&
+              generationFunctions.find(
+                (f) => f.type === dataField.generationType
+              )?.displayName) ||
+            dataField.valueType.toNonCamelCase()}
         </Button>
       </Col>
       {dataField.valueType === "array" && (

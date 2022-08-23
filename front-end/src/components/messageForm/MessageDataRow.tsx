@@ -2,7 +2,11 @@ import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import MessageDataRowTypeSpecific from "./MessageDataRowTypeSpecific";
-import { MessageDataField, MessageDataFieldSpecific } from "./messageTypes";
+import {
+  Message,
+  MessageDataField,
+  MessageDataFieldSpecific,
+} from "./messageTypes";
 import NestedDataFields from "./NestedDataFields";
 import ValidationErrorMessage from "./ValidationErrorMessage";
 
@@ -50,8 +54,10 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
 // Determines if the row should re-render
 const areEqualForMemo: (
   prevField: MessageDataField,
-  currField: MessageDataField
-) => boolean = (prevField, currField) => {
+  prevMessage: Message,
+  currField: MessageDataField,
+  currMessage: Message
+) => boolean = (prevField, prevMessage, currField, currMessage) => {
   const areEqualBasedOnFieldType: (
     prevSpecific: MessageDataFieldSpecific,
     currSpecific: MessageDataFieldSpecific
@@ -65,7 +71,12 @@ const areEqualForMemo: (
       return (
         prevSpecific.value.length === currSpecific.value.length &&
         currSpecific.value.every((s, index) =>
-          areEqualForMemo(prevSpecific.value[index], s)
+          areEqualForMemo(
+            prevSpecific.value[index],
+            prevMessage,
+            s,
+            currMessage
+          )
         )
       );
     } else if (
@@ -76,6 +87,11 @@ const areEqualForMemo: (
         prevSpecific.count === currSpecific.count &&
         areEqualBasedOnFieldType(prevSpecific.value, currSpecific.value)
       );
+    } else if (
+      prevSpecific.valueType === "generation" &&
+      currSpecific.valueType === "generation"
+    ) {
+      return prevMessage.autoGeneration === currMessage.autoGeneration;
     }
 
     return prevSpecific.value === currSpecific.value;
@@ -89,5 +105,10 @@ const areEqualForMemo: (
 };
 
 export default React.memo(MessageDataRow, (prevProps, currProps) =>
-  areEqualForMemo(prevProps.dataField, currProps.dataField)
+  areEqualForMemo(
+    prevProps.dataField,
+    prevProps.message,
+    currProps.dataField,
+    currProps.message
+  )
 );

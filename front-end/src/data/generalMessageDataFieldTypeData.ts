@@ -1,4 +1,5 @@
 import { messageDataFieldTypes } from "../components/messageForm/messageTypes";
+import toNonCamelCase from "../utils/toNonCamelCase";
 import WithOptional from "../utils/withOptional";
 
 interface GeneralMessageDataFieldTypeData {
@@ -27,7 +28,7 @@ const partialGeneralMessageDataFieldTypeData: WithOptional<
 
 const generalMessageDataFieldTypeData: GeneralMessageDataFieldTypeData[] =
   partialGeneralMessageDataFieldTypeData.map((d) => ({
-    displayName: d.type.toNonCamelCase(),
+    displayName: toNonCamelCase(d.type),
     ...d,
   }));
 
