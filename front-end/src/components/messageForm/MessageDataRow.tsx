@@ -19,8 +19,6 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
   const { dataField, indices, updateMessageDataName, removeMessageDataField } =
     props;
 
-  console.log("rendering", dataField.name);
-
   return (
     <>
       <Stack
