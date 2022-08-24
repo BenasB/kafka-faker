@@ -1,4 +1,4 @@
-name: Build and publish BE Docker image
+name: BE Docker
 
 on:
   push:
@@ -30,6 +30,6 @@ jobs:
       - name: Build and push ⬆️
         uses: docker/build-push-action@v3
         with:
-          context: ./back-end/KafkaFaker.BE.Api/
+          context: ./back-end/
           push: true
           tags: benasbudrys/kafka-faker-be:latest

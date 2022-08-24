@@ -1,4 +1,4 @@
-name: Build and publish FE Docker image
+name: FE Docker
 
 on:
   push:
