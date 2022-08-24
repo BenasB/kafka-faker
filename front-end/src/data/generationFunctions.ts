@@ -14,7 +14,6 @@ export const messageDataFieldGenerationGroups = [
   "finance",
   "git",
   "hacker",
-  "image",
   "internet",
   "lorem",
   "music",
@@ -140,22 +139,6 @@ export const messageDataFieldGenerationTypes = [
   "hackerNoun",
   "hackerPhrase",
   "hackerVerb",
-  "abstractImage",
-  "animalImage",
-  "avatar",
-  "businessImage",
-  "catImage",
-  "cityImage",
-  "svgDataUri",
-  "fashionImage",
-  "foodImage",
-  "image",
-  "natureImage",
-  "nightlifeImage",
-  "personImage",
-  "sportsImage",
-  "technicsImage",
-  "transportImage",
   "domainName",
   "domainSuffix",
   "domainWord",
@@ -770,76 +753,6 @@ const partialGenerationGroups: PartialGenerationGroup[] = [
       {
         type: "hackerVerb",
         function: faker.hacker.verb,
-      },
-    ],
-  },
-  {
-    group: "image",
-    functions: [
-      {
-        type: "abstractImage",
-        function: faker.image.abstract,
-      },
-      {
-        type: "animalImage",
-        function: faker.image.animals,
-      },
-      {
-        type: "avatar",
-        function: faker.image.avatar,
-      },
-      {
-        type: "businessImage",
-        function: faker.image.business,
-      },
-      {
-        type: "catImage",
-        function: faker.image.cats,
-      },
-      {
-        type: "cityImage",
-        function: faker.image.city,
-      },
-      {
-        type: "svgDataUri",
-        function: faker.image.dataUri,
-        displayName: "SVG data URI",
-      },
-      {
-        type: "fashionImage",
-        function: faker.image.fashion,
-      },
-      {
-        type: "foodImage",
-        function: faker.image.food,
-      },
-      {
-        type: "image",
-        function: faker.image.image,
-      },
-      {
-        type: "natureImage",
-        function: faker.image.nature,
-      },
-      {
-        type: "nightlifeImage",
-        function: faker.image.nightlife,
-      },
-      {
-        type: "personImage",
-        function: faker.image.people,
-      },
-      {
-        type: "sportsImage",
-        function: faker.image.sports,
-      },
-      {
-        type: "technicsImage",
-        function: faker.image.technics,
-      },
-      {
-        type: "transportImage",
-        function: faker.image.transport,
       },
     ],
   },
