@@ -28,6 +28,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: ./front-end
+          context: ./front-end/
           push: true
           tags: benasbudrys/kafka-faker-fe:latest
