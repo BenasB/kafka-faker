@@ -119,9 +119,7 @@ const MessageSaveModal: React.FC<Props & MessageSaveProps> = ({
 
             const backEndSchemaModel: BackEndSchemaModel = {
               title: schemaTitle.value,
-              jsonString: JSON.stringify(
-                serializeMessageSchema(message)
-              ).escapeSpecialCharacters(),
+              jsonString: JSON.stringify(serializeMessageSchema(message)),
             };
 
             // In demo use demoSchemas

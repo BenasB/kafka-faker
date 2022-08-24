@@ -5,7 +5,6 @@ import App from "./App";
 import "./utils/toFirstUpperCase";
 import "./utils/toNonCamelCase";
 import "./utils/limitLength";
-import "./utils/escapeSpecialCharacters";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
