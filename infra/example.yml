@@ -30,7 +30,7 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
-      MYSQL_DATABASE: kafka-fakeris
+      MYSQL_DATABASE: kafka-faker
     volumes:
       - schema-volume:/var/lib/mysql
     healthcheck:
