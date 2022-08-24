@@ -5,7 +5,7 @@ import {
   Button,
   FormControl,
   OverlayTrigger,
-  Tooltip,
+  Popover,
 } from "react-bootstrap";
 import generalMessageDataFieldTypeData from "../../data/generalMessageDataFieldTypeData";
 import generationFunctions from "../../data/generationFunctions";
@@ -55,7 +55,10 @@ const MessageDataRowTypeSpecific: React.FC<Props & MessageFormManagement> = (
       </Col>
       {dataField.valueType === "array" && (
         <Col xs={2}>
-          <OverlayTrigger overlay={<Tooltip>Array element count</Tooltip>}>
+          <OverlayTrigger
+            placement="top"
+            overlay={<Popover className="p-2">Array element count</Popover>}
+          >
             <FormControl
               type="number"
               min="0"

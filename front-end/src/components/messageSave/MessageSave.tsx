@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { Message } from "../messageForm/messageTypes";
 import MessageSaveModal from "./MessageSaveModal";
 
@@ -12,7 +12,9 @@ const MessageSave: React.FC<MessageSaveProps> = (props) => {
 
   return (
     <>
-      <OverlayTrigger overlay={<Tooltip>Save message schema</Tooltip>}>
+      <OverlayTrigger
+        overlay={<Popover className="p-2">Save message schema</Popover>}
+      >
         <Button
           variant="outline-secondary"
           size="sm"

@@ -4,9 +4,9 @@ import {
   Row,
   Col,
   Button,
-  Tooltip,
   OverlayTrigger,
   Stack,
+  Popover,
 } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
@@ -76,7 +76,11 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
             {!message.autoGeneration && message.data.length > 0 && (
               <Col>
                 <OverlayTrigger
-                  overlay={<Tooltip>Regenerate all generation fields</Tooltip>}
+                  overlay={
+                    <Popover className="p-2">
+                      Regenerate all generation fields
+                    </Popover>
+                  }
                 >
                   <Button
                     variant="outline-secondary"
@@ -92,7 +96,9 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
               <>
                 <Col>
                   <OverlayTrigger
-                    overlay={<Tooltip>Delete all fields</Tooltip>}
+                    overlay={
+                      <Popover className="p-2">Delete all fields</Popover>
+                    }
                   >
                     <Button
                       variant="outline-danger"
@@ -113,9 +119,9 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
           </Row>
           <OverlayTrigger
             overlay={
-              <Tooltip>
+              <Popover className="p-2 text-center">
                 Automatically regenerate data when sending a message
-              </Tooltip>
+              </Popover>
             }
           >
             <Form.Check
