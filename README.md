@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./kafka-faker-logo-background.svg"/>
+  <img src="./.github/kafka-faker-logo-background.svg"/>
 </p>
 
 Apache Kafka JSON message faking
@@ -26,6 +26,12 @@ When developing applications which use Apache Kafka as a messaging queue, it is 
 You can try out the demo mode of the UI [here](https://benasb.github.io/kafka-faker)!
 
 Disclaimer: this application is inteded for desktop/laptop users, so the design is not mobile responsive.
+
+![Kafka Faker demo picture 1](./.github/demo-1.png)
+
+![Kafka Faker demo picture 2](./.github/demo-2.png)
+
+![Kafka Faker demo picture 3](./.github/demo-3.png)
 
 ## Application stack 📚
 
