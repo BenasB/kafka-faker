@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Button, OverlayTrigger, Popover } from "react-bootstrap";
 import { Message } from "../messageForm/messageTypes";
 import MessageLoadModal from "./MessageLoadModal";
 
@@ -12,7 +12,9 @@ const MessageLoad: React.FC<MessageLoadProps> = (props) => {
 
   return (
     <>
-      <OverlayTrigger overlay={<Tooltip>Load message schema</Tooltip>}>
+      <OverlayTrigger
+        overlay={<Popover className="p-2">Load message schema</Popover>}
+      >
         <Button
           variant="outline-secondary"
           size="sm"
