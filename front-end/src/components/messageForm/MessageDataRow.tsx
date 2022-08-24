@@ -25,7 +25,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
         style={{ paddingLeft: 30 * dataField.depth + "px" }}
         direction="horizontal"
         gap={3}
-        className={"flex-wrap"}
+        className={"flex-wrap align-items-start"}
       >
         <Col xs={3}>
           <Form.Control
