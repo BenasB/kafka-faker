@@ -1,6 +1,6 @@
 # Example docker compose stack for using Kafka Faker
 
-version: "3"
+version: "3.9"
 services:
   front-end:
     image: benasbudrys/kafka-faker-fe
@@ -19,6 +19,9 @@ services:
     environment:
       BootstrapServers: my-cluster-brokers # Set this to your cluster brokers
       ConnectionStrings__SchemaDatabase: Server=db;Database=kafka-faker;Uid=root;Pwd=my-secret-pw;
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     image: mysql
@@ -30,6 +33,10 @@ services:
       MYSQL_DATABASE: kafka-faker
     volumes:
       - schema-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
 volumes:
   schema-volume:
