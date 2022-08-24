@@ -4,10 +4,6 @@
 
 Apache Kafka JSON message faking
 
-<h1 align="center">
-👷 🚧 Currently under construction 🏗️ 👷‍♀️
-</h1>
-
 ## Motivation 🤔
 
 When developing applications which use Apache Kafka as a messaging queue, it is sometimes good to have fake data flowing through it for development purposes. Kafka Faker allows you to do that conveniently through a web UI.
@@ -40,6 +36,11 @@ Disclaimer: this application is inteded for desktop/laptop users, so the design 
 3. Kafka cluster
 4. MySQL database
 
-## Try it out 🕹️
+## Set Kafka Faker up 🕹️
 
-WIP
+This application is published as images on Docker Hub:
+
+- [Front end](https://hub.docker.com/repository/docker/benasbudrys/kafka-faker-fe)
+- [Back end](https://hub.docker.com/repository/docker/benasbudrys/kafka-faker-be)
+
+See an example Docker compose file [here](./infra/example.yml)
