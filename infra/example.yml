@@ -1,0 +1,35 @@
+# Example docker compose stack for using Kafka Faker
+
+version: "3"
+services:
+  front-end:
+    image: benasbudrys/kafka-faker-fe
+    container_name: kafka-faker-fe
+    ports:
+      - 9000:3000
+    environment:
+      # Since this is an SPA/Client side, this url must be how you would reach back end from host
+      REACT_APP_BACK_END_URL: http://localhost:9001
+
+  back-end:
+    image: benasbudrys/kafka-faker-be
+    container_name: kafka-faker-be
+    ports:
+      - 9001:5000
+    environment:
+      BootstrapServers: my-cluster-brokers # Set this to your cluster brokers
+      ConnectionStrings__SchemaDatabase: Server=db;Database=kafka-faker;Uid=root;Pwd=my-secret-pw;
+
+  db:
+    image: mysql
+    container_name: db
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: kafka-faker
+    volumes:
+      - schema-volume:/var/lib/mysql
+
+volumes:
+  schema-volume:

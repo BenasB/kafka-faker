@@ -9,8 +9,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors();
-
 builder.Services.AddSingleton<Producer>(_ => new Producer(builder.Configuration.GetValue<string>("BootstrapServers")));
 var schemaDatabaseConnectionString = builder.Configuration.GetConnectionString("SchemaDatabase");
 builder.Services.AddTransient<MySqlConnection>(_ => new MySqlConnection(schemaDatabaseConnectionString));
@@ -26,8 +24,6 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
-
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(builder.Configuration.GetValue<string>("FrontEndUrl")));
 
 app.MapControllers();
 

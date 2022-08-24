@@ -24,5 +24,4 @@ Use `dotnet run --project KafkaFaker.BE.Api` to start the project locally. You c
 - Environment variables
   - `BootstrapServers` sets the Apache Kafka bootstrap servers used by the kafka client. Specify your brokers here.
   - `ConnectionStrings__SchemaDatabase` sets the connection string for the schema database
-  - `FrontEndUrl` points to the front end project
   - Any other [ASP.NET Core environment variables](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/web-host?view=aspnetcore-6.0#host-configuration-values)
