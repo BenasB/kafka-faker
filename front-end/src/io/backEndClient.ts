@@ -12,7 +12,7 @@ export interface BackEndSchemaModel {
 }
 
 const httpClient: AxiosInstance = axios.create({
-  baseURL: "https://localhost:7204/", // TODO: Correct this
+  baseURL: process.env.REACT_APP_BACK_END_URL,
   timeout: 5000,
 });
 

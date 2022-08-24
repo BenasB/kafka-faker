@@ -93,7 +93,11 @@ const areEqualForMemo: (
       prevSpecific.valueType === "generation" &&
       currSpecific.valueType === "generation"
     ) {
-      return prevMessage.autoGeneration === currMessage.autoGeneration;
+      return (
+        prevMessage.autoGeneration === currMessage.autoGeneration &&
+        prevSpecific.generationType === currSpecific.generationType &&
+        prevSpecific.value === currSpecific.value
+      );
     }
 
     return prevSpecific.value === currSpecific.value;
