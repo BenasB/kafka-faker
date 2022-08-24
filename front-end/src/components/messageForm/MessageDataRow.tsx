@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Col, Form, Button, Stack } from "react-bootstrap";
 import { MessageFormManagement } from "../../hooks/useMessageForm";
 import MessageDataRowTypeSpecific from "./MessageDataRowTypeSpecific";
 import {
@@ -21,9 +21,11 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
 
   return (
     <>
-      <Row
+      <Stack
         style={{ paddingLeft: 30 * dataField.depth + "px" }}
-        className={"w-100"}
+        direction="horizontal"
+        gap={3}
+        className={"flex-wrap"}
       >
         <Col xs={3}>
           <Form.Control
@@ -44,7 +46,7 @@ const MessageDataRow: React.FC<Props & MessageFormManagement> = (props) => {
             <i className="bi bi-trash"></i>
           </Button>
         </Col>
-      </Row>
+      </Stack>
       <NestedDataFields {...props} />
     </>
   );

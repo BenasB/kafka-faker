@@ -36,7 +36,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
       autoComplete={"off"}
     >
       <Form.Group>
-        <Row className={"w-100"}>
+        <div className={"d-flex"}>
           <Form.Label column sm={2}>
             Topic
           </Form.Label>
@@ -50,10 +50,10 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
             />
             <ValidationErrorMessage {...message.topic} />
           </Col>
-        </Row>
+        </div>
       </Form.Group>
       <Form.Group>
-        <Row className={"w-100"}>
+        <div className={"d-flex"}>
           <Form.Label column sm={2}>
             Key
           </Form.Label>
@@ -65,7 +65,7 @@ const MessageForm: React.FC<MessageFormManagement> = (props) => {
               onChange={(e) => updateKey(e.target.value)}
             />
           </Col>
-        </Row>
+        </div>
       </Form.Group>
       <Form.Group as={Stack} gap={3}>
         <div className="d-flex justify-content-between">
